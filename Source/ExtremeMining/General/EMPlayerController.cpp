@@ -3,3 +3,9 @@
 
 #include "General/EMPlayerController.h"
 
+void AEMPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+
+}
