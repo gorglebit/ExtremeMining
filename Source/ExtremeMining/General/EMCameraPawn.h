@@ -37,8 +37,22 @@ private:
 	int32 CameraMoveSpeed;
 private:
 	UFUNCTION()
-		void MovePawnForwardNearBorder();
+		void MovePawnForwardBackTick();
 	UFUNCTION()
-		void MovePawnRightNearBorder();
+		void MovePawnRightLeftTick();
 
+	UFUNCTION()
+		void MovePawnForwardBackAxis(const float value);
+
+	UFUNCTION()
+		void MovePawnRightLeftAxis(const float value);
+
+	UFUNCTION()
+		void MovePawnForward();
+	UFUNCTION()
+		void MovePawnBack();
+	UFUNCTION()
+		void MovePawnRight();
+	UFUNCTION()
+		void MovePawnLeft();
 };

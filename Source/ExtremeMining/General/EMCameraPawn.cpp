@@ -47,8 +47,8 @@ void AEMCameraPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//MovePawnForwardNearBorder();
-	MovePawnRightNearBorder();
+	MovePawnForwardBackTick();
+	MovePawnRightLeftTick();
 }
 
 // Called to bind functionality to input
@@ -56,63 +56,125 @@ void AEMCameraPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis("CameraPawnMoveForwardBack", this, &AEMCameraPawn::MovePawnForwardBackAxis);
+	PlayerInputComponent->BindAxis("CameraPawnMoveRightLeft", this, &AEMCameraPawn::MovePawnRightLeftAxis);
 }
 
-void AEMCameraPawn::MovePawnForwardNearBorder()
+void AEMCameraPawn::MovePawnForwardBackTick()
 {
 	float mouseX, mouseY;
-	UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetMousePosition(mouseX, mouseY);
-	mouseY = FMath::Clamp(mouseY, 0, ViewportSize.Y);
+	
+	bool IsMouseEnable = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetMousePosition(mouseX, mouseY);
+	if (!IsMouseEnable) return;
 
-	float delta = mouseY / ViewportSize.Y;
+	float Ratio = mouseY / ViewportSize.Y;
 
-	if (delta > 0.95)
+	if (Ratio > 0.95)
 	{
-		auto DeltaLocation = FVector::ZeroVector;
-		DeltaLocation.X = CameraMoveSpeed * GetWorld()->GetDeltaSeconds() * -1;
-
-		AddActorWorldOffset(DeltaLocation);
-		UE_LOG(LogTemp, Warning, TEXT("%f > 95"), delta);
+		MovePawnForward();
 	}
 	else
 	{
-		if (delta < 0.05)
+		if (Ratio < 0.05)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("%f < 0.05"), delta);
-			auto DeltaLocation = FVector::ZeroVector;
-			DeltaLocation.X = CameraMoveSpeed * GetWorld()->GetDeltaSeconds();
-
-			AddActorWorldOffset(DeltaLocation);
+			MovePawnBack();
 		}
 	}
 }
 
-void AEMCameraPawn::MovePawnRightNearBorder()
+void AEMCameraPawn::MovePawnRightLeftTick()
 {
 	float mouseX, mouseY;
-	UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetMousePosition(mouseX, mouseY);
-	mouseX = FMath::Clamp(mouseY, 0, ViewportSize.X);
+	
+	bool IsMouseEnable = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetMousePosition(mouseX, mouseY);
+	if (!IsMouseEnable) return;
 
-	float delta = mouseX / ViewportSize.X;
-	UE_LOG(LogTemp, Warning, TEXT("delta is - %f"), delta);
-	if (delta > 0.95)
+	float Ratio = mouseX / ViewportSize.X;
+
+	if (Ratio > 0.95)
 	{
-		auto DeltaLocation = FVector::ZeroVector;
-		DeltaLocation.Y = CameraMoveSpeed * GetWorld()->GetDeltaSeconds();
-
-		AddActorWorldOffset(DeltaLocation);
-		UE_LOG(LogTemp, Warning, TEXT("%f > 95"), delta);
+		MovePawnRight();
 	}
 	else
 	{
-		if (delta < 0.05)
+		if (Ratio < 0.05)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("%f < 0.05"), delta);
-			auto DeltaLocation = FVector::ZeroVector;
-			DeltaLocation.Y = CameraMoveSpeed * GetWorld()->GetDeltaSeconds() * -1;
-
-			AddActorWorldOffset(DeltaLocation);
+			MovePawnLeft();
 		}
 	}
+}
+
+void AEMCameraPawn::MovePawnForwardBackAxis(const float value)
+{
+	if (value == 0) return;
+
+	if (value == 1)
+	{
+		MovePawnForward();
+		return;
+	}
+
+	if (value == -1)
+	{
+		MovePawnBack();
+		return;
+	}
+}
+
+void AEMCameraPawn::MovePawnRightLeftAxis(const float value)
+{
+	if (value == 0) return;
+
+	if (value == 1)
+	{
+		MovePawnRight();
+		return;
+	}
+
+	if (value == -1)
+	{
+		MovePawnLeft();
+		return;
+	}
+}
+
+void AEMCameraPawn::MovePawnForward()
+{
+	if (!GetWorld()) return;
+
+	auto DeltaLocation = FVector::ZeroVector;
+	DeltaLocation.X = CameraMoveSpeed * GetWorld()->GetDeltaSeconds() * -1;
+
+	AddActorWorldOffset(DeltaLocation);
+}
+
+void AEMCameraPawn::MovePawnBack()
+{
+	if (!GetWorld()) return;
+
+	auto DeltaLocation = FVector::ZeroVector;
+	DeltaLocation.X = CameraMoveSpeed * GetWorld()->GetDeltaSeconds();
+
+	AddActorWorldOffset(DeltaLocation);
+}
+
+void AEMCameraPawn::MovePawnRight()
+{
+	if (!GetWorld()) return;
+
+	auto DeltaLocation = FVector::ZeroVector;
+	DeltaLocation.Y = CameraMoveSpeed * GetWorld()->GetDeltaSeconds();
+
+	AddActorWorldOffset(DeltaLocation);
+}
+
+void AEMCameraPawn::MovePawnLeft()
+{
+	if (!GetWorld()) return;
+
+	auto DeltaLocation = FVector::ZeroVector;
+	DeltaLocation.Y = CameraMoveSpeed * GetWorld()->GetDeltaSeconds() * -1;
+
+	AddActorWorldOffset(DeltaLocation);
 }
 
