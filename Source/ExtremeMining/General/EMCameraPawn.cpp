@@ -23,7 +23,7 @@ AEMCameraPawn::AEMCameraPawn()
 
 	SpringArmComponent->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when character does
 	SpringArmComponent->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));
-	SpringArmComponent->TargetArmLength = 0.f;
+	SpringArmComponent->TargetArmLength = 500.f;
 	SpringArmComponent->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
 	SpringArmComponent->bEnableCameraLag = true;
 	// Create a camera...
@@ -32,7 +32,8 @@ AEMCameraPawn::AEMCameraPawn()
 	CameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 
-	CameraMoveSpeed = 1400;
+	CameraMoveSpeed = 1000;
+	CameraZoomSpeed = 100;
 }
 
 // Called when the game starts or when spawned
@@ -58,6 +59,7 @@ void AEMCameraPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	PlayerInputComponent->BindAxis("CameraPawnMoveForwardBack", this, &AEMCameraPawn::MovePawnForwardBackAxis);
 	PlayerInputComponent->BindAxis("CameraPawnMoveRightLeft", this, &AEMCameraPawn::MovePawnRightLeftAxis);
+	PlayerInputComponent->BindAxis("CameraPawnZoom", this, &AEMCameraPawn::CameraZoomInOutAxis);
 }
 
 void AEMCameraPawn::MovePawnForwardBackTick()
@@ -134,6 +136,27 @@ void AEMCameraPawn::MovePawnRightLeftAxis(const float value)
 	if (value == -1)
 	{
 		MovePawnLeft();
+		return;
+	}
+}
+
+void AEMCameraPawn::CameraZoomInOutAxis(const float value)
+{
+	if (value == 0) return;
+
+	if (value == 1)
+	{
+		float NewArmLength = SpringArmComponent->TargetArmLength + CameraZoomSpeed;
+		FMath::Clamp(NewArmLength, 300, 1500);
+		SpringArmComponent->TargetArmLength = NewArmLength;
+		return;
+	}
+
+	if (value == -1)
+	{
+		float NewArmLength = SpringArmComponent->TargetArmLength - CameraZoomSpeed;
+		FMath::Clamp(NewArmLength, 300, 1500);
+		SpringArmComponent->TargetArmLength = NewArmLength;
 		return;
 	}
 }

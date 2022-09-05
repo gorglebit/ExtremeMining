@@ -35,6 +35,7 @@ private:
 
 	FVector2D ViewportSize;
 	int32 CameraMoveSpeed;
+	int32 CameraZoomSpeed;
 private:
 	UFUNCTION()
 		void MovePawnForwardBackTick();
@@ -46,6 +47,9 @@ private:
 
 	UFUNCTION()
 		void MovePawnRightLeftAxis(const float value);
+
+	UFUNCTION()
+		void CameraZoomInOutAxis(const float value);
 
 	UFUNCTION()
 		void MovePawnForward();
