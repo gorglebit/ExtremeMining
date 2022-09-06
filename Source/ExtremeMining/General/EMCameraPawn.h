@@ -37,20 +37,29 @@ private:
 	int32 CameraMoveSpeed;
 	int32 CameraZoomSpeed;
 private:
+	// Moving on tick near border
 	UFUNCTION()
 		void MovePawnForwardBackTick();
 	UFUNCTION()
 		void MovePawnRightLeftTick();
+	//--------------
 
+	// Moving using keyboard
 	UFUNCTION()
 		void MovePawnForwardBackAxis(const float value);
 
 	UFUNCTION()
 		void MovePawnRightLeftAxis(const float value);
+	//------------------
 
+	//Camera zoom
 	UFUNCTION()
-		void CameraZoomInOutAxis(const float value);
+		void CameraZoomIn();
+	UFUNCTION()
+		void CameraZoomOut();
+	//----------------
 
+	// Simple moving functions
 	UFUNCTION()
 		void MovePawnForward();
 	UFUNCTION()
@@ -59,4 +68,5 @@ private:
 		void MovePawnRight();
 	UFUNCTION()
 		void MovePawnLeft();
+	//--------------------------
 };

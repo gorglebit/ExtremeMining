@@ -59,7 +59,8 @@ void AEMCameraPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	PlayerInputComponent->BindAxis("CameraPawnMoveForwardBack", this, &AEMCameraPawn::MovePawnForwardBackAxis);
 	PlayerInputComponent->BindAxis("CameraPawnMoveRightLeft", this, &AEMCameraPawn::MovePawnRightLeftAxis);
-	PlayerInputComponent->BindAxis("CameraPawnZoom", this, &AEMCameraPawn::CameraZoomInOutAxis);
+	PlayerInputComponent->BindAction("CameraZoomIn",IE_Pressed, this, &AEMCameraPawn::CameraZoomIn);
+	PlayerInputComponent->BindAction("CameraZoomOut",IE_Pressed, this, &AEMCameraPawn::CameraZoomOut);
 }
 
 void AEMCameraPawn::MovePawnForwardBackTick()
@@ -140,25 +141,20 @@ void AEMCameraPawn::MovePawnRightLeftAxis(const float value)
 	}
 }
 
-void AEMCameraPawn::CameraZoomInOutAxis(const float value)
+void AEMCameraPawn::CameraZoomIn()
 {
-	if (value == 0) return;
+	float NewArmLength = SpringArmComponent->TargetArmLength - CameraZoomSpeed;
+	NewArmLength = FMath::Clamp(NewArmLength, 300, 1500);
+	SpringArmComponent->TargetArmLength = NewArmLength;
+	return;
+}
 
-	if (value == 1)
-	{
-		float NewArmLength = SpringArmComponent->TargetArmLength + CameraZoomSpeed;
-		FMath::Clamp(NewArmLength, 300, 1500);
-		SpringArmComponent->TargetArmLength = NewArmLength;
-		return;
-	}
-
-	if (value == -1)
-	{
-		float NewArmLength = SpringArmComponent->TargetArmLength - CameraZoomSpeed;
-		FMath::Clamp(NewArmLength, 300, 1500);
-		SpringArmComponent->TargetArmLength = NewArmLength;
-		return;
-	}
+void AEMCameraPawn::CameraZoomOut()
+{
+	float NewArmLength = SpringArmComponent->TargetArmLength + CameraZoomSpeed;
+	NewArmLength = FMath::Clamp(NewArmLength, 300, 1500);
+	SpringArmComponent->TargetArmLength = NewArmLength;
+	return;
 }
 
 void AEMCameraPawn::MovePawnForward()
