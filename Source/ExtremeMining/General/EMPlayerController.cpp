@@ -6,6 +6,4 @@
 void AEMPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-
 }
