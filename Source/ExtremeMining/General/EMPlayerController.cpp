@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "EMPlayerController.h"
+#include "GameFramework/HUD.h"
+#include "EMHeadUpDisplay.h"
 
 void AEMPlayerController::BeginPlay()
 {
@@ -20,17 +21,27 @@ void AEMPlayerController::Tick(float DeltaTime)
 
 	if (IsLeftMousePressed)
 	{
-
+		SelectionHeld();
 	}
 }
 
 void AEMPlayerController::SelectObjectStart()
 {
 	IsLeftMousePressed = true;
+
+	AEMHeadUpDisplay* HUD = Cast<AEMHeadUpDisplay>(GetHUD());
+	if (!HUD) return;
+
+	HUD->SelectionPressed();
 }
 void AEMPlayerController::SelectObjectStop()
 {
 	IsLeftMousePressed = false;
+
+	AEMHeadUpDisplay* HUD = Cast<AEMHeadUpDisplay>(GetHUD());
+	if (!HUD) return;
+
+	SelectionReleased();
 }
 
 void AEMPlayerController::SetupInputComponent()
