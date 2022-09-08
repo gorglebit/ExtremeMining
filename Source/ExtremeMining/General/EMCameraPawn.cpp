@@ -1,10 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "General/EMCameraPawn.h"
+#include "EMCameraPawn.h"
 #include <GameFramework/SpringArmComponent.h>
 #include <Camera/CameraComponent.h>
 #include <Kismet/GameplayStatics.h>
+#include <GameFramework/PlayerController.h>
 
 // Sets default values
 AEMCameraPawn::AEMCameraPawn()
@@ -59,6 +60,7 @@ void AEMCameraPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	PlayerInputComponent->BindAxis("CameraPawnMoveForwardBack", this, &AEMCameraPawn::MovePawnForwardBackAxis);
 	PlayerInputComponent->BindAxis("CameraPawnMoveRightLeft", this, &AEMCameraPawn::MovePawnRightLeftAxis);
+	
 	PlayerInputComponent->BindAction("CameraZoomIn",IE_Pressed, this, &AEMCameraPawn::CameraZoomIn);
 	PlayerInputComponent->BindAction("CameraZoomOut",IE_Pressed, this, &AEMCameraPawn::CameraZoomOut);
 }
