@@ -4,6 +4,23 @@
 
 #include <Kismet/GameplayStatics.h>
 
+AEMHeadUpDisplay::AEMHeadUpDisplay()
+{
+	IsDrawing = false;
+	StartMousePosition = { 0, 0 };
+	CurrentMousePostion = { 0, 0 };
+}
+
+void AEMHeadUpDisplay::SelectObjectInRect()
+{
+	if (IsDrawing)
+	{
+		float rectWeight = CurrentMousePostion.X - StartMousePosition.X;
+		float rectHeight = CurrentMousePostion.Y - StartMousePosition.Y;
+		DrawRect(FLinearColor::Black, StartMousePosition.X, StartMousePosition.Y, rectWeight, rectHeight);
+	}
+}
+
 void AEMHeadUpDisplay::SelectionPressed()
 {
 	IsDrawing = true;
@@ -24,16 +41,3 @@ void AEMHeadUpDisplay::SelectionReleased()
 {
 	IsDrawing = false;
 }
-
-//void AEMHeadUpDisplay::ReceiveDrawHUD(int32 SizeX, int32 SizeY)
-//{
-//	int x, y;
-//	Super::ReceiveDrawHUD(x,y);
-//
-//	if (IsDrawing)
-//	{
-//		float rectHeight = CurrentMousePostion.Y - StartMousePosition.Y;
-//		float rectWeight = CurrentMousePostion.X - StartMousePosition.X;
-//		DrawRect(FColor::Blue, StartMousePosition.X, StartMousePosition.Y, rectWeight, rectHeight);
-//	}
-//}

@@ -18,7 +18,14 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	// Moving on tick near border
+	UFUNCTION(BlueprintCallable)
+	void MovePawnForwardBackTick();
 
+	UFUNCTION(BlueprintCallable)
+	void MovePawnRightLeftTick();
+	//--------------
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -39,11 +46,6 @@ private:
 	int32 CameraZoomSpeed;
 
 private:
-	// Moving on tick near border
-		void MovePawnForwardBackTick();
-		void MovePawnRightLeftTick();
-	//--------------
-
 	// Moving using keyboard
 		void MovePawnForwardBackAxis(const float value);
 		void MovePawnRightLeftAxis(const float value);

@@ -17,6 +17,7 @@ class EXTREMEMINING_API AEMHeadUpDisplay : public AHUD, public IEMHeadUpDisplayI
 	GENERATED_BODY()
 	
 public:
+	AEMHeadUpDisplay();
 	virtual void SelectionPressed() override;
 	virtual void SelectionHeld() override;
 	virtual void SelectionReleased() override;
@@ -24,13 +25,17 @@ public:
 	//virtual void ReceiveDrawHUD(int32 SizeX, int32 SizeY) override;
 	
 protected:
+	UFUNCTION(BlueprintCallable)
+	void SelectObjectInRect();
+
+protected:
 	UPROPERTY(BlueprintReadOnly)
-	bool IsDrawing = false;
+	bool IsDrawing;
 
 	UPROPERTY(BlueprintReadOnly)
-	FVector2D StartMousePosition = 0.0;
+	FVector2D StartMousePosition;
 	UPROPERTY(BlueprintReadOnly)
-	FVector2D CurrentMousePostion = 0.0;
+	FVector2D CurrentMousePostion;
 private:
 	
 	

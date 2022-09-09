@@ -17,6 +17,8 @@ class EXTREMEMINING_API AEMPlayerController : public APlayerController, public I
 	GENERATED_BODY()
 
 public:
+	AEMPlayerController();
+
 	virtual void SetupInputComponent() override;
 	virtual void Tick(float DeltaTime) override;
 
@@ -24,7 +26,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 private:
-	bool IsLeftMousePressed = false;
+	bool IsLeftMousePressed;
 private:
 	void SelectObjectStart();
 	void SelectObjectStop();

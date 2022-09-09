@@ -49,8 +49,8 @@ void AEMCameraPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	MovePawnForwardBackTick();
-	MovePawnRightLeftTick();
+	//MovePawnForwardBackTick();
+	//MovePawnRightLeftTick();
 }
 
 // Called to bind functionality to input
@@ -70,20 +70,20 @@ void AEMCameraPawn::MovePawnForwardBackTick()
 	float mouseX, mouseY;
 	
 	bool IsMouseEnable = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetMousePosition(mouseX, mouseY);
-	if (!IsMouseEnable) return;
+	if (!IsMouseEnable)
+	{
+		MovePawnBack();
+		return;
+	}
 
 	float Ratio = mouseY / ViewportSize.Y;
 
 	if (Ratio > 0.95)
-	{
 		MovePawnForward();
-	}
 	else
 	{
 		if (Ratio < 0.05)
-		{
 			MovePawnBack();
-		}
 	}
 }
 
@@ -97,15 +97,11 @@ void AEMCameraPawn::MovePawnRightLeftTick()
 	float Ratio = mouseX / ViewportSize.X;
 
 	if (Ratio > 0.95)
-	{
 		MovePawnRight();
-	}
 	else
 	{
 		if (Ratio < 0.05)
-		{
 			MovePawnLeft();
-		}
 	}
 }
 
