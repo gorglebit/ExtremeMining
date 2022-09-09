@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
-#include "../Interface/EMHeadUpDisplayInterface.h"
+#include "../Interface/EMBasicInterface.h"
 
 #include "EMHeadUpDisplay.generated.h"
 
@@ -12,15 +12,15 @@
  * 
  */
 UCLASS()
-class EXTREMEMINING_API AEMHeadUpDisplay : public AHUD, public IEMHeadUpDisplayInterface
+class EXTREMEMINING_API AEMHeadUpDisplay : public AHUD, public IEMBasicInterface
 {
 	GENERATED_BODY()
 	
 public:
 	AEMHeadUpDisplay();
-	virtual void SelectionPressed() override;
-	virtual void SelectionHeld() override;
-	virtual void SelectionReleased() override;
+	virtual void MarqueePressed() override;
+	virtual void MarqueeHeld() override;
+	virtual void MarqueeReleased() override;
 
 	//virtual void ReceiveDrawHUD(int32 SizeX, int32 SizeY) override;
 	

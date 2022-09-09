@@ -5,14 +5,14 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 
-#include "../Interface/EMHeadUpDisplayInterface.h"
+#include "../Interface/EMBasicInterface.h"
 #include "EMPlayerController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class EXTREMEMINING_API AEMPlayerController : public APlayerController, public IEMHeadUpDisplayInterface
+class EXTREMEMINING_API AEMPlayerController : public APlayerController, public IEMBasicInterface
 {
 	GENERATED_BODY()
 

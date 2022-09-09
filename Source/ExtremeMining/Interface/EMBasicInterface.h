@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "EMHeadUpDisplayInterface.generated.h"
+#include "EMBasicInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UEMHeadUpDisplayInterface : public UInterface
+class UEMBasicInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,13 +16,16 @@ class UEMHeadUpDisplayInterface : public UInterface
 /**
  * 
  */
-class EXTREMEMINING_API IEMHeadUpDisplayInterface
+class EXTREMEMINING_API IEMBasicInterface
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void SelectionPressed();
-	virtual void SelectionHeld();
-	virtual void SelectionReleased();
+	virtual void MarqueePressed();
+	virtual void MarqueeHeld();
+	virtual void MarqueeReleased();
+	virtual void SelectObject();
+	virtual void DeselectObject();
+	
 };

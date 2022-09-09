@@ -24,7 +24,7 @@ void AEMHeadUpDisplay::SelectObjectInRect()
 	}
 }
 
-void AEMHeadUpDisplay::SelectionPressed()
+void AEMHeadUpDisplay::MarqueePressed()
 {
 	IsDrawing = true;
 	float mouseX, mouseY;
@@ -33,14 +33,14 @@ void AEMHeadUpDisplay::SelectionPressed()
 	CurrentMousePostion = StartMousePosition;
 }
 
-void AEMHeadUpDisplay::SelectionHeld()
+void AEMHeadUpDisplay::MarqueeHeld()
 {
 	float mouseX, mouseY;
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetMousePosition(mouseX, mouseY);
 	CurrentMousePostion = { mouseX, mouseY };
 }
 
-void AEMHeadUpDisplay::SelectionReleased()
+void AEMHeadUpDisplay::MarqueeReleased()
 {
 	IsDrawing = false;
 }

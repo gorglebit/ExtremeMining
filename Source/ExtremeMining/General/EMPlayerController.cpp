@@ -30,7 +30,7 @@ void AEMPlayerController::Tick(float DeltaTime)
 
 	if (IsLeftMousePressed)
 	{
-		HUD->SelectionHeld();
+		HUD->MarqueeHeld();
 	}
 }
 
@@ -42,7 +42,7 @@ void AEMPlayerController::SelectObjectStart()
 	AEMHeadUpDisplay* HUD = Cast<AEMHeadUpDisplay>(GetHUD());
 	if (!HUD) return;
 
-	HUD->SelectionPressed();
+	HUD->MarqueePressed();
 }
 void AEMPlayerController::SelectObjectStop()
 {
@@ -52,7 +52,7 @@ void AEMPlayerController::SelectObjectStop()
 	AEMHeadUpDisplay* HUD = Cast<AEMHeadUpDisplay>(GetHUD());
 	if (!HUD) return;
 
-	HUD->SelectionReleased();
+	HUD->MarqueeReleased();
 }
 
 void AEMPlayerController::SetupInputComponent()
