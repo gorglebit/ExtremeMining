@@ -37,6 +37,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	FVector2D CurrentMousePostion;
 private:
+
+	TArray<AActor*> SelectedObjectsArray;
+	TArray<AActor*> ActorsInRectArray;
 	
 	
 
