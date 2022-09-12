@@ -4,6 +4,8 @@
 
 #include <Kismet/GameplayStatics.h>
 
+#include "../Character/EMCharacterBase.h"
+
 AEMHeadUpDisplay::AEMHeadUpDisplay()
 {
 	IsDrawing = false;
@@ -19,8 +21,32 @@ void AEMHeadUpDisplay::SelectObjectInRect()
 		float rectHeight = CurrentMousePostion.Y - StartMousePosition.Y;
 		DrawRect(FLinearColor(255, 0, 0, 0.2), StartMousePosition.X, StartMousePosition.Y, rectWeight, rectHeight);
 
-		TArray<AActor*> ActorsInSelectionRect;
-		GetActorsInSelectionRectangle(StartMousePosition, CurrentMousePostion, ActorsInSelectionRect, false, false);
+		GetActorsInSelectionRectangle(StartMousePosition, CurrentMousePostion, ActorsInRectArray, false, false);
+
+		for (int i = 0; i < ActorsInRectArray.Num(); i++)
+		{
+			AEMCharacterBase* CharActor = Cast<AEMCharacterBase>(ActorsInRectArray[i]);
+
+			if (CharActor)
+			{
+				CharActor->SelectObject();
+				SelectedObjectsArray.Add(CharActor);
+			}
+		}
+
+		for (int i = 0; i < SelectedObjectsArray.Num(); i++)
+		{
+			if (ActorsInRectArray.Find(SelectedObjectsArray[i]) == -1)
+			{
+				AEMCharacterBase* CharActor = Cast<AEMCharacterBase>(SelectedObjectsArray[i]);
+				if (CharActor)
+				{
+					CharActor->DeselectObject();
+					SelectedObjectsArray.Remove(CharActor);
+				}
+			}
+			
+		}
 	}
 }
 
