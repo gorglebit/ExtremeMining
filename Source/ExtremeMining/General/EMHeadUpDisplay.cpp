@@ -19,6 +19,8 @@ void AEMHeadUpDisplay::SelectObjectInRect()
 	{
 		float rectWeight = CurrentMousePostion.X - StartMousePosition.X;
 		float rectHeight = CurrentMousePostion.Y - StartMousePosition.Y;
+
+		ActorsInRectArray.Empty();
 		DrawRect(FLinearColor(255, 0, 0, 0.2), StartMousePosition.X, StartMousePosition.Y, rectWeight, rectHeight);
 
 		GetActorsInSelectionRectangle(StartMousePosition, CurrentMousePostion, ActorsInRectArray, false, false);
@@ -30,7 +32,7 @@ void AEMHeadUpDisplay::SelectObjectInRect()
 			if (CharActor)
 			{
 				CharActor->SelectObject();
-				SelectedObjectsArray.Add(CharActor);
+				SelectedObjectsArray.AddUnique(CharActor);
 			}
 		}
 
