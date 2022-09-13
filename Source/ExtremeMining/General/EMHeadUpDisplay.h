@@ -19,7 +19,7 @@ class EXTREMEMINING_API AEMHeadUpDisplay : public AHUD, public IEMBasicInterface
 public:
 	AEMHeadUpDisplay();
 	virtual void MarqueePressed() override;
-	virtual void MarqueeHeld() override;
+	virtual void MarqueeHeld() override; 
 	virtual void MarqueeReleased() override;
 
 	//virtual void ReceiveDrawHUD(int32 SizeX, int32 SizeY) override;
