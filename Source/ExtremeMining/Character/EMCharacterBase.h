@@ -13,25 +13,19 @@ class EXTREMEMINING_API AEMCharacterBase : public ACharacter, public IEMBasicInt
 {
 	GENERATED_BODY()
 
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* BodyMesh;
+
 public:
-	// Sets default values for this character's properties
 	AEMCharacterBase();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintNativeEvent)
-	void ShowThatSelected();
-
-	UFUNCTION(BlueprintNativeEvent)
-	void ShowThatDeselected();
-
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void SelectObject() override;
