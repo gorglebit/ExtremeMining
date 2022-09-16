@@ -8,9 +8,8 @@
 #include "../Interface/EMBasicInterface.h"
 #include "EMPlayerController.generated.h"
 
-/**
- * 
- */
+class AEMBuildingBase;
+
 UCLASS()
 class EXTREMEMINING_API AEMPlayerController : public APlayerController, public IEMBasicInterface
 {
@@ -18,15 +17,16 @@ class EXTREMEMINING_API AEMPlayerController : public APlayerController, public I
 
 private:
 	FVector RightMouseLocation;
+	AEMBuildingBase* SelectedBuilding;
 
 public:
 	AEMPlayerController();
 
 	virtual void SetupInputComponent() override;
 	virtual void Tick(float DeltaTime) override;
+	void ClearSelectedBuildings() override;
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 private:
 	bool IsLeftMousePressed;
@@ -34,5 +34,7 @@ private:
 	void SelectObjectStartAction();
 	void SelectObjectStopAction();
 	void MoveToLocationAction();
+
+	
 	
 };

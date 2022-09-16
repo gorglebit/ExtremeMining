@@ -4,23 +4,29 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "../Interface/EMBasicInterface.h"
 #include "EMBuildingBase.generated.h"
 
 UCLASS()
-class EXTREMEMINING_API AEMBuildingBase : public AActor
+class EXTREMEMINING_API AEMBuildingBase : public AActor, public IEMBasicInterface
 {
 	GENERATED_BODY()
 	
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* BuildMesh;
+
 public:	
-	// Sets default values for this actor's properties
 	AEMBuildingBase();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	virtual void SelectObject() override;
+
+	virtual void DeselectObject() override;
 
 };

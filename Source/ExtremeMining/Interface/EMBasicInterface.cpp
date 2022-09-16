@@ -29,7 +29,11 @@ void IEMBasicInterface::UnitMoveCommand(const FVector3d Location)
 {
 }
 
-TArray<AActor*> IEMBasicInterface::GrabSelectedUnits()
+TArray<AEMCharacterBase*> IEMBasicInterface::GrabSelectedUnits()
 {
-	return TArray<AActor*>();
+	return TArray<AEMCharacterBase*>();
+}
+
+void IEMBasicInterface::ClearSelectedBuildings()
+{
 }

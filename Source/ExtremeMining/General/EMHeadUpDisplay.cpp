@@ -1,10 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "EMHeadUpDisplay.h"
-
 #include <Kismet/GameplayStatics.h>
-
 #include "../Character/EMCharacterBase.h"
+#include "EMPlayerController.h"
 
 AEMHeadUpDisplay::AEMHeadUpDisplay()
 {
@@ -33,6 +32,13 @@ void AEMHeadUpDisplay::SelectObjectInRect()
 			{
 				CharActor->SelectObject();
 				SelectedCharactersArray.AddUnique(CharActor);
+
+				AEMPlayerController* Controller = Cast<AEMPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+				if (Controller)
+				{
+					Controller->ClearSelectedBuildings();
+				}
+					
 			}
 		}
 
@@ -73,7 +79,7 @@ void AEMHeadUpDisplay::MarqueeReleased()
 	IsDrawing = false;
 }
 
-TArray<AActor*> AEMHeadUpDisplay::GrabSelectedUnits()
+TArray<AEMCharacterBase*> AEMHeadUpDisplay::GrabSelectedUnits()
 {
 	return SelectedCharactersArray;
 }

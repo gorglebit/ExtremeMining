@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-
 #include "../Interface/EMBasicInterface.h"
 #include "EMCharacterBase.generated.h"
+
+class UStaticMeshComponent;
 
 UCLASS()
 class EXTREMEMINING_API AEMCharacterBase : public ACharacter, public IEMBasicInterface
@@ -15,7 +16,7 @@ class EXTREMEMINING_API AEMCharacterBase : public ACharacter, public IEMBasicInt
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* BodyMesh;
+		UStaticMeshComponent* BodyMesh;
 
 public:
 	AEMCharacterBase();

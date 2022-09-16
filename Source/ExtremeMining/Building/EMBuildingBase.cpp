@@ -1,27 +1,34 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "EMBuildingBase.h"
 
-// Sets default values
 AEMBuildingBase::AEMBuildingBase()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	BuildMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
+	BuildMesh->SetupAttachment(RootComponent);
 }
 
-// Called when the game starts or when spawned
 void AEMBuildingBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
 void AEMBuildingBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AEMBuildingBase::SelectObject()
+{
+	BuildMesh->SetRenderCustomDepth(true);
+}
+
+void AEMBuildingBase::DeselectObject()
+{
+	BuildMesh->SetRenderCustomDepth(false);
 }
 

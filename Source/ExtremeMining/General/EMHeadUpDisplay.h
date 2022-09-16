@@ -5,12 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
 #include "../Interface/EMBasicInterface.h"
-
 #include "EMHeadUpDisplay.generated.h"
 
-/**
- * 
- */
+class AEMCharacterBase;
+
 UCLASS()
 class EXTREMEMINING_API AEMHeadUpDisplay : public AHUD, public IEMBasicInterface
 {
@@ -21,7 +19,7 @@ public:
 	virtual void MarqueePressed() override;
 	virtual void MarqueeHeld() override; 
 	virtual void MarqueeReleased() override;
-	virtual TArray<AActor*> GrabSelectedUnits() override;
+	virtual TArray<AEMCharacterBase*> GrabSelectedUnits() override;
 
 	//virtual void ReceiveDrawHUD(int32 SizeX, int32 SizeY) override;
 	
@@ -39,10 +37,6 @@ protected:
 	FVector2D CurrentMousePostion;
 private:
 
-	TArray<AActor*> SelectedCharactersArray;
-	TArray<AActor*> ActorsInRectArray;
-	
-	
-
-	
+	TArray<AEMCharacterBase*> SelectedCharactersArray;
+	TArray<AEMCharacterBase*> ActorsInRectArray;
 };

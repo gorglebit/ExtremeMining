@@ -12,25 +12,21 @@ class EXTREMEMINING_API AEMCameraPawn : public APawn
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
 	AEMCameraPawn();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
 	// Moving on tick near border
 	UFUNCTION(BlueprintCallable)
-	void MovePawnForwardBackTick();
+		void MovePawnForwardBackTick();
 
 	UFUNCTION(BlueprintCallable)
-	void MovePawnRightLeftTick();
+		void MovePawnRightLeftTick();
 	//--------------
 public:
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
@@ -50,19 +46,19 @@ private:
 
 private:
 	// Moving using keyboard
-		void MovePawnForwardBackAxis(const float value);
-		void MovePawnRightLeftAxis(const float value);
+	void MovePawnForwardBackAxis(const float value);
+	void MovePawnRightLeftAxis(const float value);
 	//------------------
 
 	//Camera zoom
-		void CameraZoomIn();
-		void CameraZoomOut();
+	void CameraZoomIn();
+	void CameraZoomOut();
 	//----------------
 
 	// Simple moving functions
-		void MovePawnForward();
-		void MovePawnBack();
-		void MovePawnRight();
-		void MovePawnLeft();
+	void MovePawnForward();
+	void MovePawnBack();
+	void MovePawnRight();
+	void MovePawnLeft();
 	//--------------------------
 };

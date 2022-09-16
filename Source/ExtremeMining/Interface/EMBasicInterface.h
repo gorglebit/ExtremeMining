@@ -13,9 +13,8 @@ class UEMBasicInterface : public UInterface
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
+class AEMCharacterBase;
+
 class EXTREMEMINING_API IEMBasicInterface
 {
 	GENERATED_BODY()
@@ -25,9 +24,12 @@ public:
 	virtual void MarqueePressed();
 	virtual void MarqueeHeld();
 	virtual void MarqueeReleased();
+
 	virtual void SelectObject();
 	virtual void DeselectObject();
+
 	virtual void UnitMoveCommand(const FVector3d Location);
-	virtual TArray<AActor*> GrabSelectedUnits();
+	virtual TArray<AEMCharacterBase*> GrabSelectedUnits();
 	
+	virtual void ClearSelectedBuildings();
 };
