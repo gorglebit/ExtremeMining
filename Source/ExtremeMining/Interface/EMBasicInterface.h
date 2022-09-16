@@ -27,5 +27,7 @@ public:
 	virtual void MarqueeReleased();
 	virtual void SelectObject();
 	virtual void DeselectObject();
+	virtual void UnitMoveCommand(const FVector3d Location);
+	virtual TArray<AActor*> GrabSelectedUnits();
 	
 };

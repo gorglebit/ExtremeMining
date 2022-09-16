@@ -24,7 +24,7 @@ AEMCameraPawn::AEMCameraPawn()
 
 	SpringArmComponent->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when character does
 	SpringArmComponent->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));
-	SpringArmComponent->TargetArmLength = 800.f;
+	SpringArmComponent->TargetArmLength = 3000.f;
 	SpringArmComponent->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
 	SpringArmComponent->bEnableCameraLag = true;
 	// Create a camera...
@@ -35,6 +35,8 @@ AEMCameraPawn::AEMCameraPawn()
 
 	CameraMoveSpeed = 1000;
 	CameraZoomSpeed = 100;
+	TargetArmMaxLength = 4000;
+	TargetArmMinLength = 1000;
 }
 
 // Called when the game starts or when spawned
@@ -142,7 +144,7 @@ void AEMCameraPawn::MovePawnRightLeftAxis(const float value)
 void AEMCameraPawn::CameraZoomIn()
 {
 	float NewArmLength = SpringArmComponent->TargetArmLength - CameraZoomSpeed;
-	NewArmLength = FMath::Clamp(NewArmLength, 300, 1500);
+	NewArmLength = FMath::Clamp(NewArmLength, TargetArmMinLength, TargetArmMaxLength);
 	SpringArmComponent->TargetArmLength = NewArmLength;
 	return;
 }
@@ -150,7 +152,7 @@ void AEMCameraPawn::CameraZoomIn()
 void AEMCameraPawn::CameraZoomOut()
 {
 	float NewArmLength = SpringArmComponent->TargetArmLength + CameraZoomSpeed;
-	NewArmLength = FMath::Clamp(NewArmLength, 300, 1500);
+	NewArmLength = FMath::Clamp(NewArmLength, TargetArmMinLength, TargetArmMaxLength);
 	SpringArmComponent->TargetArmLength = NewArmLength;
 	return;
 }

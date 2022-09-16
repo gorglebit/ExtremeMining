@@ -32,19 +32,19 @@ void AEMHeadUpDisplay::SelectObjectInRect()
 			if (CharActor)
 			{
 				CharActor->SelectObject();
-				SelectedObjectsArray.AddUnique(CharActor);
+				SelectedCharactersArray.AddUnique(CharActor);
 			}
 		}
 
-		for (int i = 0; i < SelectedObjectsArray.Num(); i++)
+		for (int i = 0; i < SelectedCharactersArray.Num(); i++)
 		{
-			if (ActorsInRectArray.Find(SelectedObjectsArray[i]) == -1)
+			if (ActorsInRectArray.Find(SelectedCharactersArray[i]) == -1)
 			{
-				AEMCharacterBase* CharActor = Cast<AEMCharacterBase>(SelectedObjectsArray[i]);
+				AEMCharacterBase* CharActor = Cast<AEMCharacterBase>(SelectedCharactersArray[i]);
 				if (CharActor)
 				{
 					CharActor->DeselectObject();
-					SelectedObjectsArray.Remove(CharActor);
+					SelectedCharactersArray.Remove(CharActor);
 				}
 			}
 			
@@ -71,4 +71,9 @@ void AEMHeadUpDisplay::MarqueeHeld()
 void AEMHeadUpDisplay::MarqueeReleased()
 {
 	IsDrawing = false;
+}
+
+TArray<AActor*> AEMHeadUpDisplay::GrabSelectedUnits()
+{
+	return SelectedCharactersArray;
 }

@@ -16,6 +16,9 @@ class EXTREMEMINING_API AEMPlayerController : public APlayerController, public I
 {
 	GENERATED_BODY()
 
+private:
+	FVector RightMouseLocation;
+
 public:
 	AEMPlayerController();
 
@@ -28,7 +31,8 @@ protected:
 private:
 	bool IsLeftMousePressed;
 private:
-	void SelectObjectStart();
-	void SelectObjectStop();
+	void SelectObjectStartAction();
+	void SelectObjectStopAction();
+	void MoveToLocationAction();
 	
 };

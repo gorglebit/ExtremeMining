@@ -24,3 +24,12 @@ void IEMBasicInterface::SelectObject()
 void IEMBasicInterface::DeselectObject()
 {
 }
+
+void IEMBasicInterface::UnitMoveCommand(const FVector3d Location)
+{
+}
+
+TArray<AActor*> IEMBasicInterface::GrabSelectedUnits()
+{
+	return TArray<AActor*>();
+}

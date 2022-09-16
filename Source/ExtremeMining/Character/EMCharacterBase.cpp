@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "EMCharacterBase.h"
+#include "Tasks/AITask_MoveTo.h"
 
 AEMCharacterBase::AEMCharacterBase()
 {
@@ -16,6 +16,10 @@ void AEMCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AEMCharacterBase::UnitMoveCommandBP_Implementation(const FVector Location)
+{
 }
 
 void AEMCharacterBase::Tick(float DeltaTime)
@@ -38,4 +42,9 @@ void AEMCharacterBase::SelectObject()
 void AEMCharacterBase::DeselectObject()
 {
 	BodyMesh->SetRenderCustomDepth(false);
+}
+
+void AEMCharacterBase::UnitMoveCommand(const FVector Location)
+{
+	UnitMoveCommandBP(Location);
 }

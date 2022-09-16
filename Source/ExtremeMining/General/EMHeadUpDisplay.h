@@ -21,6 +21,7 @@ public:
 	virtual void MarqueePressed() override;
 	virtual void MarqueeHeld() override; 
 	virtual void MarqueeReleased() override;
+	virtual TArray<AActor*> GrabSelectedUnits() override;
 
 	//virtual void ReceiveDrawHUD(int32 SizeX, int32 SizeY) override;
 	
@@ -38,7 +39,7 @@ protected:
 	FVector2D CurrentMousePostion;
 private:
 
-	TArray<AActor*> SelectedObjectsArray;
+	TArray<AActor*> SelectedCharactersArray;
 	TArray<AActor*> ActorsInRectArray;
 	
 	

@@ -45,6 +45,9 @@ private:
 	int32 CameraMoveSpeed;
 	int32 CameraZoomSpeed;
 
+	int32 TargetArmMaxLength;
+	int32 TargetArmMinLength;
+
 private:
 	// Moving using keyboard
 		void MovePawnForwardBackAxis(const float value);
