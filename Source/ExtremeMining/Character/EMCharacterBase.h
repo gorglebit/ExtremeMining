@@ -24,9 +24,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintNativeEvent)
-		void UnitMoveCommandBP(const FVector Location);
-
 public:
 	virtual void Tick(float DeltaTime) override;
 

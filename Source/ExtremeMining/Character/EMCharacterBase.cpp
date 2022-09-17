@@ -2,6 +2,9 @@
 
 #include "EMCharacterBase.h"
 
+#include "AIController.h"
+#include "Blueprint/AIBlueprintHelperLibrary.h"
+
 AEMCharacterBase::AEMCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -14,11 +17,7 @@ AEMCharacterBase::AEMCharacterBase()
 void AEMCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
-}
 
-void AEMCharacterBase::UnitMoveCommandBP_Implementation(const FVector Location)
-{
 }
 
 void AEMCharacterBase::Tick(float DeltaTime)
@@ -45,5 +44,9 @@ void AEMCharacterBase::DeselectObject()
 
 void AEMCharacterBase::UnitMoveCommand(const FVector Location)
 {
-	UnitMoveCommandBP(Location);
+	AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(this);
+	if (!AIController) return;
+
+	AIController->StopMovement();
+	UAIBlueprintHelperLibrary::SimpleMoveToLocation(AIController, Location);
 }
