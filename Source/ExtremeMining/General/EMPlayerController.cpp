@@ -6,6 +6,8 @@
 #include "../Building/EMBuildingBase.h"
 #include "../Character/EMCharacterBase.h"
 
+//UE_LOG(LogTemp, Warning, TEXT(""));
+
 AEMPlayerController::AEMPlayerController()
 {
 	IsLeftMousePressed = false;
@@ -40,7 +42,7 @@ void AEMPlayerController::Tick(float DeltaTime)
 void AEMPlayerController::SelectObjectStartAction()
 {
 	IsLeftMousePressed = true;
-	//UE_LOG(LogTemp, Warning, TEXT("LeftMouse = true"));
+	//UE_LOG(LogTemp, Warning, TEXT(""));
 
 	ClearSelectedBuildings();
 

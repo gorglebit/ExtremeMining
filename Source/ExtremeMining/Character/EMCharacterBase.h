@@ -17,7 +17,8 @@ class EXTREMEMINING_API AEMCharacterBase : public ACharacter, public IEMBasicInt
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 		UStaticMeshComponent* BodyMesh;
-	
+
+	FTimerHandle TimerCheckMoveStatus;
 protected:
 	UPROPERTY(BlueprintReadOnly)
 		FVector WorkLocation;
@@ -30,6 +31,7 @@ public:
 
 
 private:
+	void CheckMoveStatus();
 	void SetFirstWorkLocation();
 
 private:

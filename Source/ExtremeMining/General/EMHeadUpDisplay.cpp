@@ -5,6 +5,8 @@
 #include "../Character/EMCharacterBase.h"
 #include "EMPlayerController.h"
 
+//UE_LOG(LogTemp, Warning, TEXT(""));
+
 AEMHeadUpDisplay::AEMHeadUpDisplay()
 {
 	IsDrawing = false;

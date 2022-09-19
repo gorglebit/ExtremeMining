@@ -7,6 +7,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "..\Building\EMBuildingBase.h"
 #include "Tasks/AITask_MoveTo.h"
+#include "Navigation/PathFollowingComponent.h"
+
+//UE_LOG(LogTemp, Warning, TEXT(""));
 
 AEMCharacterBase::AEMCharacterBase()
 {
@@ -19,6 +22,8 @@ AEMCharacterBase::AEMCharacterBase()
 	IsCommandActive = false;
 	CharacterType = 0;
 }
+
+
 
 void AEMCharacterBase::SetFirstWorkLocation()
 {
@@ -78,12 +83,22 @@ void AEMCharacterBase::UnitMoveCommand(const FVector Location)
 
 	AIController->StopMovement();
 	AIController->MoveToLocation(Location, -1, true, true, false, true, nullptr, false);
-	
-	//AIController->
-	//UAITask_MoveTo* AITask = UAITask_MoveTo::AIMoveTo(
-	//	AIController,
-	//	Location,
-	//	NULL, 
-	//	-1
-	//);
+
+	TimerCheckMoveStatus;
+	GetWorldTimerManager().SetTimer(TimerCheckMoveStatus, this, &AEMCharacterBase::CheckMoveStatus, 3.f, true);
+}
+
+void AEMCharacterBase::CheckMoveStatus()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Timer start!!!"));
+	AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(this);
+	if (!AIController) return;
+	EPathFollowingStatus::Type Status = AIController->GetMoveStatus();
+
+	if (Status == EPathFollowingStatus::Idle)
+	{
+		IsCommandActive = false;
+		GetWorldTimerManager().ClearTimer(TimerCheckMoveStatus);
+		UE_LOG(LogTemp, Warning, TEXT("Timer end!!!"));
+	}
 }

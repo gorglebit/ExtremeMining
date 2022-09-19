@@ -2,6 +2,8 @@
 
 #include "EMBuildingBase.h"
 
+//UE_LOG(LogTemp, Warning, TEXT(""));
+
 AEMBuildingBase::AEMBuildingBase()
 {
 	PrimaryActorTick.bCanEverTick = true;

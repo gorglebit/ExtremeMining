@@ -6,6 +6,8 @@
 #include <Kismet/GameplayStatics.h>
 #include <GameFramework/PlayerController.h>
 
+//UE_LOG(LogTemp, Warning, TEXT(""));
+
 AEMCameraPawn::AEMCameraPawn()
 {
 	PrimaryActorTick.bCanEverTick = true;

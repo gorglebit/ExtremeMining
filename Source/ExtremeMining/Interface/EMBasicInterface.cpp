@@ -3,6 +3,8 @@
 
 #include "EMBasicInterface.h"
 
+//UE_LOG(LogTemp, Warning, TEXT(""));
+
 // Add default functionality here for any IEMBasicInterface functions that are not pure virtual.
 
 void IEMBasicInterface::MarqueePressed()
