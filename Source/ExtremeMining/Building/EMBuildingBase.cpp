@@ -8,6 +8,7 @@ AEMBuildingBase::AEMBuildingBase()
 
 	BuildMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
 	BuildMesh->SetupAttachment(RootComponent);
+	BuildMesh->SetRelativeRotation(FRotator(0.f, 45.f, 0.f));
 }
 
 void AEMBuildingBase::BeginPlay()

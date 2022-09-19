@@ -4,6 +4,8 @@
 
 #include "AIController.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "..\Building\EMBuildingBase.h"
 
 AEMCharacterBase::AEMCharacterBase()
 {
@@ -14,10 +16,32 @@ AEMCharacterBase::AEMCharacterBase()
 	BodyMesh->SetupAttachment(RootComponent);
 }
 
+void AEMCharacterBase::SetFirstWorkLocation()
+{
+	TSubclassOf<AEMBuildingBase> ActorClass;
+	ActorClass = AEMBuildingBase::StaticClass();
+
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingBase::StaticClass(), OutActors);
+
+	for (int i = 0; i < OutActors.Num(); i++)
+	{
+		AEMBuildingBase* Building = Cast<AEMBuildingBase>(OutActors[i]);
+		if (!Building) return;
+
+		if (Building->BuildingType == BuildingType::BUILDING_MAIN)
+		{
+			WorkLocation = Building->GetActorLocation() - FVector(900, 0, 0);
+			return;
+		}
+	}
+}
+
 void AEMCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	SetFirstWorkLocation();
 }
 
 void AEMCharacterBase::Tick(float DeltaTime)
@@ -48,5 +72,7 @@ void AEMCharacterBase::UnitMoveCommand(const FVector Location)
 	if (!AIController) return;
 
 	AIController->StopMovement();
-	UAIBlueprintHelperLibrary::SimpleMoveToLocation(AIController, Location);
+	AIController->MoveToLocation(Location, -1, true, true, false, true, nullptr, false);
+
+	
 }

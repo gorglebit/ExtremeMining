@@ -17,14 +17,25 @@ class EXTREMEMINING_API AEMCharacterBase : public ACharacter, public IEMBasicInt
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 		UStaticMeshComponent* BodyMesh;
+	
+protected:
+	UPROPERTY(BlueprintReadOnly)
+		FVector WorkLocation;
 
 public:
-	AEMCharacterBase();
+	
+
+private:
+	void SetFirstWorkLocation();
+
+private:
 
 protected:
 	virtual void BeginPlay() override;
 
 public:
+	AEMCharacterBase();
+
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
