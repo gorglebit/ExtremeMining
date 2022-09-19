@@ -6,6 +6,7 @@
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "..\Building\EMBuildingBase.h"
+#include "Tasks/AITask_MoveTo.h"
 
 AEMCharacterBase::AEMCharacterBase()
 {
@@ -14,6 +15,9 @@ AEMCharacterBase::AEMCharacterBase()
 	//GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
 	BodyMesh->SetupAttachment(RootComponent);
+
+	IsCommandActive = false;
+	CharacterType = 0;
 }
 
 void AEMCharacterBase::SetFirstWorkLocation()
@@ -68,11 +72,18 @@ void AEMCharacterBase::DeselectObject()
 
 void AEMCharacterBase::UnitMoveCommand(const FVector Location)
 {
+	IsCommandActive = true;
 	AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(this);
 	if (!AIController) return;
 
 	AIController->StopMovement();
 	AIController->MoveToLocation(Location, -1, true, true, false, true, nullptr, false);
-
 	
+	//AIController->
+	//UAITask_MoveTo* AITask = UAITask_MoveTo::AIMoveTo(
+	//	AIController,
+	//	Location,
+	//	NULL, 
+	//	-1
+	//);
 }

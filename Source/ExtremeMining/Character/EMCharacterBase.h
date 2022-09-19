@@ -21,9 +21,13 @@ private:
 protected:
 	UPROPERTY(BlueprintReadOnly)
 		FVector WorkLocation;
+	UPROPERTY(BlueprintReadWrite)
+		int32 CharacterType;
+	UPROPERTY(BlueprintReadWrite)
+		bool IsCommandActive;
 
 public:
-	
+
 
 private:
 	void SetFirstWorkLocation();
