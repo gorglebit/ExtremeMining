@@ -13,30 +13,34 @@ UCLASS()
 class EXTREMEMINING_API AEMHeadUpDisplay : public AHUD, public IEMBasicInterface
 {
 	GENERATED_BODY()
-	
+
+private:
+	TArray<AEMCharacterBase*> SelectedCharactersArray;
+	TArray<AEMCharacterBase*> ActorsInRectArray;
+
+protected:
+	UPROPERTY(BlueprintReadOnly)
+		bool IsDrawing;
+
+	UPROPERTY(BlueprintReadOnly)
+		FVector2D StartMousePosition;
+
+	UPROPERTY(BlueprintReadOnly)
+		FVector2D CurrentMousePostion;
+public:
+
+private:
+
+protected:
+	UFUNCTION(BlueprintCallable)
+		void SelectObjectInRect();
+
 public:
 	AEMHeadUpDisplay();
 	virtual void MarqueePressed() override;
 	virtual void MarqueeHeld() override; 
 	virtual void MarqueeReleased() override;
 	virtual TArray<AEMCharacterBase*> GrabSelectedUnits() override;
-
-	//virtual void ReceiveDrawHUD(int32 SizeX, int32 SizeY) override;
 	
-protected:
-	UFUNCTION(BlueprintCallable)
-	void SelectObjectInRect();
 
-protected:
-	UPROPERTY(BlueprintReadOnly)
-	bool IsDrawing;
-
-	UPROPERTY(BlueprintReadOnly)
-	FVector2D StartMousePosition;
-	UPROPERTY(BlueprintReadOnly)
-	FVector2D CurrentMousePostion;
-private:
-
-	TArray<AEMCharacterBase*> SelectedCharactersArray;
-	TArray<AEMCharacterBase*> ActorsInRectArray;
 };

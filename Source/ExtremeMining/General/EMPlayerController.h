@@ -28,8 +28,10 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
 private:
 	bool IsLeftMousePressed;
+
 private:
 	void SelectObjectStartAction();
 	void SelectObjectStopAction();

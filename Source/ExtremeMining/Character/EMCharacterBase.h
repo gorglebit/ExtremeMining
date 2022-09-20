@@ -9,32 +9,45 @@
 
 class UStaticMeshComponent;
 
+enum CharacterType
+{
+	CHARACTER_MAIN,
+	CHARACTER_FOOD,
+	CHARACTER_WOOD,
+	CHARACTER_MONEY,
+	CHARACTER_SEA
+};
+
 UCLASS()
 class EXTREMEMINING_API AEMCharacterBase : public ACharacter, public IEMBasicInterface
 {
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-		UStaticMeshComponent* BodyMesh;
-
 	FTimerHandle TimerCheckMoveStatus;
+
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+		UStaticMeshComponent* BodyMeshComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
+		UStaticMeshComponent* HatMeshComponent;
+
 	UPROPERTY(BlueprintReadOnly)
 		FVector WorkLocation;
+
 	UPROPERTY(BlueprintReadWrite)
 		int32 CharacterType;
+
 	UPROPERTY(BlueprintReadWrite)
 		bool IsCommandActive;
 
 public:
-
+	
 
 private:
 	void CheckMoveStatus();
-	void SetFirstWorkLocation();
-
-private:
+	
 
 protected:
 	virtual void BeginPlay() override;
@@ -52,5 +65,12 @@ public:
 
 	virtual void UnitMoveCommand(const FVector Location) override;
 
+	FORCEINLINE int32 GetCharacterType() { return CharacterType; }
 
+	FORCEINLINE void SetCharacterType(const int32 CharType) { CharacterType = CharType; }
+
+	UFUNCTION(BlueprintNativeEvent)
+		void SetCharacterRole(const int32 Type);
+
+	void SetWorkLocation(const int32 BuildType);
 };

@@ -5,9 +5,9 @@
 #include "AIController.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Kismet/GameplayStatics.h"
-#include "..\Building\EMBuildingBase.h"
-#include "Tasks/AITask_MoveTo.h"
 #include "Navigation/PathFollowingComponent.h"
+
+#include "..\Building\EMBuildingBase.h"
 
 //UE_LOG(LogTemp, Warning, TEXT(""));
 
@@ -16,16 +16,17 @@ AEMCharacterBase::AEMCharacterBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
-	BodyMesh->SetupAttachment(RootComponent);
-
+	BodyMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
+	BodyMeshComponent->SetupAttachment(RootComponent);
+	HatMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HatMesh"));
+	HatMeshComponent->SetupAttachment(BodyMeshComponent);
 	IsCommandActive = false;
 	CharacterType = 0;
 }
 
 
 
-void AEMCharacterBase::SetFirstWorkLocation()
+void AEMCharacterBase::SetWorkLocation(const int32 BuildType)
 {
 	TSubclassOf<AEMBuildingBase> ActorClass;
 	ActorClass = AEMBuildingBase::StaticClass();
@@ -38,7 +39,7 @@ void AEMCharacterBase::SetFirstWorkLocation()
 		AEMBuildingBase* Building = Cast<AEMBuildingBase>(OutActors[i]);
 		if (!Building) return;
 
-		if (Building->BuildingType == BuildingType::BUILDING_MAIN)
+		if (Building->GetBuildingType() == BuildType)
 		{
 			WorkLocation = Building->GetActorLocation() - FVector(900, 0, 0);
 			return;
@@ -50,7 +51,8 @@ void AEMCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetFirstWorkLocation();
+	SetCharacterRole(CharacterType);
+	SetWorkLocation(CharacterType);
 }
 
 void AEMCharacterBase::Tick(float DeltaTime)
@@ -67,12 +69,12 @@ void AEMCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void AEMCharacterBase::SelectObject()
 {
-	BodyMesh->SetRenderCustomDepth(true);
+	BodyMeshComponent->SetRenderCustomDepth(true);
 }
 
 void AEMCharacterBase::DeselectObject()
 {
-	BodyMesh->SetRenderCustomDepth(false);
+	BodyMeshComponent->SetRenderCustomDepth(false);
 }
 
 void AEMCharacterBase::UnitMoveCommand(const FVector Location)
@@ -88,9 +90,13 @@ void AEMCharacterBase::UnitMoveCommand(const FVector Location)
 	GetWorldTimerManager().SetTimer(TimerCheckMoveStatus, this, &AEMCharacterBase::CheckMoveStatus, 3.f, true);
 }
 
+void AEMCharacterBase::SetCharacterRole_Implementation(const int32 Type)
+{
+}
+
 void AEMCharacterBase::CheckMoveStatus()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Timer start!!!"));
+	//UE_LOG(LogTemp, Warning, TEXT("Timer start!!!"));
 	AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(this);
 	if (!AIController) return;
 	EPathFollowingStatus::Type Status = AIController->GetMoveStatus();
@@ -99,6 +105,6 @@ void AEMCharacterBase::CheckMoveStatus()
 	{
 		IsCommandActive = false;
 		GetWorldTimerManager().ClearTimer(TimerCheckMoveStatus);
-		UE_LOG(LogTemp, Warning, TEXT("Timer end!!!"));
+		//UE_LOG(LogTemp, Warning, TEXT("Timer end!!!"));
 	}
 }

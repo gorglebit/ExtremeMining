@@ -3,6 +3,7 @@
 #include "EMPlayerController.h"
 #include "GameFramework/HUD.h"
 #include "EMHeadUpDisplay.h"
+#include "Components/BoxComponent.h"
 #include "../Building/EMBuildingBase.h"
 #include "../Character/EMCharacterBase.h"
 
@@ -74,17 +75,31 @@ void AEMPlayerController::SelectObjectStopAction()
 
 void AEMPlayerController::MoveToLocationAction()
 {
+	// Hit
 	FHitResult HitResult;
 	GetHitResultUnderCursorByChannel(ETraceTypeQuery::TraceTypeQuery_MAX, true, HitResult);
-	RightMouseLocation = HitResult.Location;
+	
+	AEMBuildingBase* AsBuilding = Cast<AEMBuildingBase>(HitResult.GetActor());
+
+	if (AsBuilding)
+	{
+		RightMouseLocation = AsBuilding->GetBoxComponent()->GetComponentLocation();
+	}
+	else
+	{
+		RightMouseLocation = HitResult.Location;
+	}
 	//UE_LOG(LogTemp, Warning, TEXT("Location - x = %f, y = %f, z = %f ,"), RightMouseLocation.X, RightMouseLocation.Y, RightMouseLocation.Z);
+	//-----------------
 
-
+	//Take selected units
 	AEMHeadUpDisplay* HUD = Cast<AEMHeadUpDisplay>(GetHUD());
 	if (!HUD) return;
-
 	TArray<AEMCharacterBase*> SelectedCharactersArray = HUD->GrabSelectedUnits();
 	//UE_LOG(LogTemp, Warning, TEXT("SelectedCharactersArray size = %i"), SelectedCharactersArray.Num());
+	//------------------------
+
+	// Selected units move
 	for (int i = 0; i < SelectedCharactersArray.Num(); i++)
 	{
 		// RightMouseLocation or other formation location
@@ -93,6 +108,7 @@ void AEMPlayerController::MoveToLocationAction()
 			SelectedCharactersArray[i]->UnitMoveCommand(RightMouseLocation);
 		}	
 	}
+	//--------------------------
 
 	//Spawn NiagraSystem in mouse right click direction
 }
