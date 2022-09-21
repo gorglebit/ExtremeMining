@@ -6,9 +6,23 @@
 #include "GameFramework/GameModeBase.h"
 #include "EMGameModeBase.generated.h"
 
+class UUserWidget;
+
 UCLASS()
 class EXTREMEMINING_API AEMGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+    UFUNCTION(BlueprintCallable, Category = "UMG Game")
+        void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
+
+protected:
+    virtual void BeginPlay() override;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
+        TSubclassOf<UUserWidget> StartingWidgetClass;
+
+    UPROPERTY()
+        UUserWidget* CurrentWidget;
 };
