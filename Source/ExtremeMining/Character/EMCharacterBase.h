@@ -36,6 +36,12 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		FVector WorkLocation;
 
+	UPROPERTY(BlueprintReadOnly)
+		float WorkLocationRadius;
+
+	UPROPERTY(BlueprintReadOnly)
+		float WorkLocationDelta;
+
 	UPROPERTY(BlueprintReadWrite)
 		int32 CharacterType;
 

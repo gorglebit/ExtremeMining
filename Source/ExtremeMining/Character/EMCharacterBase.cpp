@@ -6,6 +6,7 @@
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Navigation/PathFollowingComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 #include "..\Building\EMBuildingBase.h"
 
@@ -22,6 +23,10 @@ AEMCharacterBase::AEMCharacterBase()
 	HatMeshComponent->SetupAttachment(BodyMeshComponent);
 	IsCommandActive = false;
 	CharacterType = 0;
+	WorkLocationRadius = 800;
+	WorkLocationDelta = 500;
+
+	GetCharacterMovement()->MaxWalkSpeed = 400;
 }
 
 
@@ -41,7 +46,7 @@ void AEMCharacterBase::SetWorkLocation(const int32 BuildType)
 
 		if (Building->GetBuildingType() == BuildType)
 		{
-			WorkLocation = Building->GetActorLocation() - FVector(900, 0, 0);
+			WorkLocation = Building->GetActorLocation() - FVector(WorkLocationDelta, 0, 0);
 			return;
 		}
 	}
@@ -80,6 +85,7 @@ void AEMCharacterBase::DeselectObject()
 void AEMCharacterBase::UnitMoveCommand(const FVector Location)
 {
 	IsCommandActive = true;
+	GetCharacterMovement()->MaxWalkSpeed = 600;
 	AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(this);
 	if (!AIController) return;
 
@@ -105,6 +111,7 @@ void AEMCharacterBase::CheckMoveStatus()
 	{
 		IsCommandActive = false;
 		GetWorldTimerManager().ClearTimer(TimerCheckMoveStatus);
+		GetCharacterMovement()->MaxWalkSpeed = 400;
 		//UE_LOG(LogTemp, Warning, TEXT("Timer end!!!"));
 	}
 }
