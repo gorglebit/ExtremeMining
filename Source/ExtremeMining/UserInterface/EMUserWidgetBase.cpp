@@ -9,9 +9,6 @@
 
 int32 UEMUserWidgetBase::GetFoodAmount()
 {
-	TArray<AActor*> OutActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
-	BuildingStorage = Cast<AEMBuildingStorage>(OutActors[0]);
 	if (!BuildingStorage) return 0;
 
 	return BuildingStorage->GetFoodAmount();
@@ -19,9 +16,6 @@ int32 UEMUserWidgetBase::GetFoodAmount()
 
 int32 UEMUserWidgetBase::GetWoodAmount()
 {
-	TArray<AActor*> OutActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
-	BuildingStorage = Cast<AEMBuildingStorage>(OutActors[0]);
 	if (!BuildingStorage) return 0;
 
 	return BuildingStorage->GetWoodAmount();
@@ -29,9 +23,7 @@ int32 UEMUserWidgetBase::GetWoodAmount()
 
 int32 UEMUserWidgetBase::GetMoneyAmount()
 {
-	TArray<AActor*> OutActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
-	BuildingStorage = Cast<AEMBuildingStorage>(OutActors[0]);
+	if (!BuildingStorage) return 0;
 
 	return BuildingStorage->GetMoneyAmount();
 }

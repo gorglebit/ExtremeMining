@@ -28,4 +28,5 @@ protected:
 	UPROPERTY(BLueprintReadOnly)
 		AEMBuildingStorage* BuildingStorage;
 public:
+	FORCEINLINE void SetStorage(AEMBuildingStorage* storage) { BuildingStorage = storage; }
 };

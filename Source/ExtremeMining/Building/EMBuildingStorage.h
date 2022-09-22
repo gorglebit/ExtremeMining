@@ -32,6 +32,7 @@ public:
 private:
 protected:
 	void BeginPlay() override;
+	void SetStorageWithDelay();
 public:
 	AEMBuildingStorage();
 

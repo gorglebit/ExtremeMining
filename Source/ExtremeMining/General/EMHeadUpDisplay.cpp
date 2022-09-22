@@ -5,7 +5,8 @@
 #include "Blueprint/UserWidget.h"
 
 #include "../Character/EMCharacterBase.h"
-#include "EMPlayerController.h"
+#include "../General/EMPlayerController.h"
+#include "../UserInterface/EMUserWidgetBase.h"
 
 //UE_LOG(LogTemp, Warning, TEXT(""));
 
@@ -21,9 +22,12 @@ void AEMHeadUpDisplay::BeginPlay()
 	Super::BeginPlay();
 
 	auto StartingWidget = CreateWidget<UUserWidget>(GetWorld(), UserWidgetBase);
-	if (StartingWidget)
+	
+	UserWidget = Cast<UEMUserWidgetBase>(StartingWidget);
+
+	if (UserWidget)
 	{
-		StartingWidget->AddToViewport();
+		UserWidget->AddToViewport();
 	}
 }
 

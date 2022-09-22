@@ -8,6 +8,7 @@
 #include "EMHeadUpDisplay.generated.h"
 
 class AEMCharacterBase;
+class UEMUserWidgetBase;
 
 UCLASS()
 class EXTREMEMINING_API AEMHeadUpDisplay : public AHUD, public IEMBasicInterface
@@ -30,9 +31,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 		TSubclassOf<UUserWidget> UserWidgetBase;
-
+	
+	UPROPERTY(BlueprintReadOnly)
+		UEMUserWidgetBase* UserWidget;
+	
 public:
-	//FORCEINLINE UUserWidget* GetStorage() { return Cast<UUserWidget>(UserWidgetBase); }
+	FORCEINLINE UEMUserWidgetBase* GetStorage() { return UserWidget; }
 
 private:
 

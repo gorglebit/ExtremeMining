@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "EMCharacterBase.h"
-
 #include "AIController.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Kismet/GameplayStatics.h"
@@ -155,7 +154,6 @@ void AEMCharacterBase::UnitMoveCommand(const FVector Location)
 	AIController->StopMovement();
 	AIController->MoveToLocation(Location, -1, true, true, false, true, nullptr, false);
 
-	TimerCheckMoveStatus;
 	GetWorldTimerManager().SetTimer(TimerCheckMoveStatus, this, &AEMCharacterBase::CheckMoveStatus, 3.f, true);
 }
 
