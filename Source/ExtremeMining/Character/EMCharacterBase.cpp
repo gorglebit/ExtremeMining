@@ -5,6 +5,7 @@
 #include "AIController.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "Math/UnrealMathUtility.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -24,8 +25,11 @@ AEMCharacterBase::AEMCharacterBase()
 	HatMeshComponent->SetupAttachment(BodyMeshComponent);
 	IsCommandActive = false;
 	CharacterType = 0;
-	WorkLocationRadius = 800;
+	WorkLocationRadius = 700;
 	WorkLocationDelta = 500;
+
+	CollectionRateNotWorker = 1;
+	CollectionRateWorker = 5;
 
 	GetCharacterMovement()->MaxWalkSpeed = 400;
 }
@@ -53,12 +57,70 @@ void AEMCharacterBase::SetWorkLocation(const int32 BuildType)
 	}
 }
 
+void AEMCharacterBase::CollectResouse()
+{
+	if (!BuildingStorage) return;
+
+	if (CharacterType == CHARACTER_MAIN)
+	{
+		int rand = FMath::RandRange(1, 3);
+
+		switch (rand)
+		{
+		case 1:
+		{
+			BuildingStorage->SetFoodAmount(BuildingStorage->GetFoodAmount() + CollectionRateNotWorker);
+			break;
+		}
+		case 2:
+		{
+			BuildingStorage->SetWoodAmount(BuildingStorage->GetWoodAmount() + CollectionRateNotWorker);
+			break;
+		}
+		case 3:
+		{
+			BuildingStorage->SetMoneyAmount(BuildingStorage->GetMoneyAmount() + CollectionRateNotWorker);
+			break;
+		}
+		default:
+			break;
+		}
+	}
+	else 
+	{
+		switch (CharacterType)
+		{
+		case 1:
+		{
+			BuildingStorage->SetFoodAmount(BuildingStorage->GetFoodAmount() + CollectionRateWorker);
+			break;
+		}
+		case 2:
+		{
+			BuildingStorage->SetWoodAmount(BuildingStorage->GetWoodAmount() + CollectionRateWorker);
+			break;
+		}
+		case 3:
+		{
+			BuildingStorage->SetMoneyAmount(BuildingStorage->GetMoneyAmount() + CollectionRateWorker);
+			break;
+		}
+		default:
+			break;
+		}
+	}
+}
+
 void AEMCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
 	SetCharacterRole(CharacterType);
 	SetWorkLocation(CharacterType);
+
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
+	BuildingStorage = Cast<AEMBuildingStorage>(OutActors[0]);
 }
 
 void AEMCharacterBase::Tick(float DeltaTime)

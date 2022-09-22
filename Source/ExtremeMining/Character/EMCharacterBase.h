@@ -34,6 +34,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
 		UStaticMeshComponent* HatMeshComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Storage)
+		AEMBuildingStorage* BuildingStorage;
+
 	UPROPERTY(BlueprintReadOnly)
 		FVector WorkLocation;
 
@@ -45,6 +48,12 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite)
 		int32 CharacterType;
+
+	UPROPERTY(BlueprintReadWrite)
+		int32 CollectionRateNotWorker;
+
+	UPROPERTY(BlueprintReadWrite)
+		int32 CollectionRateWorker;
 
 	UPROPERTY(BlueprintReadWrite)
 		bool IsCommandActive;
@@ -80,4 +89,7 @@ public:
 		void SetCharacterRole(const int32 Type);
 
 	void SetWorkLocation(const int32 BuildType);
+
+	UFUNCTION(BlueprintCallable)
+		void CollectResouse();
 };
