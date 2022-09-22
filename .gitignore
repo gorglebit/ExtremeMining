@@ -1,6 +1,7 @@
 .idea/
 .vs/
 Binaries/
+Build/
 Content/__ExternalActors__/
 Content/__ExternalObjects__/
 Config/HoloLens/
