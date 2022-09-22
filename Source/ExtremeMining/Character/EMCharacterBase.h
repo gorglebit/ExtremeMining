@@ -8,6 +8,7 @@
 #include "EMCharacterBase.generated.h"
 
 class UStaticMeshComponent;
+class AEMBuildingStorage;
 
 enum CharacterType
 {

@@ -27,11 +27,18 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 		FVector2D CurrentMousePostion;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+		TSubclassOf<UUserWidget> UserWidgetBase;
+
 public:
+	//FORCEINLINE UUserWidget* GetStorage() { return Cast<UUserWidget>(UserWidgetBase); }
 
 private:
 
 protected:
+	void BeginPlay() override;
+
 	UFUNCTION(BlueprintCallable)
 		void SelectObjectInRect();
 

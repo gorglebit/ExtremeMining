@@ -2,6 +2,8 @@
 
 #include "EMHeadUpDisplay.h"
 #include <Kismet/GameplayStatics.h>
+#include "Blueprint/UserWidget.h"
+
 #include "../Character/EMCharacterBase.h"
 #include "EMPlayerController.h"
 
@@ -12,6 +14,17 @@ AEMHeadUpDisplay::AEMHeadUpDisplay()
 	IsDrawing = false;
 	StartMousePosition = { 0, 0 };
 	CurrentMousePostion = { 0, 0 };
+}
+
+void AEMHeadUpDisplay::BeginPlay()
+{
+	Super::BeginPlay();
+
+	auto StartingWidget = CreateWidget<UUserWidget>(GetWorld(), UserWidgetBase);
+	if (StartingWidget)
+	{
+		StartingWidget->AddToViewport();
+	}
 }
 
 void AEMHeadUpDisplay::SelectObjectInRect()

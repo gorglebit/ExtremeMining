@@ -8,7 +8,8 @@
 #include "Navigation/PathFollowingComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-#include "..\Building\EMBuildingBase.h"
+#include "../Building/EMBuildingBase.h"
+#include "../Building/EMBuildingStorage.h"
 
 //UE_LOG(LogTemp, Warning, TEXT(""));
 
