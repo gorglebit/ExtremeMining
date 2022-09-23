@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/TextBlock.h"
 #include "EMUserWidgetBase.generated.h"
 
 class AEMBuildingStorage;
+class UTextBlock;
 
 UCLASS()
 class EXTREMEMINING_API UEMUserWidgetBase : public UUserWidget
@@ -14,6 +16,24 @@ class EXTREMEMINING_API UEMUserWidgetBase : public UUserWidget
 	GENERATED_BODY()
 private:
 protected:
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* FoodTextBlock;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* WoodTextBlock;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* MoneyTextBlock;
+
+	UPROPERTY(BLueprintReadOnly)
+		AEMBuildingStorage* StorageBuilding;
+public:
+//-------------------------------
+private:
+	
+protected:
+	virtual void NativeConstruct() override;
+
 	UFUNCTION(BLueprintCallable)
 		int32 GetFoodAmount();
 
@@ -22,11 +42,16 @@ protected:
 
 	UFUNCTION(BLueprintCallable)
 		int32 GetMoneyAmount();
+	
 public:
-private:
-protected:
-	UPROPERTY(BLueprintReadOnly)
-		AEMBuildingStorage* BuildingStorage;
-public:
-	FORCEINLINE void SetStorage(AEMBuildingStorage* storage) { BuildingStorage = storage; }
+	UFUNCTION(BLueprintCallable)
+	FORCEINLINE	void SetFoodText(const int Amount) { FoodTextBlock->SetText(FText::AsNumber(Amount)); }
+
+	UFUNCTION(BLueprintCallable)
+	FORCEINLINE	void SetWoodText(const int Amount) { WoodTextBlock->SetText(FText::AsNumber(Amount)); }
+
+	UFUNCTION(BLueprintCallable)
+	FORCEINLINE	void SetMoneyText(const int Amount) { MoneyTextBlock->SetText(FText::AsNumber(Amount)); }
+	
+	FORCEINLINE void SetStorage(AEMBuildingStorage* storage) { StorageBuilding = storage; }
 };

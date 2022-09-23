@@ -2,6 +2,7 @@
 
 #include "EMUserWidgetBase.h"
 #include <Kismet/GameplayStatics.h>
+#include "Components/TextBlock.h"
 
 #include "../Building/EMBuildingStorage.h"
 
@@ -9,22 +10,27 @@
 
 int32 UEMUserWidgetBase::GetFoodAmount()
 {
-	if (!BuildingStorage) return 0;
+	if (!StorageBuilding) return 0;
 
-	return BuildingStorage->GetFoodAmount();
+	return StorageBuilding->GetFoodAmount();
 }
 
 int32 UEMUserWidgetBase::GetWoodAmount()
 {
-	if (!BuildingStorage) return 0;
+	if (!StorageBuilding) return 0;
 
-	return BuildingStorage->GetWoodAmount();
+	return StorageBuilding->GetWoodAmount();
 }
 
 int32 UEMUserWidgetBase::GetMoneyAmount()
 {
-	if (!BuildingStorage) return 0;
+	if (!StorageBuilding) return 0;
 
-	return BuildingStorage->GetMoneyAmount();
+	return StorageBuilding->GetMoneyAmount();
+}
+
+void UEMUserWidgetBase::NativeConstruct()
+{
+	Super::NativeConstruct();
 }
 

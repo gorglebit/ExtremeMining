@@ -22,18 +22,20 @@ protected:
 		int32 Money;
 
 public:
+//---------------------------
+private:
+protected:
+	virtual void BeginPlay() override;
+	void SetStorageWithDelay();
+public:
+	AEMBuildingStorage();
+
 	FORCEINLINE int32 GetFoodAmount() { return Food; }
 	FORCEINLINE int32 GetWoodAmount() { return Wood; }
 	FORCEINLINE int32 GetMoneyAmount() { return Money; }
 
-	FORCEINLINE void SetFoodAmount(const int32 Amount) { Food = Amount; }
-	FORCEINLINE void SetWoodAmount(const int32 Amount) { Wood = Amount; }
-	FORCEINLINE void SetMoneyAmount(const int32 Amount) { Money = Amount; }
-private:
-protected:
-	void BeginPlay() override;
-	void SetStorageWithDelay();
-public:
-	AEMBuildingStorage();
+	void SetFoodAmount(const int32 Amount);
+	void SetWoodAmount(const int32 Amount);
+	void SetMoneyAmount(const int32 Amount);
 
 };

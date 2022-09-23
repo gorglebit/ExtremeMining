@@ -2,6 +2,7 @@
 
 #include "EMBuildingBase.h"
 #include "Components/BoxComponent.h"
+
 #include "../Character/EMCharacterBase.h"
 
 //UE_LOG(LogTemp, Warning, TEXT(""));
@@ -46,7 +47,7 @@ void AEMBuildingBase::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AAc
 	AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(OtherActor);
 	if (!AsCharacter) return;
 
-	if (BuildingType == AsCharacter->GetCharacterType())
+	if (BuildingType < 1 || BuildingType > 4)
 	{
 	}
 	else

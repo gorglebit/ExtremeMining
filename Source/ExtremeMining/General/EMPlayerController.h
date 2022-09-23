@@ -16,8 +16,20 @@ class EXTREMEMINING_API AEMPlayerController : public APlayerController, public I
 	GENERATED_BODY()
 
 private:
+	bool IsLeftMousePressed;
 	FVector RightMouseLocation;
 	AEMBuildingBase* SelectedBuilding;
+protected:
+public:
+//------------------
+
+private:
+	void SelectObjectStartAction();
+	void SelectObjectStopAction();
+	void MoveToLocationAction();
+
+protected:
+	virtual void BeginPlay() override;
 
 public:
 	AEMPlayerController();
@@ -25,18 +37,4 @@ public:
 	virtual void SetupInputComponent() override;
 	virtual void Tick(float DeltaTime) override;
 	void ClearSelectedBuildings() override;
-
-protected:
-	virtual void BeginPlay() override;
-
-private:
-	bool IsLeftMousePressed;
-
-private:
-	void SelectObjectStartAction();
-	void SelectObjectStopAction();
-	void MoveToLocationAction();
-
-	
-	
 };

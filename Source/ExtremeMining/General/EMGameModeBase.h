@@ -12,9 +12,13 @@ UCLASS()
 class EXTREMEMINING_API AEMGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+private:
+protected:
 public:
 
+//-------------
+private:
 protected:
     virtual void BeginPlay() override;
+public:
 };

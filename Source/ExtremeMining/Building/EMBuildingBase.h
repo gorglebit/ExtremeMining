@@ -4,17 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
 #include "../Interface/EMBasicInterface.h"
 #include "EMBuildingBase.generated.h"
-
-enum BuildingType
-{
-	BUILDING_MAIN,
-	BUILDING_FOOD,
-	BUILDING_WOOD,
-	BUILDING_MONEY,
-	BUILDING_SEA
-};
 
 class UStaticMeshComponent;
 class UBoxComponent;
@@ -25,7 +17,6 @@ class EXTREMEMINING_API AEMBuildingBase : public AActor, public IEMBasicInterfac
 	GENERATED_BODY()
 
 private:
-
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh)
 		UStaticMeshComponent* BuildMesh;
@@ -39,23 +30,23 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 		int32 BuildingType;
 public:
+//------------------------
 
-
-public:
-	AEMBuildingBase();
-
-	FORCEINLINE UBoxComponent* GetBoxComponent() { return CollisionBoxComponent; }
-
-	FORCEINLINE int32 GetBuildingType() { return BuildingType; }
-
+private:
 protected:
 	virtual void BeginPlay() override;
 
 public:
+	AEMBuildingBase();
+
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SelectObject() override;
 
 	virtual void DeselectObject() override;
 
+
+	FORCEINLINE UBoxComponent* GetBoxComponent() { return CollisionBoxComponent; }
+
+	FORCEINLINE int32 GetBuildingType() { return BuildingType; }
 };

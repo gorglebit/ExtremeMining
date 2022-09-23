@@ -2,8 +2,9 @@
 
 #include "EMPlayerController.h"
 #include "GameFramework/HUD.h"
-#include "EMHeadUpDisplay.h"
 #include "Components/BoxComponent.h"
+
+#include "../General/EMHeadUpDisplay.h"
 #include "../Building/EMBuildingBase.h"
 #include "../Character/EMCharacterBase.h"
 

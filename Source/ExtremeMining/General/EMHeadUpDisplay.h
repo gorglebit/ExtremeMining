@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
+
 #include "../Interface/EMBasicInterface.h"
 #include "EMHeadUpDisplay.generated.h"
 
@@ -36,10 +37,9 @@ protected:
 		UEMUserWidgetBase* UserWidget;
 	
 public:
-	FORCEINLINE UEMUserWidgetBase* GetStorage() { return UserWidget; }
-
+	
+//------------------
 private:
-
 protected:
 	void BeginPlay() override;
 
@@ -53,5 +53,5 @@ public:
 	virtual void MarqueeReleased() override;
 	virtual TArray<AEMCharacterBase*> GrabSelectedUnits() override;
 	
-
+	FORCEINLINE UEMUserWidgetBase* GetStorage() { return UserWidget; }
 };

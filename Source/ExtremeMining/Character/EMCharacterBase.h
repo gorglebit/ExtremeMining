@@ -4,20 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+
 #include "../Interface/EMBasicInterface.h"
 #include "EMCharacterBase.generated.h"
 
 class UStaticMeshComponent;
 class AEMBuildingStorage;
-
-enum CharacterType
-{
-	CHARACTER_MAIN,
-	CHARACTER_FOOD,
-	CHARACTER_WOOD,
-	CHARACTER_MONEY,
-	CHARACTER_SEA
-};
 
 UCLASS()
 class EXTREMEMINING_API AEMCharacterBase : public ACharacter, public IEMBasicInterface
@@ -25,7 +17,8 @@ class EXTREMEMINING_API AEMCharacterBase : public ACharacter, public IEMBasicInt
 	GENERATED_BODY()
 
 private:
-	FTimerHandle TimerCheckMoveStatus;
+	FTimerHandle CheckMoveStatusTimer;
+	FTimerHandle FoodIntakeTimer;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
@@ -35,7 +28,7 @@ protected:
 		UStaticMeshComponent* HatMeshComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Storage)
-		AEMBuildingStorage* BuildingStorage;
+		AEMBuildingStorage* StorageBuilding;
 
 	UPROPERTY(BlueprintReadOnly)
 		FVector WorkLocation;
@@ -56,14 +49,17 @@ protected:
 		int32 CollectionRateWorker;
 
 	UPROPERTY(BlueprintReadWrite)
+		int32 FoodIntakeCount;
+
+	UPROPERTY(BlueprintReadWrite)
 		bool IsCommandActive;
 
 public:
-	
+//------------------------------
 
 private:
 	void CheckMoveStatus();
-	
+	void IntakeFood();
 
 protected:
 	virtual void BeginPlay() override;
@@ -85,10 +81,10 @@ public:
 
 	FORCEINLINE void SetCharacterType(const int32 CharType) { CharacterType = CharType; }
 
+	void SetWorkLocation(const int32 BuildType);
+
 	UFUNCTION(BlueprintNativeEvent)
 		void SetCharacterRole(const int32 Type);
-
-	void SetWorkLocation(const int32 BuildType);
 
 	UFUNCTION(BlueprintCallable)
 		void CollectResouse();

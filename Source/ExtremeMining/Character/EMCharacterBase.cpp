@@ -30,6 +30,8 @@ AEMCharacterBase::AEMCharacterBase()
 	CollectionRateNotWorker = 1;
 	CollectionRateWorker = 5;
 
+	FoodIntakeCount = 1;
+
 	GetCharacterMovement()->MaxWalkSpeed = 400;
 }
 
@@ -58,9 +60,10 @@ void AEMCharacterBase::SetWorkLocation(const int32 BuildType)
 
 void AEMCharacterBase::CollectResouse()
 {
-	if (!BuildingStorage) return;
+	if (!StorageBuilding) return;
+	//UE_LOG(LogTemp, Warning, TEXT("StorageBuilding = true"));
 
-	if (CharacterType == CHARACTER_MAIN)
+	if (CharacterType == 0)
 	{
 		int rand = FMath::RandRange(1, 3);
 
@@ -68,17 +71,17 @@ void AEMCharacterBase::CollectResouse()
 		{
 		case 1:
 		{
-			BuildingStorage->SetFoodAmount(BuildingStorage->GetFoodAmount() + CollectionRateNotWorker);
+			StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() + CollectionRateNotWorker);
 			break;
 		}
 		case 2:
 		{
-			BuildingStorage->SetWoodAmount(BuildingStorage->GetWoodAmount() + CollectionRateNotWorker);
+			StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() + CollectionRateNotWorker);
 			break;
 		}
 		case 3:
 		{
-			BuildingStorage->SetMoneyAmount(BuildingStorage->GetMoneyAmount() + CollectionRateNotWorker);
+			StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() + CollectionRateNotWorker);
 			break;
 		}
 		default:
@@ -91,17 +94,17 @@ void AEMCharacterBase::CollectResouse()
 		{
 		case 1:
 		{
-			BuildingStorage->SetFoodAmount(BuildingStorage->GetFoodAmount() + CollectionRateWorker);
+			StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() + CollectionRateWorker);
 			break;
 		}
 		case 2:
 		{
-			BuildingStorage->SetWoodAmount(BuildingStorage->GetWoodAmount() + CollectionRateWorker);
+			StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() + CollectionRateWorker);
 			break;
 		}
 		case 3:
 		{
-			BuildingStorage->SetMoneyAmount(BuildingStorage->GetMoneyAmount() + CollectionRateWorker);
+			StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() + CollectionRateWorker);
 			break;
 		}
 		default:
@@ -119,7 +122,9 @@ void AEMCharacterBase::BeginPlay()
 
 	TArray<AActor*> OutActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
-	BuildingStorage = Cast<AEMBuildingStorage>(OutActors[0]);
+	StorageBuilding = Cast<AEMBuildingStorage>(OutActors[0]);
+
+	GetWorldTimerManager().SetTimer(FoodIntakeTimer, this, &AEMCharacterBase::IntakeFood, 2.5f, true);
 }
 
 void AEMCharacterBase::Tick(float DeltaTime)
@@ -137,11 +142,13 @@ void AEMCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void AEMCharacterBase::SelectObject()
 {
 	BodyMeshComponent->SetRenderCustomDepth(true);
+	HatMeshComponent->SetRenderCustomDepth(true);
 }
 
 void AEMCharacterBase::DeselectObject()
 {
 	BodyMeshComponent->SetRenderCustomDepth(false);
+	HatMeshComponent->SetRenderCustomDepth(false);
 }
 
 void AEMCharacterBase::UnitMoveCommand(const FVector Location)
@@ -154,7 +161,7 @@ void AEMCharacterBase::UnitMoveCommand(const FVector Location)
 	AIController->StopMovement();
 	AIController->MoveToLocation(Location, -1, true, true, false, true, nullptr, false);
 
-	GetWorldTimerManager().SetTimer(TimerCheckMoveStatus, this, &AEMCharacterBase::CheckMoveStatus, 3.f, true);
+	GetWorldTimerManager().SetTimer(CheckMoveStatusTimer, this, &AEMCharacterBase::CheckMoveStatus, 3.f, true);
 }
 
 void AEMCharacterBase::SetCharacterRole_Implementation(const int32 Type)
@@ -171,8 +178,13 @@ void AEMCharacterBase::CheckMoveStatus()
 	if (Status == EPathFollowingStatus::Idle)
 	{
 		IsCommandActive = false;
-		GetWorldTimerManager().ClearTimer(TimerCheckMoveStatus);
+		GetWorldTimerManager().ClearTimer(CheckMoveStatusTimer);
 		GetCharacterMovement()->MaxWalkSpeed = 400;
 		//UE_LOG(LogTemp, Warning, TEXT("Timer end!!!"));
 	}
+}
+
+void AEMCharacterBase::IntakeFood()
+{
+	StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() - FoodIntakeCount);
 }
