@@ -42,8 +42,11 @@ protected:
 
 	UFUNCTION(BLueprintCallable)
 		int32 GetMoneyAmount();
+
+	void OnFoodAmountChanged(int32 NewAmount);
 	
 public:
+
 	UFUNCTION(BLueprintCallable)
 	FORCEINLINE	void SetFoodText(const int Amount) { FoodTextBlock->SetText(FText::AsNumber(Amount)); }
 

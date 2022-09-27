@@ -12,6 +12,7 @@ void AEMBuildingStorage::SetFoodAmount(const int32 Amount)
 {
 	Food = Amount;
 	Food = FMath::Clamp(Food, 0, 1000);
+	OnFoodAmountChangedDelegate.Broadcast(Food);
 }
 
 void AEMBuildingStorage::SetWoodAmount(const int32 Amount)

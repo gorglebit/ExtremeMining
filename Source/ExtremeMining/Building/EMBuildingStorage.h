@@ -6,6 +6,8 @@
 #include "EMBuildingBase.h"
 #include "EMBuildingStorage.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFoodAmountChangedSignature, int32, NewAmount);
+
 UCLASS()
 class EXTREMEMINING_API AEMBuildingStorage : public AEMBuildingBase
 {
@@ -22,6 +24,9 @@ protected:
 		int32 Money;
 
 public:
+
+	UPROPERTY(BlueprintAssignable)
+		FOnFoodAmountChangedSignature OnFoodAmountChangedDelegate;
 //---------------------------
 private:
 protected:

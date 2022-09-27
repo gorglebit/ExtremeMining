@@ -29,8 +29,15 @@ int32 UEMUserWidgetBase::GetMoneyAmount()
 	return StorageBuilding->GetMoneyAmount();
 }
 
+void UEMUserWidgetBase::OnFoodAmountChanged(int32 NewAmount)
+{
+	FoodTextBlock->SetText(FText::AsNumber(NewAmount));
+}
+
 void UEMUserWidgetBase::NativeConstruct()
 {
 	Super::NativeConstruct();
+
+	//StorageBuilding->OnFoodAmountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnFoodAmountChanged);
 }
 
