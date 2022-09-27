@@ -34,15 +34,16 @@ private:
 protected:
 	virtual void NativeConstruct() override;
 
-	UFUNCTION(BLueprintCallable)
+	UFUNCTION(BlueprintCallable)
 		int32 GetFoodAmount();
 
-	UFUNCTION(BLueprintCallable)
+	UFUNCTION(BlueprintCallable)
 		int32 GetWoodAmount();
 
-	UFUNCTION(BLueprintCallable)
+	UFUNCTION(BlueprintCallable)
 		int32 GetMoneyAmount();
 
+	UFUNCTION()
 	void OnFoodAmountChanged(int32 NewAmount);
 	
 public:

@@ -38,6 +38,15 @@ void UEMUserWidgetBase::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	//StorageBuilding->OnFoodAmountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnFoodAmountChanged);
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
+	StorageBuilding = Cast<AEMBuildingStorage>(OutActors[0]);
+
+	if (StorageBuilding)
+	{
+		StorageBuilding->OnFoodAmountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnFoodAmountChanged);
+		//UE_LOG(LogTemp, Warning, TEXT("OnFoodAmountChangedDelegate"));
+	}
+		
 }
 

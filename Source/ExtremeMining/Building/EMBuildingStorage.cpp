@@ -31,10 +31,10 @@ void AEMBuildingStorage::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FTimerHandle MyTimer;
-	GetWorldTimerManager().SetTimer(MyTimer, this, &AEMBuildingStorage::SetStorageWithDelay, 0.1f, false);
+	//FTimerHandle MyTimer;
+	//GetWorldTimerManager().SetTimer(MyTimer, this, &AEMBuildingStorage::SetStorageWithDelay, 0.1f, false);
 
-	SetStorageWithDelay();
+	//SetStorageWithDelay();
 }
 
 void AEMBuildingStorage::SetStorageWithDelay()
