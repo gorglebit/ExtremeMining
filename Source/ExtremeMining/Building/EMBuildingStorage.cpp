@@ -43,6 +43,8 @@ void AEMBuildingStorage::SetFoodAmount(const int32 Amount)
 			}
 		}
 	}
+
+	SetFoodStorage();
 }
 
 void AEMBuildingStorage::SetWoodAmount(const int32 Amount)
@@ -57,6 +59,10 @@ void AEMBuildingStorage::SetMoneyAmount(const int32 Amount)
 	Money = Amount;
 	Money = FMath::Clamp(Money, 0, 1000);
 	OnMoneyAmountChangedDelegate.Broadcast(Money);
+}
+
+void AEMBuildingStorage::SetFoodStorage_Implementation()
+{
 }
 
 void AEMBuildingStorage::BeginPlay()

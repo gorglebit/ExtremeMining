@@ -43,12 +43,20 @@ protected:
 public:
 	AEMBuildingStorage();
 
+	UFUNCTION(BlueprintCallable)
 	FORCEINLINE int32 GetFoodAmount() { return Food; }
+
+	UFUNCTION(BlueprintCallable)
 	FORCEINLINE int32 GetWoodAmount() { return Wood; }
+
+	UFUNCTION(BlueprintCallable)
 	FORCEINLINE int32 GetMoneyAmount() { return Money; }
 
 	void SetFoodAmount(const int32 Amount);
 	void SetWoodAmount(const int32 Amount);
 	void SetMoneyAmount(const int32 Amount);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void SetFoodStorage();
 
 };
