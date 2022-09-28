@@ -22,7 +22,9 @@ AEMCharacterBase::AEMCharacterBase()
 	BodyMeshComponent->SetupAttachment(RootComponent);
 	HatMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HatMesh"));
 	HatMeshComponent->SetupAttachment(BodyMeshComponent);
+
 	IsCommandActive = false;
+	IsHungry = false;
 	CharacterType = 0;
 	WorkLocationRadius = 700;
 	WorkLocationDelta = 500;
@@ -111,6 +113,11 @@ void AEMCharacterBase::CollectResouse()
 			break;
 		}
 	}
+}
+
+void AEMCharacterBase::SetMaxMoveSpeed(const int SpeedAmount)
+{
+	GetCharacterMovement()->MaxWalkSpeed = SpeedAmount;
 }
 
 void AEMCharacterBase::BeginPlay()

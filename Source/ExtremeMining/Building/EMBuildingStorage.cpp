@@ -5,6 +5,8 @@
 
 #include "../General/EMHeadUpDisplay.h"
 #include "../UserInterface/EMUserWidgetBase.h"
+#include "../Character/EMCharacterBase.h"
+#include "../General/EMPlayerState.h"
 
 //UE_LOG(LogTemp, Warning, TEXT(""));
 
@@ -13,28 +15,59 @@ void AEMBuildingStorage::SetFoodAmount(const int32 Amount)
 	Food = Amount;
 	Food = FMath::Clamp(Food, 0, 1000);
 	OnFoodAmountChangedDelegate.Broadcast(Food);
+
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMCharacterBase::StaticClass(), OutActors);
+
+	if (Food <= 50)
+	{
+		for (int i = 0; i < OutActors.Num(); i++)
+		{
+			AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(OutActors[i]);
+			if (AsCharacter && !AsCharacter->GetIsCommandActive())
+			{
+				AsCharacter->SetMaxMoveSpeed(200);
+				AsCharacter->SetIsHungry(true);
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < OutActors.Num(); i++)
+		{
+			AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(OutActors[i]);
+			if (AsCharacter && !AsCharacter->GetIsCommandActive())
+			{
+				AsCharacter->SetMaxMoveSpeed(400);
+				AsCharacter->SetIsHungry(false);
+			}
+		}
+	}
 }
 
 void AEMBuildingStorage::SetWoodAmount(const int32 Amount)
 {
 	Wood = Amount;
 	Wood = FMath::Clamp(Wood, 0, 1000);
+	OnWoodAmountChangedDelegate.Broadcast(Wood);
 }
 
 void AEMBuildingStorage::SetMoneyAmount(const int32 Amount)
 {
 	Money = Amount;
 	Money = FMath::Clamp(Money, 0, 1000);
+	OnMoneyAmountChangedDelegate.Broadcast(Money);
 }
 
 void AEMBuildingStorage::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//FTimerHandle MyTimer;
-	//GetWorldTimerManager().SetTimer(MyTimer, this, &AEMBuildingStorage::SetStorageWithDelay, 0.1f, false);
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
 
-	//SetStorageWithDelay();
+	SetFoodAmount(AsState->GetStartResourceCount());
+	SetWoodAmount(AsState->GetStartResourceCount());
+	SetMoneyAmount(AsState->GetStartResourceCount());
 }
 
 void AEMBuildingStorage::SetStorageWithDelay()
@@ -53,7 +86,5 @@ void AEMBuildingStorage::SetStorageWithDelay()
 
 AEMBuildingStorage::AEMBuildingStorage()
 {
-	Food = 200;
-	Wood = 200;
-	Money = 200;
+
 }

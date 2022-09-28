@@ -54,6 +54,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 		bool IsCommandActive;
 
+	UPROPERTY(BlueprintReadWrite)
+		bool IsHungry;
+
 public:
 //------------------------------
 
@@ -77,9 +80,14 @@ public:
 
 	virtual void UnitMoveCommand(const FVector Location) override;
 
+	FORCEINLINE bool GetIsCommandActive() { return IsCommandActive; }
+
+	FORCEINLINE bool GetIsHungry() { return IsHungry; }
+	FORCEINLINE void SetIsHungry(bool InCondition) { IsHungry = InCondition; }
+
 	FORCEINLINE int32 GetCharacterType() { return CharacterType; }
 
-	FORCEINLINE void SetCharacterType(const int32 CharType) { CharacterType = CharType; }
+	FORCEINLINE void SetCharacterType(const int32 InCharType) { CharacterType = InCharType; }
 
 	void SetWorkLocation(const int32 BuildType);
 
@@ -88,4 +96,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void CollectResouse();
+
+	void SetMaxMoveSpeed(const int SpeedAmount);
 };
