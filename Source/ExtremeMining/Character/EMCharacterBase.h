@@ -19,6 +19,7 @@ class EXTREMEMINING_API AEMCharacterBase : public ACharacter, public IEMBasicInt
 private:
 	FTimerHandle CheckMoveStatusTimer;
 	FTimerHandle FoodIntakeTimer;
+	FTimerHandle CollectResourceTimer;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
@@ -83,19 +84,28 @@ public:
 	FORCEINLINE bool GetIsCommandActive() { return IsCommandActive; }
 
 	FORCEINLINE bool GetIsHungry() { return IsHungry; }
+
 	FORCEINLINE void SetIsHungry(bool InCondition) { IsHungry = InCondition; }
 
 	FORCEINLINE int32 GetCharacterType() { return CharacterType; }
 
 	FORCEINLINE void SetCharacterType(const int32 InCharType) { CharacterType = InCharType; }
 
-	void SetWorkLocation(const int32 BuildType);
+	FORCEINLINE void SetCollectionReateWorker(const int32 InAmount) { CollectionRateWorker = InAmount; }
 
-	UFUNCTION(BlueprintNativeEvent)
-		void SetCharacterRole(const int32 Type);
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE int32 GetCollectionReateWorker() { return CollectionRateWorker; }
+
+	void SetWorkLocation(const int32 InCharacterType);
 
 	UFUNCTION(BlueprintCallable)
 		void CollectResouse();
 
 	void SetMaxMoveSpeed(const int SpeedAmount);
+
+	UFUNCTION(BlueprintNativeEvent)
+		void SetCollectWidget();
+
+	UFUNCTION(BlueprintNativeEvent)
+		void SetCharacterRole(const int32 Type);
 };

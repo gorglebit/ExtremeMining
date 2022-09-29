@@ -26,11 +26,11 @@ AEMCharacterBase::AEMCharacterBase()
 	IsCommandActive = false;
 	IsHungry = false;
 	CharacterType = 0;
-	WorkLocationRadius = 1000;
-	WorkLocationDelta = 0;
+	WorkLocationRadius = 700;
+	WorkLocationDelta = 1100;
 
 	CollectionRateNotWorker = 1;
-	CollectionRateWorker = 7;
+	CollectionRateWorker = 5;
 
 	FoodIntakeCount = 1;
 
@@ -39,23 +39,33 @@ AEMCharacterBase::AEMCharacterBase()
 
 
 
-void AEMCharacterBase::SetWorkLocation(const int32 BuildType)
+void AEMCharacterBase::SetWorkLocation(const int32 InCharacterType)
 {
-	TSubclassOf<AEMBuildingBase> ActorClass;
-	ActorClass = AEMBuildingBase::StaticClass();
-
 	TArray<AActor*> OutActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingBase::StaticClass(), OutActors);
 
-	for (int i = 0; i < OutActors.Num(); i++)
+	if (InCharacterType == 0)
 	{
-		AEMBuildingBase* Building = Cast<AEMBuildingBase>(OutActors[i]);
-		if (!Building) return;
-
-		if (Building->GetBuildingType() == BuildType)
+		for (int i = 0; i < OutActors.Num(); i++)
 		{
-			WorkLocation = Building->GetActorLocation() - FVector(WorkLocationDelta, 0, 0);
-			return;
+			AEMBuildingBase* AsBuilding = Cast<AEMBuildingBase>(OutActors[i]);
+			if (AsBuilding->GetBuildingType() == 0) 
+			{
+				WorkLocation = AsBuilding->GetActorLocation() - FVector(WorkLocationDelta, 0, 0);
+				return;
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < OutActors.Num(); i++)
+		{
+			AEMBuildingBase* AsBuilding = Cast<AEMBuildingBase>(OutActors[i]);
+			if (AsBuilding->GetBuildingType() == InCharacterType)
+			{
+				WorkLocation = AsBuilding->GetActorLocation();
+				return;
+			}
 		}
 	}
 }
@@ -113,11 +123,17 @@ void AEMCharacterBase::CollectResouse()
 			break;
 		}
 	}
+
+	SetCollectWidget();
 }
 
 void AEMCharacterBase::SetMaxMoveSpeed(const int SpeedAmount)
 {
 	GetCharacterMovement()->MaxWalkSpeed = SpeedAmount;
+}
+
+void AEMCharacterBase::SetCollectWidget_Implementation()
+{
 }
 
 void AEMCharacterBase::BeginPlay()
@@ -132,6 +148,7 @@ void AEMCharacterBase::BeginPlay()
 	StorageBuilding = Cast<AEMBuildingStorage>(OutActors[0]);
 
 	GetWorldTimerManager().SetTimer(FoodIntakeTimer, this, &AEMCharacterBase::IntakeFood, 2.5f, true);
+	GetWorldTimerManager().SetTimer(CollectResourceTimer, this, &AEMCharacterBase::CollectResouse, 4.f, true);
 }
 
 void AEMCharacterBase::Tick(float DeltaTime)
@@ -162,6 +179,8 @@ void AEMCharacterBase::UnitMoveCommand(const FVector Location)
 {
 	IsCommandActive = true;
 	GetCharacterMovement()->MaxWalkSpeed = 600;
+	GetWorldTimerManager().PauseTimer(CollectResourceTimer);// CollectResourceTimer->
+
 	AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(this);
 	if (!AIController) return;
 
@@ -187,6 +206,7 @@ void AEMCharacterBase::CheckMoveStatus()
 		IsCommandActive = false;
 		GetWorldTimerManager().ClearTimer(CheckMoveStatusTimer);
 		GetCharacterMovement()->MaxWalkSpeed = 400;
+		GetWorldTimerManager().UnPauseTimer(CollectResourceTimer);
 		//UE_LOG(LogTemp, Warning, TEXT("Timer end!!!"));
 	}
 }

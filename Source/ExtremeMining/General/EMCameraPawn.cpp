@@ -23,7 +23,7 @@ AEMCameraPawn::AEMCameraPawn()
 
 	SpringArmComponent->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when character does
 	SpringArmComponent->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));
-	SpringArmComponent->TargetArmLength = 5000.f;
+	SpringArmComponent->TargetArmLength = 4000.f;
 	SpringArmComponent->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
 	SpringArmComponent->bEnableCameraLag = true;
 

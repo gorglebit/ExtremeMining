@@ -28,6 +28,7 @@ void AEMBuildingStorage::SetFoodAmount(const int32 Amount)
 			{
 				AsCharacter->SetMaxMoveSpeed(200);
 				AsCharacter->SetIsHungry(true);
+				AsCharacter->SetCollectionReateWorker(3);
 			}
 		}
 	}
@@ -40,6 +41,7 @@ void AEMBuildingStorage::SetFoodAmount(const int32 Amount)
 			{
 				AsCharacter->SetMaxMoveSpeed(400);
 				AsCharacter->SetIsHungry(false);
+				AsCharacter->SetCollectionReateWorker(5);
 			}
 		}
 	}
@@ -52,6 +54,8 @@ void AEMBuildingStorage::SetWoodAmount(const int32 Amount)
 	Wood = Amount;
 	Wood = FMath::Clamp(Wood, 0, 1000);
 	OnWoodAmountChangedDelegate.Broadcast(Wood);
+
+	SetWoodStorage();
 }
 
 void AEMBuildingStorage::SetMoneyAmount(const int32 Amount)
@@ -59,6 +63,16 @@ void AEMBuildingStorage::SetMoneyAmount(const int32 Amount)
 	Money = Amount;
 	Money = FMath::Clamp(Money, 0, 1000);
 	OnMoneyAmountChangedDelegate.Broadcast(Money);
+
+	SetMoneyStorage();
+}
+
+void AEMBuildingStorage::SetWoodStorage_Implementation()
+{
+}
+
+void AEMBuildingStorage::SetMoneyStorage_Implementation()
+{
 }
 
 void AEMBuildingStorage::SetFoodStorage_Implementation()

@@ -57,6 +57,12 @@ public:
 	void SetMoneyAmount(const int32 Amount);
 
 	UFUNCTION(BlueprintNativeEvent)
-	void SetFoodStorage();
+		void SetFoodStorage();
+
+	UFUNCTION(BlueprintNativeEvent)
+		void SetWoodStorage();
+
+	UFUNCTION(BlueprintNativeEvent)
+		void SetMoneyStorage();
 
 };
