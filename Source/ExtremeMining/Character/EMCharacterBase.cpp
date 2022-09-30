@@ -75,11 +75,13 @@ void AEMCharacterBase::CollectResouse()
 	if (!StorageBuilding) return;
 	//UE_LOG(LogTemp, Warning, TEXT("StorageBuilding = true"));
 
+	int RandomNumber = 0;
+
 	if (CharacterType == 0)
 	{
-		int rand = FMath::RandRange(1, 3);
+		RandomNumber = FMath::RandRange(1, 3);
 
-		switch (rand)
+		switch (RandomNumber)
 		{
 		case 1:
 		{
@@ -124,7 +126,7 @@ void AEMCharacterBase::CollectResouse()
 		}
 	}
 
-	SetCollectWidget();
+	SetCollectWidget(RandomNumber);
 }
 
 void AEMCharacterBase::SetMaxMoveSpeed(const int SpeedAmount)
@@ -132,7 +134,7 @@ void AEMCharacterBase::SetMaxMoveSpeed(const int SpeedAmount)
 	GetCharacterMovement()->MaxWalkSpeed = SpeedAmount;
 }
 
-void AEMCharacterBase::SetCollectWidget_Implementation()
+void AEMCharacterBase::SetCollectWidget_Implementation(const int32 ResourceType)
 {
 }
 

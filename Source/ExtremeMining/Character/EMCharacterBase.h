@@ -104,7 +104,7 @@ public:
 	void SetMaxMoveSpeed(const int SpeedAmount);
 
 	UFUNCTION(BlueprintNativeEvent)
-		void SetCollectWidget();
+		void SetCollectWidget(const int32 ResourceType);
 
 	UFUNCTION(BlueprintNativeEvent)
 		void SetCharacterRole(const int32 Type);
