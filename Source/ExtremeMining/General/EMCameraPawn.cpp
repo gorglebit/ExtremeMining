@@ -42,7 +42,16 @@ AEMCameraPawn::AEMCameraPawn()
 void AEMCameraPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	GetWorld()->GetGameViewport()->GetViewportSize(ViewportSize);
+	
+	if (GetWorld()->GetGameViewport())
+	{
+		GetWorld()->GetGameViewport()->GetViewportSize(ScreenSize);
+	}
+	else
+	{
+		ScreenSize.X = GSystemResolution.ResX;
+		ScreenSize.Y = GSystemResolution.ResY;
+	}
 }
 
 void AEMCameraPawn::Tick(float DeltaTime)
@@ -72,7 +81,8 @@ void AEMCameraPawn::MovePawnForwardBackTick()
 		return;
 	}
 
-	float Ratio = mouseY / ViewportSize.Y;
+	if (ScreenSize.Y == 0) return;
+	float Ratio = mouseY / ScreenSize.Y;
 
 	if (Ratio > 0.95)
 		MovePawnForward();
@@ -90,15 +100,17 @@ void AEMCameraPawn::MovePawnRightLeftTick()
 	bool IsMouseEnable = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetMousePosition(mouseX, mouseY);
 	if (!IsMouseEnable) return;
 
-	float Ratio = mouseX / ViewportSize.X;
-
+	if (ScreenSize.X == 0) return;
+	float Ratio = mouseX / ScreenSize.X;
+	UE_LOG(LogTemp, Warning, TEXT("%f."), ScreenSize.X);
 	if (Ratio > 0.95)
-		MovePawnRight();
+		MovePawnRight(); 
 	else
 	{
 		if (Ratio < 0.05)
 			MovePawnLeft();
 	}
+	
 }
 
 void AEMCameraPawn::MovePawnForwardBackAxis(const float value)

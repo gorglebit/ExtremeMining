@@ -11,7 +11,7 @@ class EXTREMEMINING_API AEMCameraPawn : public APawn
 {
 	GENERATED_BODY()
 private:
-	FVector2D ViewportSize;
+	FVector2D ScreenSize;
 	int32 CameraMoveSpeed;
 	int32 CameraZoomSpeed;
 
