@@ -109,7 +109,7 @@ void AEMCameraPawn::MovePawnRightLeftTick()
 
 	if (ScreenSize.X == 0) return;
 	float Ratio = mouseX / ScreenSize.X;
-	UE_LOG(LogTemp, Warning, TEXT("%f."), ScreenSize.X);
+	//UE_LOG(LogTemp, Warning, TEXT("%f."), ScreenSize.X);
 	if (Ratio > 0.95)
 		MovePawnRight(); 
 	else

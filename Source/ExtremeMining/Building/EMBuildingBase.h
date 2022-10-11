@@ -32,6 +32,21 @@ protected:
 		int32 BuildingType;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 BuildingLevel;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 BuildingMaxLevel;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 FirstUpgradeLevelCost;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 SecondUpgradeLevelCost;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 ThirdUpgradeLevelCost;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UWidgetComponent* BuildingWidget;
 public:
 //------------------------
@@ -53,4 +68,14 @@ public:
 	FORCEINLINE UBoxComponent* GetBoxComponent() { return CollisionBoxComponent; }
 
 	FORCEINLINE int32 GetBuildingType() { return BuildingType; }
+
+	FORCEINLINE int32 GetBuildingLevel() { return BuildingLevel; }
+
+	FORCEINLINE int32 GetFirstUpgradeLevelCost() { return FirstUpgradeLevelCost; }
+
+	FORCEINLINE int32 GetSecondUpgradeLevelCost() { return SecondUpgradeLevelCost; }
+
+	FORCEINLINE int32 GetThirdUpgradeLevelCost() { return ThirdUpgradeLevelCost; }
+
+	FORCEINLINE void IncrementBuildingLevel() { BuildingLevel++; }
 };

@@ -20,6 +20,13 @@ AEMBuildingBase::AEMBuildingBase()
 
 	BuildingWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("BuildingWidget"));
 	BuildingWidget->SetupAttachment(BuildMesh);
+
+	BuildingLevel = 0;
+	BuildingMaxLevel = 3;
+
+	FirstUpgradeLevelCost = 100;
+	SecondUpgradeLevelCost = 200;
+	ThirdUpgradeLevelCost = 300;
 }
 
 void AEMBuildingBase::BeginPlay()
@@ -37,11 +44,13 @@ void AEMBuildingBase::Tick(float DeltaTime)
 void AEMBuildingBase::SelectObject()
 {
 	BuildMesh->SetRenderCustomDepth(true);
+	BuildingWidget->SetVisibility(true);
 }
 
 void AEMBuildingBase::DeselectObject()
 {
 	BuildMesh->SetRenderCustomDepth(false);
+	BuildingWidget->SetVisibility(false);
 }
 
 void AEMBuildingBase::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

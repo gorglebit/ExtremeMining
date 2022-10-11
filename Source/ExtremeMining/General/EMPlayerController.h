@@ -34,6 +34,8 @@ protected:
 public:
 	AEMPlayerController();
 
+	FORCEINLINE AEMBuildingBase* GetSelectedBuilding() { return SelectedBuilding; }
+
 	virtual void SetupInputComponent() override;
 	virtual void Tick(float DeltaTime) override;
 	void ClearSelectedBuildings() override;
