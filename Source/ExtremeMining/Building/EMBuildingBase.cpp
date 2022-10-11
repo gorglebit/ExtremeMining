@@ -2,6 +2,7 @@
 
 #include "EMBuildingBase.h"
 #include "Components/BoxComponent.h"
+#include "Components/WidgetComponent.h"
 
 #include "../Character/EMCharacterBase.h"
 
@@ -16,6 +17,9 @@ AEMBuildingBase::AEMBuildingBase()
 
 	CollisionBoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("EnterBoxCollision"));
 	CollisionBoxComponent->SetupAttachment(BuildMesh);
+
+	BuildingWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("BuildingWidget"));
+	BuildingWidget->SetupAttachment(BuildMesh);
 }
 
 void AEMBuildingBase::BeginPlay()

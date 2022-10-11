@@ -22,14 +22,16 @@ AEMCameraPawn::AEMCameraPawn()
 	SpringArmComponent->SetupAttachment(RootComponent);
 
 	SpringArmComponent->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when character does
-	SpringArmComponent->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));
+	SpringArmComponent->SetRelativeRotation(FRotator(-55.f, 0.f, 0.f));
 	SpringArmComponent->TargetArmLength = 4000.f;
 	SpringArmComponent->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
 	SpringArmComponent->bEnableCameraLag = true;
 
 	// Create a camera...
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
+	//CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
+	CameraComponent->SetupAttachment(SpringArmComponent);
+
 	CameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 
@@ -43,6 +45,11 @@ void AEMCameraPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	SetScreenSize();
+}
+
+void AEMCameraPawn::SetScreenSize()
+{
 	if (GetWorld()->GetGameViewport())
 	{
 		GetWorld()->GetGameViewport()->GetViewportSize(ScreenSize);

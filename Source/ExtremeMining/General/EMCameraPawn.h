@@ -18,12 +18,12 @@ private:
 	int32 TargetArmMaxLength;
 	int32 TargetArmMinLength;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		class UCameraComponent* CameraComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		class USpringArmComponent* SpringArmComponent;
-protected:
 public:
 //------------------------------
 
@@ -38,6 +38,7 @@ private:
 	void MovePawnBack();
 	void MovePawnRight();
 	void MovePawnLeft();
+	void SetScreenSize();
 
 protected:
 	virtual void BeginPlay() override;

@@ -10,6 +10,7 @@
 
 class UStaticMeshComponent;
 class UBoxComponent;
+class UWidgetComponent;
 
 UCLASS()
 class EXTREMEMINING_API AEMBuildingBase : public AActor, public IEMBasicInterface
@@ -27,8 +28,11 @@ protected:
 	UFUNCTION()
 		void OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		int32 BuildingType;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		UWidgetComponent* BuildingWidget;
 public:
 //------------------------
 
