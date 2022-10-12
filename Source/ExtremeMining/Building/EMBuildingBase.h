@@ -52,6 +52,8 @@ public:
 //------------------------
 
 private:
+	void SetCitizenMaxCount(const int32 InLevel);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -63,6 +65,8 @@ public:
 	virtual void SelectObject() override;
 
 	virtual void DeselectObject() override;
+
+	void UpgradeBuilding();
 
 
 	FORCEINLINE UBoxComponent* GetBoxComponent() { return CollisionBoxComponent; }
@@ -77,5 +81,5 @@ public:
 
 	FORCEINLINE int32 GetThirdUpgradeLevelCost() { return ThirdUpgradeLevelCost; }
 
-	FORCEINLINE void IncrementBuildingLevel() { BuildingLevel++; }
+	FORCEINLINE void IncrementBuildingLevel() { BuildingLevel++; BuildingLevel = FMath::Clamp(BuildingLevel, 0, 3); }
 };

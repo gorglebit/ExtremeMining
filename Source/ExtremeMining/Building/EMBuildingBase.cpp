@@ -3,8 +3,11 @@
 #include "EMBuildingBase.h"
 #include "Components/BoxComponent.h"
 #include "Components/WidgetComponent.h"
+#include <Kismet/GameplayStatics.h>
 
 #include "../Character/EMCharacterBase.h"
+#include "../General/EMPlayerState.h"
+#include "../Building/EMBuildingStorage.h"
 
 //UE_LOG(LogTemp, Warning, TEXT(""));
 
@@ -29,6 +32,33 @@ AEMBuildingBase::AEMBuildingBase()
 	ThirdUpgradeLevelCost = 300;
 }
 
+void AEMBuildingBase::SetCitizenMaxCount(const int32 InLevel)
+{
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
+
+	switch (InLevel)
+	{
+	case 1:
+	{
+		AsState->SetMaxCitizenCount(20);
+		break;
+	}
+	case 2:
+	{
+		AsState->SetMaxCitizenCount(25);
+		break;
+	}
+	case 3:
+	{
+		AsState->SetMaxCitizenCount(30);
+		break;
+	}
+	default:
+		break;
+	}
+}
+
 void AEMBuildingBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -51,6 +81,34 @@ void AEMBuildingBase::DeselectObject()
 {
 	BuildMesh->SetRenderCustomDepth(false);
 	BuildingWidget->SetVisibility(false);
+}
+
+void AEMBuildingBase::UpgradeBuilding()
+{
+	IncrementBuildingLevel();
+
+	switch (BuildingType)
+	{
+	case 0:
+	{
+		SetCitizenMaxCount(BuildingLevel);
+		break;
+	}
+	case 5:
+	{
+		TArray<AActor*> OutActors;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
+
+		auto AsStorage = Cast<AEMBuildingStorage>(OutActors[0]);
+		if (!AsStorage) break;
+		
+		AsStorage->UpgradeStorage();
+
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void AEMBuildingBase::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

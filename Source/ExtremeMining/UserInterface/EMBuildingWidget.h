@@ -49,6 +49,9 @@ protected:
 
 	UFUNCTION(BlueprintNativeEvent)
 		void SetUpgradeButtonIcon(const bool IsEnable);
+
+	UFUNCTION(BlueprintNativeEvent)
+		void SetStarCount(const int32 InBuildingLevel);
 public:
 
 };

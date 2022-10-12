@@ -35,6 +35,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 		FOnMoneyAmountChangedSignature OnMoneyAmountChangedDelegate;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Resourse")
+		int32 MaxResourceCount;
 //---------------------------
 private:
 protected:
@@ -42,6 +45,8 @@ protected:
 	void SetStorageWithDelay();
 public:
 	AEMBuildingStorage();
+
+	FORCEINLINE void SetMaxResourceCount(const int32 InNewMaxCount) { MaxResourceCount = InNewMaxCount; }
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE int32 GetFoodAmount() { return Food; }
@@ -64,5 +69,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 		void SetMoneyStorage();
+
+	void UpgradeStorage();
 
 };

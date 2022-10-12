@@ -19,32 +19,37 @@ void AEMBuildingStorage::SetFoodAmount(const int32 Amount)
 	TArray<AActor*> OutActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMCharacterBase::StaticClass(), OutActors);
 
-	if (Food <= 50)
-	{
-		for (int i = 0; i < OutActors.Num(); i++)
-		{
-			AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(OutActors[i]);
-			if (AsCharacter && !AsCharacter->GetIsCommandActive())
-			{
-				AsCharacter->SetMaxMoveSpeed(200);
-				AsCharacter->SetIsHungry(true);
-				AsCharacter->SetCollectionReateWorker(3);
-			}
-		}
-	}
-	else
-	{
-		for (int i = 0; i < OutActors.Num(); i++)
-		{
-			AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(OutActors[i]);
-			if (AsCharacter && !AsCharacter->GetIsCommandActive())
-			{
-				AsCharacter->SetMaxMoveSpeed(400);
-				AsCharacter->SetIsHungry(false);
-				AsCharacter->SetCollectionReateWorker(5);
-			}
-		}
-	}
+	//if (Food <= 50)
+	//{
+	//	for (int i = 0; i < OutActors.Num(); i++)
+	//	{
+	//		AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(OutActors[i]);
+	//		if (AsCharacter && !AsCharacter->GetIsCommandActive())
+	//		{
+	//			AsCharacter->SetMaxMoveSpeed(200);
+	//			AsCharacter->SetIsHungry(true);
+	//			AsCharacter->SetCollectionReateWorkerFood(AsCharacter->GetCollectionReateWorkerFood() - 2);
+	//			AsCharacter->SetCollectionReateWorkerWood(AsCharacter->GetCollectionReateWorkerWood() - 2);
+	//			AsCharacter->SetCollectionReateWorkerMoney(AsCharacter->GetCollectionReateWorkerMoney() - 2);
+	//		}
+	//	}
+	//}
+	//else
+	//{
+	//	for (int i = 0; i < OutActors.Num(); i++)
+	//	{
+	//		AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(OutActors[i]);
+	//		if (AsCharacter && !AsCharacter->GetIsCommandActive())
+	//		{
+	//			AsCharacter->SetMaxMoveSpeed(400);
+	//			AsCharacter->SetIsHungry(false);
+
+	//			AsCharacter->SetCollectionReateWorkerFood(AsCharacter->GetCollectionReateWorkerFood());
+	//			AsCharacter->SetCollectionReateWorkerWood(AsCharacter->GetCollectionReateWorkerFood());
+	//			AsCharacter->SetCollectionReateWorkerMoney(AsCharacter->GetCollectionReateWorkerFood());
+	//		}
+	//	}
+	//}
 
 	SetFoodStorage();
 }
@@ -65,6 +70,30 @@ void AEMBuildingStorage::SetMoneyAmount(const int32 Amount)
 	OnMoneyAmountChangedDelegate.Broadcast(Money);
 
 	SetMoneyStorage();
+}
+
+void AEMBuildingStorage::UpgradeStorage()
+{
+	switch (BuildingLevel)
+	{
+	case 1:
+	{
+		SetMaxResourceCount(1500);
+		break;
+	}
+	case 2:
+	{
+		SetMaxResourceCount(2000);
+		break;
+	}
+	case 3:
+	{
+		SetMaxResourceCount(2500);
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void AEMBuildingStorage::SetWoodStorage_Implementation()
@@ -106,5 +135,10 @@ void AEMBuildingStorage::SetStorageWithDelay()
 
 AEMBuildingStorage::AEMBuildingStorage()
 {
+	PrimaryActorTick.bCanEverTick = true;
 
+	MaxResourceCount = 1000;
 }
+
+	
+

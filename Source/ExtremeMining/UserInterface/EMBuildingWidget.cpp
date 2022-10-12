@@ -101,7 +101,13 @@ void UEMBuildingWidget::UpgradeBuilding()
 	AEMBuildingBase* SelectedBuilding = AsController->GetSelectedBuilding();
 	if (!SelectedBuilding) return;
 
-	UE_LOG(LogTemp, Warning, TEXT("UPGRADE!!!"));
+	SelectedBuilding->UpgradeBuilding();
+
+	SetStarCount(SelectedBuilding->GetBuildingLevel());
+}
+
+void UEMBuildingWidget::SetStarCount_Implementation(const int32 InBuildingLevel)
+{
 }
 
 void UEMBuildingWidget::SetUpgradeButtonIcon_Implementation(const bool IsEnable)

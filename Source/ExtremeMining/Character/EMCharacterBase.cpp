@@ -30,7 +30,14 @@ AEMCharacterBase::AEMCharacterBase()
 	WorkLocationDelta = 1100;
 
 	CollectionRateNotWorker = 1;
-	CollectionRateWorker = 5;
+	
+	CollectionRateWorkerStart = 5;
+
+	CollectionRateWorkerFood = CollectionRateWorkerStart;
+	CollectionRateWorkerWood = CollectionRateWorkerStart;
+	CollectionRateWorkerMoney = CollectionRateWorkerStart;
+
+	CollectionRateWorkerDelta = 2;
 
 	FoodIntakeCount = 1;
 
@@ -75,13 +82,13 @@ void AEMCharacterBase::CollectResouse()
 	if (!StorageBuilding) return;
 	//UE_LOG(LogTemp, Warning, TEXT("StorageBuilding = true"));
 
-	int RandomNumber = 0;
+	int ResourseType = 0;
 
-	if (CharacterType == 0)
+	if (CharacterType == CHARACTER_TYPE_CITIZEN)
 	{
-		RandomNumber = FMath::RandRange(1, 3);
+		ResourseType = FMath::RandRange(1, 3);
 
-		switch (RandomNumber)
+		switch (ResourseType)
 		{
 		case 1:
 		{
@@ -108,17 +115,20 @@ void AEMCharacterBase::CollectResouse()
 		{
 		case 1:
 		{
-			StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() + CollectionRateWorker);
+			CollectionRateWorkerFood = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_FOOD) * CollectionRateWorkerDelta);
+			StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() + CollectionRateWorkerFood);
 			break;
 		}
 		case 2:
 		{
-			StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() + CollectionRateWorker);
+			CollectionRateWorkerWood = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_WOOD) * CollectionRateWorkerDelta);
+			StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() + CollectionRateWorkerWood);
 			break;
 		}
 		case 3:
 		{
-			StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() + CollectionRateWorker);
+			CollectionRateWorkerMoney = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_MONEY) * CollectionRateWorkerDelta);
+			StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() + CollectionRateWorkerMoney);
 			break;
 		}
 		default:
@@ -126,7 +136,24 @@ void AEMCharacterBase::CollectResouse()
 		}
 	}
 
-	SetCollectWidget(RandomNumber);
+	SetCollectWidget(ResourseType);
+}
+
+int32 AEMCharacterBase::GetBuildingLevel(const int32 BuildingType)
+{
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingBase::StaticClass(), OutActors);
+
+	int32 BuildLevel = 0;
+	for (int i = 0; i < OutActors.Num(); i++)
+	{
+		auto AsBuilding = Cast<AEMBuildingBase>(OutActors[i]);
+		if (AsBuilding->GetBuildingType() == BuildingType)
+		{
+			BuildLevel = AsBuilding->GetBuildingLevel();
+		}
+	}
+	return BuildLevel;
 }
 
 void AEMCharacterBase::SetMaxMoveSpeed(const int SpeedAmount)

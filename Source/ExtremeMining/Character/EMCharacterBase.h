@@ -8,6 +8,16 @@
 #include "../Interface/EMBasicInterface.h"
 #include "EMCharacterBase.generated.h"
 
+#define BUILDING_TYPE_FOOD	1
+#define BUILDING_TYPE_WOOD	2
+#define BUILDING_TYPE_MONEY 3
+
+#define CHARACTER_TYPE_CITIZEN	0
+#define CHARACTER_TYPE_FOOD		1
+#define CHARACTER_TYPE_WOOD		2
+#define CHARACTER_TYPE_MONEY	3
+#define CHARACTER_TYPE_SEA		4	
+
 class UStaticMeshComponent;
 class AEMBuildingStorage;
 
@@ -31,7 +41,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Storage)
 		AEMBuildingStorage* StorageBuilding;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 		FVector WorkLocation;
 
 	UPROPERTY(BlueprintReadOnly)
@@ -47,7 +57,19 @@ protected:
 		int32 CollectionRateNotWorker;
 
 	UPROPERTY(BlueprintReadWrite)
-		int32 CollectionRateWorker;
+		int32 CollectionRateWorkerFood;
+
+	UPROPERTY(BlueprintReadWrite)
+		int32 CollectionRateWorkerWood;
+
+	UPROPERTY(BlueprintReadWrite)
+		int32 CollectionRateWorkerMoney;
+
+	UPROPERTY(BlueprintReadWrite)
+		int32 CollectionRateWorkerDelta;
+
+	UPROPERTY(BlueprintReadWrite)
+		int32 CollectionRateWorkerStart;
 
 	UPROPERTY(BlueprintReadWrite)
 		int32 FoodIntakeCount;
@@ -59,11 +81,12 @@ protected:
 		bool IsHungry;
 
 public:
-//------------------------------
+	//------------------------------
 
 private:
 	void CheckMoveStatus();
 	void IntakeFood();
+	int32 GetBuildingLevel(const int32 BuildingType);
 
 protected:
 	virtual void BeginPlay() override;
@@ -91,15 +114,26 @@ public:
 
 	FORCEINLINE void SetCharacterType(const int32 InCharType) { CharacterType = InCharType; }
 
-	FORCEINLINE void SetCollectionReateWorker(const int32 InAmount) { CollectionRateWorker = InAmount; }
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE int32 GetCollectionReateWorkerFood() { return CollectionRateWorkerFood; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE int32 GetCollectionReateWorker() { return CollectionRateWorker; }
+		FORCEINLINE int32 GetCollectionReateWorkerWood() { return CollectionRateWorkerWood; }
 
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE int32 GetCollectionReateWorkerMoney() { return CollectionRateWorkerMoney; }
+
+	FORCEINLINE void SetCollectionReateWorkerFood(const int32 InAmount) { CollectionRateWorkerFood = InAmount; }
+	FORCEINLINE void SetCollectionReateWorkerWood(const int32 InAmount) { CollectionRateWorkerWood = InAmount; }
+	FORCEINLINE void SetCollectionReateWorkerMoney(const int32 InAmount) { CollectionRateWorkerMoney = InAmount; }
+
+	UFUNCTION(BlueprintCallable)
 	void SetWorkLocation(const int32 InCharacterType);
 
 	UFUNCTION(BlueprintCallable)
 		void CollectResouse();
+
+
 
 	void SetMaxMoveSpeed(const int SpeedAmount);
 
