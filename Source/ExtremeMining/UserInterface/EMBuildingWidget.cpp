@@ -19,6 +19,8 @@ void UEMBuildingWidget::NativeConstruct()
 
 	TArray<AActor*> OutActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
+	if (OutActors.Num() == 0) return;
+
 	StorageBuilding = Cast<AEMBuildingStorage>(OutActors[0]);
 
 	UpgradeButton->SetIsEnabled(false);

@@ -10,6 +10,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFoodAmountChangedSignature, int32
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWoodAmountChangedSignature, int32, NewAmount);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoneyAmountChangedSignature, int32, NewAmount);
 
+
 UCLASS()
 class EXTREMEMINING_API AEMBuildingStorage : public AEMBuildingBase
 {
@@ -36,8 +37,6 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FOnMoneyAmountChangedSignature OnMoneyAmountChangedDelegate;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Resourse")
-		int32 MaxResourceCount;
 //---------------------------
 private:
 protected:
@@ -45,8 +44,6 @@ protected:
 	void SetStorageWithDelay();
 public:
 	AEMBuildingStorage();
-
-	FORCEINLINE void SetMaxResourceCount(const int32 InNewMaxCount) { MaxResourceCount = InNewMaxCount; }
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE int32 GetFoodAmount() { return Food; }
@@ -71,5 +68,4 @@ public:
 		void SetMoneyStorage();
 
 	void UpgradeStorage();
-
 };

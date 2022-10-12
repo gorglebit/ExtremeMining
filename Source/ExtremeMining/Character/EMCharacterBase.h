@@ -72,6 +72,9 @@ protected:
 		int32 CollectionRateWorkerStart;
 
 	UPROPERTY(BlueprintReadWrite)
+		int32 FinesIfHungry;
+
+	UPROPERTY(BlueprintReadWrite)
 		int32 FoodIntakeCount;
 
 	UPROPERTY(BlueprintReadWrite)
@@ -106,9 +109,13 @@ public:
 
 	FORCEINLINE bool GetIsCommandActive() { return IsCommandActive; }
 
+	FORCEINLINE int32 GetFinesIfHungry() { return FinesIfHungry; }
+
+	FORCEINLINE void SetFinesIfHungry(const int32 InNewAmount) { FinesIfHungry = InNewAmount; }
+
 	FORCEINLINE bool GetIsHungry() { return IsHungry; }
 
-	FORCEINLINE void SetIsHungry(bool InCondition) { IsHungry = InCondition; }
+	FORCEINLINE void SetIsHungry(bool InCondition); 
 
 	FORCEINLINE int32 GetCharacterType() { return CharacterType; }
 

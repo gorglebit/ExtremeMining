@@ -49,6 +49,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UWidgetComponent* BuildingWidget;
 public:
+
 //------------------------
 
 private:

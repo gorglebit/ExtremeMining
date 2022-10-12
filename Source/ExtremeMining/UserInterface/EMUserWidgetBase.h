@@ -26,6 +26,15 @@ protected:
 		UTextBlock* MoneyTextBlock;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* MaxFoodTextBlock;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* MaxWoodTextBlock;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* MaxMoneyTextBlock;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UTextBlock* CurrentCitizenTextBlock;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
@@ -59,7 +68,13 @@ protected:
 		void OnMoneyAmountChanged(int32 NewAmount);
 
 	UFUNCTION()
+		void OnMaxRecourceCountChanged(int32 NewAmount);
+
+	UFUNCTION()
 		void OnCurrentCitizenCountChanged(int32 NewAmount);
+
+	UFUNCTION()
+		void OnMaxCitizenCountChanged(int32 NewAmount);
 	
 public:
 

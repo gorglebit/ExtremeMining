@@ -30,7 +30,7 @@ AEMCharacterBase::AEMCharacterBase()
 	WorkLocationDelta = 1100;
 
 	CollectionRateNotWorker = 1;
-	
+
 	CollectionRateWorkerStart = 5;
 
 	CollectionRateWorkerFood = CollectionRateWorkerStart;
@@ -38,6 +38,7 @@ AEMCharacterBase::AEMCharacterBase()
 	CollectionRateWorkerMoney = CollectionRateWorkerStart;
 
 	CollectionRateWorkerDelta = 2;
+	FinesIfHungry = 0;
 
 	FoodIntakeCount = 1;
 
@@ -56,7 +57,7 @@ void AEMCharacterBase::SetWorkLocation(const int32 InCharacterType)
 		for (int i = 0; i < OutActors.Num(); i++)
 		{
 			AEMBuildingBase* AsBuilding = Cast<AEMBuildingBase>(OutActors[i]);
-			if (AsBuilding->GetBuildingType() == 0) 
+			if (AsBuilding->GetBuildingType() == 0)
 			{
 				WorkLocation = AsBuilding->GetActorLocation() - FVector(WorkLocationDelta, 0, 0);
 				return;
@@ -109,25 +110,25 @@ void AEMCharacterBase::CollectResouse()
 			break;
 		}
 	}
-	else 
+	else
 	{
 		switch (CharacterType)
 		{
 		case 1:
 		{
-			CollectionRateWorkerFood = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_FOOD) * CollectionRateWorkerDelta);
+			CollectionRateWorkerFood = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_FOOD) * CollectionRateWorkerDelta) - FinesIfHungry;
 			StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() + CollectionRateWorkerFood);
 			break;
 		}
 		case 2:
 		{
-			CollectionRateWorkerWood = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_WOOD) * CollectionRateWorkerDelta);
+			CollectionRateWorkerWood = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_WOOD) * CollectionRateWorkerDelta) - FinesIfHungry;
 			StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() + CollectionRateWorkerWood);
 			break;
 		}
 		case 3:
 		{
-			CollectionRateWorkerMoney = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_MONEY) * CollectionRateWorkerDelta);
+			CollectionRateWorkerMoney = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_MONEY) * CollectionRateWorkerDelta) - FinesIfHungry;
 			StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() + CollectionRateWorkerMoney);
 			break;
 		}
@@ -217,6 +218,15 @@ void AEMCharacterBase::UnitMoveCommand(const FVector Location)
 	AIController->MoveToLocation(Location, -1, true, true, false, true, nullptr, false);
 
 	GetWorldTimerManager().SetTimer(CheckMoveStatusTimer, this, &AEMCharacterBase::CheckMoveStatus, 3.f, true);
+}
+
+void AEMCharacterBase::SetIsHungry(bool InCondition)
+{
+	IsHungry = InCondition;
+	if (InCondition)
+		FinesIfHungry = 2;
+	else
+		FinesIfHungry = 0;
 }
 
 void AEMCharacterBase::SetCharacterRole_Implementation(const int32 Type)

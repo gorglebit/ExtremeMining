@@ -7,6 +7,8 @@
 #include "EMPlayerState.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCurrentCitizenCountChangedSignature, int32, NewAmount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxCitizenCountChangedSignature, int32, NewAmount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxResourceCountChangedSignature, int32, NewAmount);
 
 UCLASS()
 class EXTREMEMINING_API AEMPlayerState : public APlayerState
@@ -25,9 +27,18 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Storage")
 		int32 StartResourceCount;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Storage")
+		int32 MaxResourceCount;
 public:
 	UPROPERTY(BlueprintAssignable)
 		FOnCurrentCitizenCountChangedSignature OnCurrentCitizenCountChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+		FOnMaxCitizenCountChangedSignature OnMaxCitizenCountChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+		FOnMaxResourceCountChangedSignature OnMaxResourceCountChangedDelegate;
 	//---------------------
 private:
 protected:
@@ -51,9 +62,15 @@ public:
 		FORCEINLINE int32 GetMaxCitizenCount() { return MaxCitizenCount; }
 
 	UFUNCTION(BlueprintCallable)
+		FORCEINLINE int32 GetMaxResourceCount() { return MaxResourceCount; }
+
+	UFUNCTION(BlueprintCallable)
 		void SetCurrentCitizenCount(const int32 InNewCount);
 
 	UFUNCTION(BlueprintCallable)
 		void SetMaxCitizenCount(const int32 InNewCount);
+
+	UFUNCTION(BlueprintCallable)
+		void SetMaxResourceCount(const int32 InNewCount);
 
 };

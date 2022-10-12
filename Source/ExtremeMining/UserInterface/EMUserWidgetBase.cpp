@@ -72,10 +72,22 @@ void UEMUserWidgetBase::OnMoneyAmountChanged(int32 NewAmount)
 	MoneyTextBlock->SetText(FText::AsNumber(NewAmount));
 }
 
+void UEMUserWidgetBase::OnMaxRecourceCountChanged(int32 NewAmount)
+{
+	MaxFoodTextBlock->SetText(FText::AsNumber(NewAmount));
+	MaxWoodTextBlock->SetText(FText::AsNumber(NewAmount));
+	MaxMoneyTextBlock->SetText(FText::AsNumber(NewAmount));
+}
+
 void UEMUserWidgetBase::OnCurrentCitizenCountChanged(int32 NewAmount)
 {
 	CurrentCitizenTextBlock->SetText(FText::AsNumber(NewAmount));
 	//UE_LOG(LogTemp, Warning, TEXT("CurrentCitizenTextBlock->SetText"));
+}
+
+void UEMUserWidgetBase::OnMaxCitizenCountChanged(int32 NewAmount)
+{
+	MaxCitizenTextBlock->SetText(FText::AsNumber(NewAmount));
 }
 
 void UEMUserWidgetBase::NativeConstruct()
@@ -95,14 +107,19 @@ void UEMUserWidgetBase::NativeConstruct()
 	WoodTextBlock->SetText(FText::AsNumber(AsState->GetStartResourceCount()));
 	MoneyTextBlock->SetText(FText::AsNumber(AsState->GetStartResourceCount()));
 
+	MaxFoodTextBlock->SetText(FText::AsNumber(AsState->GetMaxResourceCount()));
+	MaxWoodTextBlock->SetText(FText::AsNumber(AsState->GetMaxResourceCount()));
+	MaxMoneyTextBlock->SetText(FText::AsNumber(AsState->GetMaxResourceCount()));
+
 	if (StorageBuilding)
 	{
 		StorageBuilding->OnFoodAmountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnFoodAmountChanged);
 		StorageBuilding->OnWoodAmountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnWoodAmountChanged);
 		StorageBuilding->OnMoneyAmountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnMoneyAmountChanged);
 		
+		AsState->OnMaxResourceCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnMaxRecourceCountChanged);
 		AsState->OnCurrentCitizenCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCurrentCitizenCountChanged);
-		
+		AsState->OnMaxCitizenCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnMaxCitizenCountChanged);
 		//UE_LOG(LogTemp, Warning, TEXT("OnFoodAmountChangedDelegate"));
 	}
 		

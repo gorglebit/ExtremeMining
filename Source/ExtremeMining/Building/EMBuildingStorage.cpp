@@ -12,52 +12,51 @@
 
 void AEMBuildingStorage::SetFoodAmount(const int32 Amount)
 {
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
+
 	Food = Amount;
-	Food = FMath::Clamp(Food, 0, 1000);
+	Food = FMath::Clamp(Food, 0, AsState->GetMaxResourceCount());
 	OnFoodAmountChangedDelegate.Broadcast(Food);
 
 	TArray<AActor*> OutActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMCharacterBase::StaticClass(), OutActors);
 
-	//if (Food <= 50)
-	//{
-	//	for (int i = 0; i < OutActors.Num(); i++)
-	//	{
-	//		AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(OutActors[i]);
-	//		if (AsCharacter && !AsCharacter->GetIsCommandActive())
-	//		{
-	//			AsCharacter->SetMaxMoveSpeed(200);
-	//			AsCharacter->SetIsHungry(true);
-	//			AsCharacter->SetCollectionReateWorkerFood(AsCharacter->GetCollectionReateWorkerFood() - 2);
-	//			AsCharacter->SetCollectionReateWorkerWood(AsCharacter->GetCollectionReateWorkerWood() - 2);
-	//			AsCharacter->SetCollectionReateWorkerMoney(AsCharacter->GetCollectionReateWorkerMoney() - 2);
-	//		}
-	//	}
-	//}
-	//else
-	//{
-	//	for (int i = 0; i < OutActors.Num(); i++)
-	//	{
-	//		AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(OutActors[i]);
-	//		if (AsCharacter && !AsCharacter->GetIsCommandActive())
-	//		{
-	//			AsCharacter->SetMaxMoveSpeed(400);
-	//			AsCharacter->SetIsHungry(false);
-
-	//			AsCharacter->SetCollectionReateWorkerFood(AsCharacter->GetCollectionReateWorkerFood());
-	//			AsCharacter->SetCollectionReateWorkerWood(AsCharacter->GetCollectionReateWorkerFood());
-	//			AsCharacter->SetCollectionReateWorkerMoney(AsCharacter->GetCollectionReateWorkerFood());
-	//		}
-	//	}
-	//}
+	if (Food <= 50)
+	{
+		for (int i = 0; i < OutActors.Num(); i++)
+		{
+			AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(OutActors[i]);
+			if (AsCharacter && !AsCharacter->GetIsCommandActive())
+			{
+				AsCharacter->SetMaxMoveSpeed(200);
+				AsCharacter->SetIsHungry(true);
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < OutActors.Num(); i++)
+		{
+			AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(OutActors[i]);
+			if (AsCharacter && !AsCharacter->GetIsCommandActive())
+			{
+				AsCharacter->SetMaxMoveSpeed(400);
+				AsCharacter->SetIsHungry(false);
+			}
+		}
+	}
 
 	SetFoodStorage();
 }
 
 void AEMBuildingStorage::SetWoodAmount(const int32 Amount)
 {
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
+
 	Wood = Amount;
-	Wood = FMath::Clamp(Wood, 0, 1000);
+	Wood = FMath::Clamp(Wood, 0, AsState->GetMaxResourceCount());
 	OnWoodAmountChangedDelegate.Broadcast(Wood);
 
 	SetWoodStorage();
@@ -65,8 +64,11 @@ void AEMBuildingStorage::SetWoodAmount(const int32 Amount)
 
 void AEMBuildingStorage::SetMoneyAmount(const int32 Amount)
 {
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
+
 	Money = Amount;
-	Money = FMath::Clamp(Money, 0, 1000);
+	Money = FMath::Clamp(Money, 0, AsState->GetMaxResourceCount());
 	OnMoneyAmountChangedDelegate.Broadcast(Money);
 
 	SetMoneyStorage();
@@ -74,21 +76,24 @@ void AEMBuildingStorage::SetMoneyAmount(const int32 Amount)
 
 void AEMBuildingStorage::UpgradeStorage()
 {
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
+
 	switch (BuildingLevel)
 	{
 	case 1:
 	{
-		SetMaxResourceCount(1500);
+		AsState->SetMaxResourceCount(500);
 		break;
 	}
 	case 2:
 	{
-		SetMaxResourceCount(2000);
+		AsState->SetMaxResourceCount(750);
 		break;
 	}
 	case 3:
 	{
-		SetMaxResourceCount(2500);
+		AsState->SetMaxResourceCount(1000);
 		break;
 	}
 	default:
@@ -137,7 +142,9 @@ AEMBuildingStorage::AEMBuildingStorage()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	MaxResourceCount = 1000;
+	Food = 0;
+	Wood = 0;
+	Money = 0;
 }
 
 	

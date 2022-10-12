@@ -14,9 +14,12 @@ void AEMPlayerState::BeginPlay()
 AEMPlayerState::AEMPlayerState()
 {
 	StartResourceCount = 100;
-	StartCitizenCount = 4;
+	MaxResourceCount = 250;
+
 	CurrentCitizenCount = 0;
+	StartCitizenCount = 4;
 	MaxCitizenCount = 15;
+	
 }
 
 void AEMPlayerState::SetCurrentCitizenCount(const int32 InNewCount)
@@ -28,4 +31,11 @@ void AEMPlayerState::SetCurrentCitizenCount(const int32 InNewCount)
 void AEMPlayerState::SetMaxCitizenCount(const int32 InNewCount)
 {	
 	MaxCitizenCount = InNewCount;
+	OnMaxCitizenCountChangedDelegate.Broadcast(InNewCount);
+}
+
+void AEMPlayerState::SetMaxResourceCount(const int32 InNewCount)
+{
+	MaxResourceCount = InNewCount;
+	OnMaxResourceCountChangedDelegate.Broadcast(InNewCount);
 }
