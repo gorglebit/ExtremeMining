@@ -113,9 +113,7 @@ public:
 
 	FORCEINLINE void SetFinesIfHungry(const int32 InNewAmount) { FinesIfHungry = InNewAmount; }
 
-	FORCEINLINE bool GetIsHungry() { return IsHungry; }
-
-	FORCEINLINE void SetIsHungry(bool InCondition); 
+	void SetIsHungry(const bool InCondition); 
 
 	FORCEINLINE int32 GetCharacterType() { return CharacterType; }
 

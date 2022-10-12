@@ -220,9 +220,10 @@ void AEMCharacterBase::UnitMoveCommand(const FVector Location)
 	GetWorldTimerManager().SetTimer(CheckMoveStatusTimer, this, &AEMCharacterBase::CheckMoveStatus, 3.f, true);
 }
 
-void AEMCharacterBase::SetIsHungry(bool InCondition)
+void AEMCharacterBase::SetIsHungry(const bool InCondition)
 {
 	IsHungry = InCondition;
+
 	if (InCondition)
 		FinesIfHungry = 2;
 	else

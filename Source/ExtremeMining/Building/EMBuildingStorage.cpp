@@ -27,6 +27,8 @@ void AEMBuildingStorage::SetFoodAmount(const int32 Amount)
 		for (int i = 0; i < OutActors.Num(); i++)
 		{
 			AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(OutActors[i]);
+			if (!AsCharacter) return;
+
 			if (AsCharacter && !AsCharacter->GetIsCommandActive())
 			{
 				AsCharacter->SetMaxMoveSpeed(200);
@@ -39,6 +41,8 @@ void AEMBuildingStorage::SetFoodAmount(const int32 Amount)
 		for (int i = 0; i < OutActors.Num(); i++)
 		{
 			AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(OutActors[i]);
+			if (!AsCharacter) return;
+
 			if (AsCharacter && !AsCharacter->GetIsCommandActive())
 			{
 				AsCharacter->SetMaxMoveSpeed(400);
