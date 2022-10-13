@@ -7,6 +7,7 @@
 #include "Math/UnrealMathUtility.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/BoxComponent.h"
 
 #include "../Building/EMBuildingBase.h"
 #include "../Building/EMBuildingStorage.h"
@@ -26,8 +27,8 @@ AEMCharacterBase::AEMCharacterBase()
 	IsCommandActive = false;
 	IsHungry = false;
 	CharacterType = 0;
-	WorkLocationRadius = 1000;
-	WorkLocationDelta = 1200;
+	WorkLocationRadius = 1400;
+	WorkLocationDelta = 1400;
 
 	CollectionRateNotWorker = 1;
 
@@ -173,12 +174,19 @@ void AEMCharacterBase::BeginPlay()
 	SetCharacterRole(CharacterType);
 	SetWorkLocation(CharacterType);
 
-	TArray<AActor*> OutActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
-	StorageBuilding = Cast<AEMBuildingStorage>(OutActors[0]);
+	SetStorageLocation();
 
 	GetWorldTimerManager().SetTimer(FoodIntakeTimer, this, &AEMCharacterBase::IntakeFood, 2.5f, true);
 	GetWorldTimerManager().SetTimer(CollectResourceTimer, this, &AEMCharacterBase::CollectResouse, 4.f, true);
+}
+
+void AEMCharacterBase::SetStorageLocation()
+{
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
+	StorageBuilding = Cast<AEMBuildingStorage>(OutActors[0]);
+	if (!StorageBuilding) return;
+	StorageLocation = StorageBuilding->GetBoxComponent()->GetComponentLocation();
 }
 
 void AEMCharacterBase::Tick(float DeltaTime)

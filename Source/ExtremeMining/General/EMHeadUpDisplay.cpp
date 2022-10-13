@@ -106,21 +106,25 @@ TArray<AEMCharacterBase*> AEMHeadUpDisplay::GrabSelectedUnits()
 void AEMHeadUpDisplay::CleanSelectedUnits()
 {
 	if (SelectedCharactersArray.Num() == 0) return;
-
+	
+	//UE_LOG(LogTemp, Warning, TEXT("CleanSelectedUnits Before - %d"), SelectedCharactersArray.Num());
 	for (int i = 0; i < SelectedCharactersArray.Num(); i++)
 	{
 		auto Char = SelectedCharactersArray[i];
 		if (Char)
 		{
 			Char->DeselectObject();
-			SelectedCharactersArray.Remove(Char);
 		}
+		//SelectedCharactersArray.Remove(Char);
 	}
-	//UE_LOG(LogTemp, Warning, TEXT("CleanSelectedUnits - %d"), SelectedCharactersArray.Num());
+
+	SelectedCharactersArray.Empty();
+	//UE_LOG(LogTemp, Warning, TEXT("CleanSelectedUnits After - %d"), SelectedCharactersArray.Num());
 }
 
 void AEMHeadUpDisplay::AddUnit(AEMCharacterBase* InCharacter)
 {
+	InCharacter->SelectObject();
 	SelectedCharactersArray.AddUnique(InCharacter);
 }
 

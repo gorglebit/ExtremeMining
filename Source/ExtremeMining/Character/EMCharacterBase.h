@@ -44,6 +44,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 		FVector WorkLocation;
 
+	UPROPERTY(BlueprintReadWrite)
+		FVector StorageLocation;
+
 	UPROPERTY(BlueprintReadOnly)
 		float WorkLocationRadius;
 
@@ -113,7 +116,7 @@ public:
 
 	FORCEINLINE void SetFinesIfHungry(const int32 InNewAmount) { FinesIfHungry = InNewAmount; }
 
-	void SetIsHungry(const bool InCondition); 
+	void SetIsHungry(const bool InCondition);
 
 	FORCEINLINE int32 GetCharacterType() { return CharacterType; }
 
@@ -133,12 +136,13 @@ public:
 	FORCEINLINE void SetCollectionReateWorkerMoney(const int32 InAmount) { CollectionRateWorkerMoney = InAmount; }
 
 	UFUNCTION(BlueprintCallable)
-	void SetWorkLocation(const int32 InCharacterType);
+		void SetWorkLocation(const int32 InCharacterType);
+
+	UFUNCTION(BlueprintCallable)
+		void SetStorageLocation();
 
 	UFUNCTION(BlueprintCallable)
 		void CollectResouse();
-
-
 
 	void SetMaxMoveSpeed(const int SpeedAmount);
 

@@ -67,7 +67,7 @@ void AEMPlayerController::SelectObjectStartAction()
 	AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(Hit.GetActor());
 	if (AsCharacter)
 	{
-		AsCharacter->SelectObject();
+		//AsCharacter->SelectObject();
 		HUD->AddUnit(AsCharacter);
 		return;
 	}
