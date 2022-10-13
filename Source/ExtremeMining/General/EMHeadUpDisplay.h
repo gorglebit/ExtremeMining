@@ -52,6 +52,8 @@ public:
 	virtual void MarqueeHeld() override; 
 	virtual void MarqueeReleased() override;
 	virtual TArray<AEMCharacterBase*> GrabSelectedUnits() override;
-	
+
+	void CleanSelectedUnits();
+
 	FORCEINLINE UEMUserWidgetBase* GetStorage() { return UserWidget; }
 };

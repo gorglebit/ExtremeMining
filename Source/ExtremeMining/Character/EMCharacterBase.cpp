@@ -26,7 +26,7 @@ AEMCharacterBase::AEMCharacterBase()
 	IsCommandActive = false;
 	IsHungry = false;
 	CharacterType = 0;
-	WorkLocationRadius = 700;
+	WorkLocationRadius = 1000;
 	WorkLocationDelta = 1100;
 
 	CollectionRateNotWorker = 1;

@@ -17,6 +17,8 @@ void UEMBuildingWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	IsUpgrading = false;
+
 	TArray<AActor*> OutActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
 	if (OutActors.Num() == 0) return;
@@ -25,7 +27,7 @@ void UEMBuildingWidget::NativeConstruct()
 
 	UpgradeButton->SetIsEnabled(false);
 
-	UpgradeButton->OnClicked.AddDynamic(this, &UEMBuildingWidget::UpgradeBuilding);
+	UpgradeButton->OnReleased.AddDynamic(this, &UEMBuildingWidget::UpgradeBuilding);
 }
 
 void UEMBuildingWidget::SetResourceCount()
@@ -83,10 +85,21 @@ void UEMBuildingWidget::SetUpgrageButtonEnable()
 	int32 MoneyToUpgrade = SelectedBuilding->GetFirstUpgradeLevelCost() * (SelectedBuilding->GetBuildingLevel() + 1);
 	int32 WoodToUpgrade = SelectedBuilding->GetFirstUpgradeLevelCost() * (SelectedBuilding->GetBuildingLevel() + 1);
 
-	if (StorageBuilding->GetMoneyAmount() > MoneyToUpgrade && StorageBuilding->GetWoodAmount() > WoodToUpgrade)
+	bool IsEnoughMoney = StorageBuilding->GetMoneyAmount() > MoneyToUpgrade && StorageBuilding->GetWoodAmount() > WoodToUpgrade;
+	
+	
+	if (!IsUpgrading)
 	{
-		UpgradeButton->SetIsEnabled(true);
-		SetUpgradeButtonIcon(true);
+		if (IsEnoughMoney)
+		{
+			UpgradeButton->SetIsEnabled(true);
+			SetUpgradeButtonIcon(true);
+		}
+		else
+		{
+			UpgradeButton->SetIsEnabled(false);
+			SetUpgradeButtonIcon(false);
+		}
 	}
 	else
 	{
@@ -97,15 +110,33 @@ void UEMBuildingWidget::SetUpgrageButtonEnable()
 
 void UEMBuildingWidget::UpgradeBuilding()
 {
-	AEMPlayerController* AsController = Cast<AEMPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	if (!AsController) return;
+	if (!IsUpgrading)
+	{
+		IsUpgrading = true;
 
-	AEMBuildingBase* SelectedBuilding = AsController->GetSelectedBuilding();
-	if (!SelectedBuilding) return;
+		AEMPlayerController* AsController = Cast<AEMPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		if (!AsController) return;
 
-	SelectedBuilding->UpgradeBuilding();
+		AEMBuildingBase* SelectedBuilding = AsController->GetSelectedBuilding();
+		if (!SelectedBuilding) return;
 
-	SetStarCount(SelectedBuilding->GetBuildingLevel());
+		UE_LOG(LogTemp, Warning, TEXT("UpgradeBuilding"));
+
+		SelectedBuilding->UpgradeBuilding();
+
+		SetResourceCount();
+		SetStarCount(SelectedBuilding->GetBuildingLevel());
+
+		FTimerHandle Timer;
+		
+		GetWorld()->GetTimerManager().SetTimer(Timer, [this]() 
+			{
+				IsUpgrading = false;
+			}
+		, 1.f, false);
+	}
+
+	
 }
 
 void UEMBuildingWidget::SetStarCount_Implementation(const int32 InBuildingLevel)

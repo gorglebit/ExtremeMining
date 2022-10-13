@@ -41,7 +41,7 @@ void AEMHeadUpDisplay::SelectObjectInRect()
 		ActorsInRectArray.Empty();
 		DrawRect(FLinearColor(255, 0, 0, 0.2), StartMousePosition.X, StartMousePosition.Y, rectWeight, rectHeight);
 
-		GetActorsInSelectionRectangle(StartMousePosition, CurrentMousePostion, ActorsInRectArray, false, false);
+		GetActorsInSelectionRectangle(StartMousePosition, CurrentMousePostion, ActorsInRectArray, false, true);
 
 		for (int i = 0; i < ActorsInRectArray.Num(); i++)
 		{
@@ -101,4 +101,18 @@ void AEMHeadUpDisplay::MarqueeReleased()
 TArray<AEMCharacterBase*> AEMHeadUpDisplay::GrabSelectedUnits()
 {
 	return SelectedCharactersArray;
+}
+
+void AEMHeadUpDisplay::CleanSelectedUnits()
+{
+	if (SelectedCharactersArray.Num() == 0) return;
+
+	for (int i = 0; i < SelectedCharactersArray.Num(); i++)
+	{
+		if (SelectedCharactersArray[i])
+		{
+			SelectedCharactersArray[i]->DeselectObject();
+			SelectedCharactersArray[i] = NULL;
+		}
+	}
 }

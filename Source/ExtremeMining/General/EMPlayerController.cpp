@@ -43,10 +43,14 @@ void AEMPlayerController::Tick(float DeltaTime)
 
 void AEMPlayerController::SelectObjectStartAction()
 {
+	AEMHeadUpDisplay* HUD = Cast<AEMHeadUpDisplay>(GetHUD());
+	if (!HUD) return;
+
 	IsLeftMousePressed = true;
 	//UE_LOG(LogTemp, Warning, TEXT(""));
 
 	ClearSelectedBuildings();
+	HUD->CleanSelectedUnits();
 
 	FHitResult Hit;
 	GetHitResultUnderCursorByChannel(ETraceTypeQuery::TraceTypeQuery_MAX, true, Hit);
@@ -56,10 +60,10 @@ void AEMPlayerController::SelectObjectStartAction()
 	{
 		buildingActor->SelectObject();
 		SelectedBuilding = buildingActor;
+		return;
 	}
 	
-	AEMHeadUpDisplay* HUD = Cast<AEMHeadUpDisplay>(GetHUD());
-	if (!HUD) return;
+	
 
 	HUD->MarqueePressed();
 }

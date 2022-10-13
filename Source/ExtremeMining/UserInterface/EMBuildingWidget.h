@@ -17,6 +17,8 @@ class EXTREMEMINING_API UEMBuildingWidget : public UUserWidget
 	GENERATED_BODY()
 	
 private:
+	bool IsUpgrading;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UTextBlock* WoodCountTextBlock;
