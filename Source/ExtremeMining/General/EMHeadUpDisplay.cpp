@@ -109,10 +109,18 @@ void AEMHeadUpDisplay::CleanSelectedUnits()
 
 	for (int i = 0; i < SelectedCharactersArray.Num(); i++)
 	{
-		if (SelectedCharactersArray[i])
+		auto Char = SelectedCharactersArray[i];
+		if (Char)
 		{
-			SelectedCharactersArray[i]->DeselectObject();
-			SelectedCharactersArray[i] = NULL;
+			Char->DeselectObject();
+			SelectedCharactersArray.Remove(Char);
 		}
 	}
+	//UE_LOG(LogTemp, Warning, TEXT("CleanSelectedUnits - %d"), SelectedCharactersArray.Num());
 }
+
+void AEMHeadUpDisplay::AddUnit(AEMCharacterBase* InCharacter)
+{
+	SelectedCharactersArray.AddUnique(InCharacter);
+}
+

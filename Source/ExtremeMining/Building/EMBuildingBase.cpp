@@ -85,6 +85,8 @@ void AEMBuildingBase::DeselectObject()
 
 void AEMBuildingBase::UpgradeBuilding()
 {
+	SpandMoneyOnUpgrade();
+	
 	IncrementBuildingLevel();
 
 	switch (BuildingType)
@@ -109,6 +111,41 @@ void AEMBuildingBase::UpgradeBuilding()
 	default:
 		break;
 	}
+}
+
+void AEMBuildingBase::SpandMoneyOnUpgrade()
+{
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
+
+	auto AsStorage = Cast<AEMBuildingStorage>(OutActors[0]);
+	if (!AsStorage) return;
+
+
+	int32 UpgrageCost;
+	switch (BuildingLevel)
+	{
+	case 0:
+	{
+		UpgrageCost = FirstUpgradeLevelCost;
+		break;
+	}
+	case 1:
+	{
+		UpgrageCost = SecondUpgradeLevelCost;
+		break;
+	}
+	case 2:
+	{
+		UpgrageCost = ThirdUpgradeLevelCost;
+		break;
+	}
+	default:
+		break;
+	}
+
+	AsStorage->SpendMoneyOnUpgrade(UpgrageCost);
+
 }
 
 void AEMBuildingBase::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

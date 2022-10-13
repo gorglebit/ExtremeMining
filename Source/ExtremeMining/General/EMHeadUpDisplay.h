@@ -54,6 +54,7 @@ public:
 	virtual TArray<AEMCharacterBase*> GrabSelectedUnits() override;
 
 	void CleanSelectedUnits();
+	void AddUnit(AEMCharacterBase* InCharacter);
 
 	FORCEINLINE UEMUserWidgetBase* GetStorage() { return UserWidget; }
 };

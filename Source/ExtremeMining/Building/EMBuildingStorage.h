@@ -45,6 +45,8 @@ protected:
 public:
 	AEMBuildingStorage();
 
+	void SpendMoneyOnUpgrade(const int32 InResourceAmount);
+
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE int32 GetFoodAmount() { return Food; }
 

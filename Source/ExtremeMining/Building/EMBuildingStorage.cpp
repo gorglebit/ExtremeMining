@@ -151,5 +151,11 @@ AEMBuildingStorage::AEMBuildingStorage()
 	Money = 0;
 }
 
+void AEMBuildingStorage::SpendMoneyOnUpgrade(const int32 InResourceAmount)
+{
+	Wood = Wood - InResourceAmount;
+	Money = Money - InResourceAmount;
+}
+
 	
 

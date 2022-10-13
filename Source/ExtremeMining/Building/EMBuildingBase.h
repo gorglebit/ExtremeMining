@@ -69,6 +69,8 @@ public:
 
 	void UpgradeBuilding();
 
+	void SpandMoneyOnUpgrade();
+
 
 	FORCEINLINE UBoxComponent* GetBoxComponent() { return CollisionBoxComponent; }
 

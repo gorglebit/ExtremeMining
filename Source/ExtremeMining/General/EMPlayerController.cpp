@@ -39,32 +39,40 @@ void AEMPlayerController::Tick(float DeltaTime)
 	{
 		HUD->MarqueeHeld();
 	}
+
+	//UE_LOG(LogTemp, Warning, TEXT("GrabSelectedUnits - %d"), HUD->GrabSelectedUnits().Num());
 }
 
 void AEMPlayerController::SelectObjectStartAction()
 {
 	AEMHeadUpDisplay* HUD = Cast<AEMHeadUpDisplay>(GetHUD());
 	if (!HUD) return;
-
-	IsLeftMousePressed = true;
+	
 	//UE_LOG(LogTemp, Warning, TEXT(""));
 
-	ClearSelectedBuildings();
 	HUD->CleanSelectedUnits();
+	ClearSelectedBuildings();
 
 	FHitResult Hit;
 	GetHitResultUnderCursorByChannel(ETraceTypeQuery::TraceTypeQuery_MAX, true, Hit);
 	
-	AEMBuildingBase* buildingActor = Cast<AEMBuildingBase>(Hit.GetActor());
-	if (buildingActor)
+	AEMBuildingBase* AsBuilding = Cast<AEMBuildingBase>(Hit.GetActor());
+	if (AsBuilding)
 	{
-		buildingActor->SelectObject();
-		SelectedBuilding = buildingActor;
+		AsBuilding->SelectObject();
+		SelectedBuilding = AsBuilding;
 		return;
 	}
-	
-	
 
+	AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(Hit.GetActor());
+	if (AsCharacter)
+	{
+		AsCharacter->SelectObject();
+		HUD->AddUnit(AsCharacter);
+		return;
+	}
+
+	IsLeftMousePressed = true;
 	HUD->MarqueePressed();
 }
 void AEMPlayerController::SelectObjectStopAction()

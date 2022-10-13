@@ -27,7 +27,7 @@ AEMCharacterBase::AEMCharacterBase()
 	IsHungry = false;
 	CharacterType = 0;
 	WorkLocationRadius = 1000;
-	WorkLocationDelta = 1100;
+	WorkLocationDelta = 1200;
 
 	CollectionRateNotWorker = 1;
 
