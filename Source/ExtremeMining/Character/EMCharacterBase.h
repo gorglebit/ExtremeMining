@@ -151,4 +151,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 		void SetCharacterRole(const int32 Type);
+
+	UFUNCTION(BlueprintNativeEvent)
+		void SpawnMoveCommandFX();
 };

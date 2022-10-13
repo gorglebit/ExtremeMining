@@ -163,6 +163,10 @@ void AEMCharacterBase::SetMaxMoveSpeed(const int SpeedAmount)
 	GetCharacterMovement()->MaxWalkSpeed = SpeedAmount;
 }
 
+void AEMCharacterBase::SpawnMoveCommandFX_Implementation()
+{
+}
+
 void AEMCharacterBase::SetCollectWidget_Implementation(const int32 ResourceType)
 {
 }
@@ -215,6 +219,8 @@ void AEMCharacterBase::DeselectObject()
 
 void AEMCharacterBase::UnitMoveCommand(const FVector Location)
 {
+	SpawnMoveCommandFX();
+
 	IsCommandActive = true;
 	GetCharacterMovement()->MaxWalkSpeed = 600;
 	GetWorldTimerManager().PauseTimer(CollectResourceTimer);// CollectResourceTimer->

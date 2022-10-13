@@ -71,7 +71,6 @@ public:
 
 	void SpandMoneyOnUpgrade();
 
-
 	FORCEINLINE UBoxComponent* GetBoxComponent() { return CollisionBoxComponent; }
 
 	FORCEINLINE int32 GetBuildingType() { return BuildingType; }
@@ -85,4 +84,7 @@ public:
 	FORCEINLINE int32 GetThirdUpgradeLevelCost() { return ThirdUpgradeLevelCost; }
 
 	FORCEINLINE void IncrementBuildingLevel() { BuildingLevel++; BuildingLevel = FMath::Clamp(BuildingLevel, 0, 3); }
+
+	UFUNCTION(BlueprintNativeEvent)
+		void SpawnUpgradeFX();
 };

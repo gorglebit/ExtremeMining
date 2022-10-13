@@ -85,6 +85,8 @@ void AEMBuildingBase::DeselectObject()
 
 void AEMBuildingBase::UpgradeBuilding()
 {
+	SpawnUpgradeFX();
+
 	SpandMoneyOnUpgrade();
 	
 	IncrementBuildingLevel();
@@ -146,6 +148,10 @@ void AEMBuildingBase::SpandMoneyOnUpgrade()
 
 	AsStorage->SpendMoneyOnUpgrade(UpgrageCost);
 
+}
+
+void AEMBuildingBase::SpawnUpgradeFX_Implementation()
+{
 }
 
 void AEMBuildingBase::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
