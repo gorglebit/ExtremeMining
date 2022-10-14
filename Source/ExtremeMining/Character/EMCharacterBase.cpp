@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
 
+#include "../General/EMPlayerState.h"
 #include "../Building/EMBuildingBase.h"
 #include "../Building/EMBuildingStorage.h"
 
@@ -175,6 +176,7 @@ void AEMCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	SetCharacterType(0);
 	SetCharacterRole(CharacterType);
 	SetWorkLocation(CharacterType);
 
@@ -242,6 +244,33 @@ void AEMCharacterBase::SetIsHungry(const bool InCondition)
 		FinesIfHungry = 2;
 	else
 		FinesIfHungry = 0;
+}
+
+void AEMCharacterBase::SetCharacterType(const int32 InCharType)
+{
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
+	
+	if (CharacterType == 0 && InCharType == 0)
+	{
+		CharacterType = InCharType;
+
+		AsState->IncrementCitizentCount(InCharType);
+		return;
+	}
+
+	if (CharacterType != InCharType)
+	{
+		AsState->DecrementCitizentCount(CharacterType);
+		
+		CharacterType = InCharType;
+
+		AsState->IncrementCitizentCount(InCharType);
+		return;
+	}
+	
+
+	
 }
 
 void AEMCharacterBase::SetCharacterRole_Implementation(const int32 Type)

@@ -4,6 +4,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "Components/TextBlock.h"
 
+#include "../Character/EMCharacterBase.h"
 #include "../Building/EMBuildingStorage.h"
 #include "../General/EMPlayerState.h"
 
@@ -90,6 +91,26 @@ void UEMUserWidgetBase::OnMaxCitizenCountChanged(int32 NewAmount)
 	MaxCitizenTextBlock->SetText(FText::AsNumber(NewAmount));
 }
 
+void UEMUserWidgetBase::OnCitizenFoodCountChanged(int32 NewAmount)
+{
+	CitizenFoodTextBlock->SetText(FText::AsNumber(NewAmount));
+}
+
+void UEMUserWidgetBase::OnCitizenWoodCountChanged(int32 NewAmount)
+{
+	CitizenWoodTextBlock->SetText(FText::AsNumber(NewAmount));
+}
+
+void UEMUserWidgetBase::OnCitizenMoneyCountChanged(int32 NewAmount)
+{
+	CitizenMoneyTextBlock->SetText(FText::AsNumber(NewAmount));
+}
+
+void UEMUserWidgetBase::OnCitizenNoneCountChanged(int32 NewAmount)
+{
+	CitizenNoneTextBlock->SetText(FText::AsNumber(NewAmount));
+}
+
 void UEMUserWidgetBase::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -120,6 +141,11 @@ void UEMUserWidgetBase::NativeConstruct()
 		AsState->OnMaxResourceCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnMaxRecourceCountChanged);
 		AsState->OnCurrentCitizenCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCurrentCitizenCountChanged);
 		AsState->OnMaxCitizenCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnMaxCitizenCountChanged);
+		
+		AsState->OnCitizenFoodCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCitizenFoodCountChanged);
+		AsState->OnCitizenWoodCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCitizenWoodCountChanged);
+		AsState->OnCitizenMoneyCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCitizenMoneyCountChanged);
+		AsState->OnCitizenNoneCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCitizenNoneCountChanged);
 		//UE_LOG(LogTemp, Warning, TEXT("OnFoodAmountChangedDelegate"));
 	}
 		

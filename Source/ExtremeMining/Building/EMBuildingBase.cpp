@@ -161,7 +161,7 @@ void AEMBuildingBase::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AAc
 	AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(OtherActor);
 	if (!AsCharacter) return;
 
-	if (BuildingType < 1 || BuildingType > 4)
+	if (BuildingType > 4)
 	{
 	}
 	else

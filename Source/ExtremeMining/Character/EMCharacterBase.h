@@ -120,7 +120,7 @@ public:
 
 	FORCEINLINE int32 GetCharacterType() { return CharacterType; }
 
-	FORCEINLINE void SetCharacterType(const int32 InCharType) { CharacterType = InCharType; }
+	void SetCharacterType(const int32 InCharType);
 
 	UFUNCTION(BlueprintCallable)
 		FORCEINLINE int32 GetCollectionReateWorkerFood() { return CollectionRateWorkerFood; }

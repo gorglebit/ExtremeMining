@@ -8,7 +8,15 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCurrentCitizenCountChangedSignature, int32, NewAmount);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxCitizenCountChangedSignature, int32, NewAmount);
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxResourceCountChangedSignature, int32, NewAmount);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCitizenCountChangedSignature, int32, NewAmount);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCitizenFoodCountChangedSignature, int32, NewAmount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCitizenWoodCountChangedSignature, int32, NewAmount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCitizenMoneyCountChangedSignature, int32, NewAmount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCitizenNoneCountChangedSignature, int32, NewAmount);
 
 UCLASS()
 class EXTREMEMINING_API AEMPlayerState : public APlayerState
@@ -30,7 +38,21 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Storage")
 		int32 MaxResourceCount;
+
+	UPROPERTY(BlueprintReadOnly, Category = "CitizenCount")
+		int32 CitizenFoodCount;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Storage")
+		int32 CitizenWoodCount;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Storage")
+		int32 CitizenMoneyCount;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Storage")
+		int32 CitizenNoneCount;
 public:
+	//FORCEINLINE int32 GetCitizenNoneCount() {return CitizenNoneCount}
+
 	UPROPERTY(BlueprintAssignable)
 		FOnCurrentCitizenCountChangedSignature OnCurrentCitizenCountChangedDelegate;
 
@@ -39,6 +61,23 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 		FOnMaxResourceCountChangedSignature OnMaxResourceCountChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+		FOnCitizenCountChangedSignature OnCitizenCountChangedDelegate;
+	//--------------------------------
+	UPROPERTY(BlueprintAssignable)
+		FOnCitizenNoneCountChangedSignature OnCitizenNoneCountChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+		FOnCitizenFoodCountChangedSignature OnCitizenFoodCountChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+		FOnCitizenWoodCountChangedSignature OnCitizenWoodCountChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+		FOnCitizenMoneyCountChangedSignature OnCitizenMoneyCountChangedDelegate;
+	
+
 	//---------------------
 private:
 protected:
@@ -73,4 +112,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetMaxResourceCount(const int32 InNewCount);
 
+	void IncrementCitizentCount(const int32 InCitizenType);
+	void DecrementCitizentCount(const int32 InCitizenType);
 };
+ 

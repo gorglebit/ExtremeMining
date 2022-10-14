@@ -24,6 +24,7 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UTextBlock* MoneyTextBlock;
+	//-----------------------------
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UTextBlock* MaxFoodTextBlock;
@@ -33,6 +34,7 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UTextBlock* MaxMoneyTextBlock;
+	//--------------------------
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UTextBlock* CurrentCitizenTextBlock;
@@ -42,6 +44,19 @@ protected:
 
 	UPROPERTY(BLueprintReadOnly)
 		AEMBuildingStorage* StorageBuilding;
+	//-------------------------------------------
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* CitizenFoodTextBlock;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* CitizenWoodTextBlock;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* CitizenMoneyTextBlock;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* CitizenNoneTextBlock;
 public:
 //-------------------------------
 private:
@@ -75,6 +90,19 @@ protected:
 
 	UFUNCTION()
 		void OnMaxCitizenCountChanged(int32 NewAmount);
+
+	UFUNCTION()
+		void OnCitizenFoodCountChanged(int32 NewAmount);
+
+	UFUNCTION()
+		void OnCitizenWoodCountChanged(int32 NewAmount);
+
+	UFUNCTION()
+		void OnCitizenMoneyCountChanged(int32 NewAmount);
+
+	UFUNCTION()
+		void OnCitizenNoneCountChanged(int32 NewAmount);
+
 	
 public:
 
