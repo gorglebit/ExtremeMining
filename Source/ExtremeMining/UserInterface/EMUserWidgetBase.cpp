@@ -3,7 +3,9 @@
 #include "EMUserWidgetBase.h"
 #include <Kismet/GameplayStatics.h>
 #include "Components/TextBlock.h"
+#include "Components/Button.h"
 
+#include "../General/EMHeadUpDisplay.h"
 #include "../Character/EMCharacterBase.h"
 #include "../Building/EMBuildingStorage.h"
 #include "../General/EMPlayerState.h"
@@ -111,6 +113,35 @@ void UEMUserWidgetBase::OnCitizenNoneCountChanged(int32 NewAmount)
 	CitizenNoneTextBlock->SetText(FText::AsNumber(NewAmount));
 }
 
+void UEMUserWidgetBase::OnSelectAllNoneCitizenClicked()
+{
+	OnSelectCitizenType(0);
+}
+
+void UEMUserWidgetBase::OnSelectCitizenType(const int32 InCitizenType)
+{
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMCharacterBase::StaticClass(), OutActors);
+
+	if (OutActors.Num() == 0) return;
+
+	auto AsHud = Cast<AEMHeadUpDisplay>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
+	if (!AsHud) return;
+	AsHud->CleanSelectedUnits();
+
+	for (int i = 0; i < OutActors.Num(); i++)
+	{
+		auto AsCharacter = Cast<AEMCharacterBase>(OutActors[i]);
+		if (!AsCharacter) return;
+
+		if (AsCharacter->GetCharacterType() == InCitizenType)
+		{
+			AsCharacter->SelectObject();
+			AsHud->SelectedCharactersArray.AddUnique(AsCharacter);
+		}
+	}
+}
+
 void UEMUserWidgetBase::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -149,6 +180,7 @@ void UEMUserWidgetBase::NativeConstruct()
 		AsState->OnCitizenNoneCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCitizenNoneCountChanged);
 		//UE_LOG(LogTemp, Warning, TEXT("OnFoodAmountChangedDelegate"));
 	}
-		
+
+	CitizenNoneButton->OnClicked.AddDynamic(this, &UEMUserWidgetBase::OnSelectAllNoneCitizenClicked);	
 }
 

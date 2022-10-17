@@ -81,7 +81,7 @@ void AEMBuildingBase::SelectObject()
 	
 	auto AsWidget = Cast<UEMBuildingWidget>(BuildingWidget->GetWidget());
 	if (!AsWidget) return;
-	AsWidget->GetUpgradeButton()->OnClicked.AddDynamic(AsWidget, &UEMBuildingWidget::UpgradeBuilding);
+	AsWidget->GetUpgradeButton()->OnClicked.AddDynamic(AsWidget, &UEMBuildingWidget::OnUpgradeBuilding);
 }
 
 void AEMBuildingBase::DeselectObject()
@@ -91,7 +91,7 @@ void AEMBuildingBase::DeselectObject()
 
 	auto AsWidget = Cast<UEMBuildingWidget>(BuildingWidget->GetWidget());
 	if (!AsWidget) return;
-	AsWidget->GetUpgradeButton()->OnClicked.RemoveDynamic(AsWidget, &UEMBuildingWidget::UpgradeBuilding);
+	AsWidget->GetUpgradeButton()->OnClicked.RemoveDynamic(AsWidget, &UEMBuildingWidget::OnUpgradeBuilding);
 }
 
 void AEMBuildingBase::UpgradeBuilding()
@@ -135,7 +135,8 @@ void AEMBuildingBase::SpandMoneyOnUpgrade()
 	if (!AsStorage) return;
 
 
-	int32 UpgrageCost;
+	int32 UpgrageCost = 0;
+
 	switch (BuildingLevel)
 	{
 	case 0:

@@ -9,6 +9,7 @@
 
 class AEMBuildingStorage;
 class UTextBlock;
+class UButton;
 
 UCLASS()
 class EXTREMEMINING_API UEMUserWidgetBase : public UUserWidget
@@ -16,6 +17,9 @@ class EXTREMEMINING_API UEMUserWidgetBase : public UUserWidget
 	GENERATED_BODY()
 private:
 protected:
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UButton* CitizenNoneButton;
+
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UTextBlock* FoodTextBlock;
 
@@ -102,6 +106,12 @@ protected:
 
 	UFUNCTION()
 		void OnCitizenNoneCountChanged(int32 NewAmount);
+
+	UFUNCTION()
+		void OnSelectAllNoneCitizenClicked();
+
+	UFUNCTION()
+		void OnSelectCitizenType(const int32 InCitizenType);
 
 	
 public:

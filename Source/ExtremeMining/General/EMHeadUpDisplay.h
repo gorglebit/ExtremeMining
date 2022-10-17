@@ -17,7 +17,6 @@ class EXTREMEMINING_API AEMHeadUpDisplay : public AHUD, public IEMBasicInterface
 	GENERATED_BODY()
 
 private:
-	TArray<AEMCharacterBase*> SelectedCharactersArray;
 	TArray<AEMCharacterBase*> ActorsInRectArray;
 
 protected:
@@ -37,6 +36,7 @@ protected:
 		UEMUserWidgetBase* UserWidget;
 	
 public:
+	TArray<AEMCharacterBase*> SelectedCharactersArray;
 	
 //------------------
 private:

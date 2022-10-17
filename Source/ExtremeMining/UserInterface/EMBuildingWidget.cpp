@@ -108,7 +108,7 @@ void UEMBuildingWidget::SetUpgrageButtonEnable()
 	}
 }
 
-void UEMBuildingWidget::UpgradeBuilding()
+void UEMBuildingWidget::OnUpgradeBuilding()
 {
 	if (!IsUpgrading)
 	{

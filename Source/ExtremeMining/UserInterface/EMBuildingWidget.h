@@ -53,7 +53,7 @@ protected:
 		void SetStarCount(const int32 InBuildingLevel);
 public:
 	UFUNCTION(BlueprintCallable)
-		void UpgradeBuilding();
+		void OnUpgradeBuilding();
 
 	FORCEINLINE UButton* GetUpgradeButton() { return UpgradeButton; }
 
