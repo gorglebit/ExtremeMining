@@ -46,14 +46,15 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		void SetUpgrageButtonEnable();
 
-	UFUNCTION(BlueprintCallable)
-		void UpgradeBuilding();
-
 	UFUNCTION(BlueprintNativeEvent)
 		void SetUpgradeButtonIcon(const bool IsEnable);
 
 	UFUNCTION(BlueprintNativeEvent)
 		void SetStarCount(const int32 InBuildingLevel);
 public:
+	UFUNCTION(BlueprintCallable)
+		void UpgradeBuilding();
+
+	FORCEINLINE UButton* GetUpgradeButton() { return UpgradeButton; }
 
 };

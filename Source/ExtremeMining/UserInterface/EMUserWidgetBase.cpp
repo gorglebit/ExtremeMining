@@ -123,6 +123,7 @@ void UEMUserWidgetBase::NativeConstruct()
 
 	CurrentCitizenTextBlock->SetText(FText::AsNumber(AsState->GetStartCitizenCount()));
 	MaxCitizenTextBlock->SetText(FText::AsNumber(AsState->GetMaxCitizenCount()));
+	CitizenNoneTextBlock->SetText(FText::AsNumber(AsState->GetStartCitizenCount()));
 
 	FoodTextBlock->SetText(FText::AsNumber(AsState->GetStartResourceCount()));
 	WoodTextBlock->SetText(FText::AsNumber(AsState->GetStartResourceCount()));

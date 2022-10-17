@@ -184,6 +184,8 @@ void AEMCharacterBase::BeginPlay()
 
 	GetWorldTimerManager().SetTimer(FoodIntakeTimer, this, &AEMCharacterBase::IntakeFood, 2.5f, true);
 	GetWorldTimerManager().SetTimer(CollectResourceTimer, this, &AEMCharacterBase::CollectResouse, 4.f, true);
+
+
 }
 
 void AEMCharacterBase::SetStorageLocation()
@@ -193,6 +195,11 @@ void AEMCharacterBase::SetStorageLocation()
 	StorageBuilding = Cast<AEMBuildingStorage>(OutActors[0]);
 	if (!StorageBuilding) return;
 	StorageLocation = StorageBuilding->GetBoxComponent()->GetComponentLocation();
+
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
+
+	AsState->IncrementCitizentCount(CharacterType);
 }
 
 void AEMCharacterBase::Tick(float DeltaTime)
@@ -251,13 +258,7 @@ void AEMCharacterBase::SetCharacterType(const int32 InCharType)
 	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
 	if (!AsState) return;
 	
-	if (CharacterType == 0 && InCharType == 0)
-	{
-		CharacterType = InCharType;
-
-		AsState->IncrementCitizentCount(InCharType);
-		return;
-	}
+	if (CharacterType == InCharType) return;
 
 	if (CharacterType != InCharType)
 	{
@@ -268,9 +269,6 @@ void AEMCharacterBase::SetCharacterType(const int32 InCharType)
 		AsState->IncrementCitizentCount(InCharType);
 		return;
 	}
-	
-
-	
 }
 
 void AEMCharacterBase::SetCharacterRole_Implementation(const int32 Type)

@@ -27,7 +27,7 @@ void UEMBuildingWidget::NativeConstruct()
 
 	UpgradeButton->SetIsEnabled(false);
 
-	UpgradeButton->OnReleased.AddDynamic(this, &UEMBuildingWidget::UpgradeBuilding);
+	//UpgradeButton->OnClicked.AddDynamic(this, &UEMBuildingWidget::UpgradeBuilding);
 }
 
 void UEMBuildingWidget::SetResourceCount()
@@ -120,7 +120,7 @@ void UEMBuildingWidget::UpgradeBuilding()
 		AEMBuildingBase* SelectedBuilding = AsController->GetSelectedBuilding();
 		if (!SelectedBuilding) return;
 
-		UE_LOG(LogTemp, Warning, TEXT("UpgradeBuilding"));
+		//UE_LOG(LogTemp, Warning, TEXT("UpgradeBuilding"));
 
 		SelectedBuilding->UpgradeBuilding();
 

@@ -4,10 +4,13 @@
 #include "Components/BoxComponent.h"
 #include "Components/WidgetComponent.h"
 #include <Kismet/GameplayStatics.h>
+#include "Components/Button.h"
 
 #include "../Character/EMCharacterBase.h"
 #include "../General/EMPlayerState.h"
 #include "../Building/EMBuildingStorage.h"
+#include "../UserInterface/EMBuildingWidget.h"
+
 
 //UE_LOG(LogTemp, Warning, TEXT(""));
 
@@ -75,12 +78,20 @@ void AEMBuildingBase::SelectObject()
 {
 	BuildMesh->SetRenderCustomDepth(true);
 	BuildingWidget->SetVisibility(true);
+	
+	auto AsWidget = Cast<UEMBuildingWidget>(BuildingWidget->GetWidget());
+	if (!AsWidget) return;
+	AsWidget->GetUpgradeButton()->OnClicked.AddDynamic(AsWidget, &UEMBuildingWidget::UpgradeBuilding);
 }
 
 void AEMBuildingBase::DeselectObject()
 {
 	BuildMesh->SetRenderCustomDepth(false);
 	BuildingWidget->SetVisibility(false);
+
+	auto AsWidget = Cast<UEMBuildingWidget>(BuildingWidget->GetWidget());
+	if (!AsWidget) return;
+	AsWidget->GetUpgradeButton()->OnClicked.RemoveDynamic(AsWidget, &UEMBuildingWidget::UpgradeBuilding);
 }
 
 void AEMBuildingBase::UpgradeBuilding()
