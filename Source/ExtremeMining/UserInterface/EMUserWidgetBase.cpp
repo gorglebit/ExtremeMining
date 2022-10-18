@@ -5,6 +5,7 @@
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
 
+#include "../General/EMPlayerController.h"
 #include "../General/EMHeadUpDisplay.h"
 #include "../Character/EMCharacterBase.h"
 #include "../Building/EMBuildingStorage.h"
@@ -35,43 +36,70 @@ int32 UEMUserWidgetBase::GetMoneyAmount()
 
 void UEMUserWidgetBase::OnFoodAmountChanged(int32 NewAmount)
 {
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
+
 	if (NewAmount <= 50)
 	{
 		FoodTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Red));
-	}
-	else
-	{
-		FoodTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::White));
+		FoodTextBlock->SetText(FText::AsNumber(NewAmount));
+		return;
 	}
 
+	if (AsState->GetMaxResourceCount() - NewAmount <= 50)
+	{
+		FoodTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Yellow));
+		FoodTextBlock->SetText(FText::AsNumber(NewAmount));
+		return;
+	}
+
+	FoodTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::White));
 	FoodTextBlock->SetText(FText::AsNumber(NewAmount));
 }
 
 void UEMUserWidgetBase::OnWoodAmountChanged(int32 NewAmount)
 {
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
+
 	if (NewAmount <= 50)
 	{
 		WoodTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Red));
-	}
-	else
-	{
-		WoodTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::White));
+		WoodTextBlock->SetText(FText::AsNumber(NewAmount));
+		return;
 	}
 
+	if (AsState->GetMaxResourceCount() - NewAmount <= 50)
+	{
+		WoodTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Yellow));
+		WoodTextBlock->SetText(FText::AsNumber(NewAmount));
+		return;
+	}
+
+	WoodTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::White));
 	WoodTextBlock->SetText(FText::AsNumber(NewAmount));
 }
 
 void UEMUserWidgetBase::OnMoneyAmountChanged(int32 NewAmount)
 {
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
+
 	if (NewAmount <= 50)
 	{
 		MoneyTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Red));
-	}
-	else
-	{
-		MoneyTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::White));
+		MoneyTextBlock->SetText(FText::AsNumber(NewAmount));
+		return;
 	}
 
+	if (AsState->GetMaxResourceCount() - NewAmount <= 50)
+	{
+		MoneyTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Yellow));
+		MoneyTextBlock->SetText(FText::AsNumber(NewAmount));
+		return;
+	}
+
+	MoneyTextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::White));
 	MoneyTextBlock->SetText(FText::AsNumber(NewAmount));
 }
 
@@ -118,6 +146,21 @@ void UEMUserWidgetBase::OnSelectAllNoneCitizenClicked()
 	OnSelectCitizenType(0);
 }
 
+void UEMUserWidgetBase::OnSelectAllFoodCitizenClicked()
+{
+	OnSelectCitizenType(1);
+}
+
+void UEMUserWidgetBase::OnSelectAllWoodCitizenClicked()
+{
+	OnSelectCitizenType(2);
+}
+
+void UEMUserWidgetBase::OnSelectAllMoneyCitizenClicked()
+{
+	OnSelectCitizenType(3);
+}
+
 void UEMUserWidgetBase::OnSelectCitizenType(const int32 InCitizenType)
 {
 	TArray<AActor*> OutActors;
@@ -128,6 +171,10 @@ void UEMUserWidgetBase::OnSelectCitizenType(const int32 InCitizenType)
 	auto AsHud = Cast<AEMHeadUpDisplay>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
 	if (!AsHud) return;
 	AsHud->CleanSelectedUnits();
+
+	auto AsController = Cast<AEMPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	if (!AsController) return;
+	AsController->ClearSelectedBuildings();
 
 	for (int i = 0; i < OutActors.Num(); i++)
 	{
@@ -182,5 +229,8 @@ void UEMUserWidgetBase::NativeConstruct()
 	}
 
 	CitizenNoneButton->OnClicked.AddDynamic(this, &UEMUserWidgetBase::OnSelectAllNoneCitizenClicked);	
+	CitizenFoodButton->OnClicked.AddDynamic(this, &UEMUserWidgetBase::OnSelectAllFoodCitizenClicked);	
+	CitizenWoodButton->OnClicked.AddDynamic(this, &UEMUserWidgetBase::OnSelectAllWoodCitizenClicked);	
+	CitizenMoneyButton->OnClicked.AddDynamic(this, &UEMUserWidgetBase::OnSelectAllMoneyCitizenClicked);	
 }
 

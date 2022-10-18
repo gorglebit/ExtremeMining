@@ -21,6 +21,15 @@ protected:
 		UButton* CitizenNoneButton;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UButton* CitizenFoodButton;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UButton* CitizenWoodButton;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UButton* CitizenMoneyButton;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UTextBlock* FoodTextBlock;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
@@ -109,6 +118,15 @@ protected:
 
 	UFUNCTION()
 		void OnSelectAllNoneCitizenClicked();
+
+	UFUNCTION()
+		void OnSelectAllFoodCitizenClicked();
+
+	UFUNCTION()
+		void OnSelectAllWoodCitizenClicked();
+
+	UFUNCTION()
+		void OnSelectAllMoneyCitizenClicked();
 
 	UFUNCTION()
 		void OnSelectCitizenType(const int32 InCitizenType);
