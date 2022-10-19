@@ -7,6 +7,7 @@
 #include "../General/EMHeadUpDisplay.h"
 #include "../Building/EMBuildingBase.h"
 #include "../Character/EMCharacterBase.h"
+#include "../Character/EMShipBase.h"
 
 //UE_LOG(LogTemp, Warning, TEXT(""));
 
@@ -109,9 +110,7 @@ void AEMPlayerController::MoveToLocationAction()
 	AEMHeadUpDisplay* HUD = Cast<AEMHeadUpDisplay>(GetHUD());
 	if (!HUD) return;
 	TArray<AEMCharacterBase*> SelectedCharactersArray = HUD->GrabSelectedUnits();
-	//UE_LOG(LogTemp, Warning, TEXT("SelectedCharactersArray size = %i"), SelectedCharactersArray.Num());
-	//------------------------
-
+	
 	// Selected units move
 	for (int i = 0; i < SelectedCharactersArray.Num(); i++)
 	{
@@ -122,6 +121,21 @@ void AEMPlayerController::MoveToLocationAction()
 		}	
 	}
 	//--------------------------
+	TArray<AEMShipBase*> SelectedShipsArray = HUD->GetSelectedShips();
+
+	// Selected units move
+	for (int i = 0; i < SelectedShipsArray.Num(); i++)
+	{
+		// RightMouseLocation or other formation location
+		if (SelectedShipsArray[i])
+		{
+			SelectedShipsArray[i]->UnitMoveCommand(RightMouseLocation);
+			//UE_LOG(LogTemp, Warning, TEXT("UnitMoveCommand"));
+		}
+	}
+	//--------------------------
+
+
 
 	//Spawn NiagraSystem in mouse right click direction
 }

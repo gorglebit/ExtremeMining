@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
 
+#include "../Core/EMCore.h"
 #include "../General/EMPlayerState.h"
 #include "../Building/EMBuildingBase.h"
 #include "../Building/EMBuildingStorage.h"
@@ -47,19 +48,17 @@ AEMCharacterBase::AEMCharacterBase()
 	GetCharacterMovement()->MaxWalkSpeed = 400;
 }
 
-
-
 void AEMCharacterBase::SetWorkLocation(const int32 InCharacterType)
 {
 	TArray<AActor*> OutActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingBase::StaticClass(), OutActors);
 
-	if (InCharacterType == 0)
+	if (InCharacterType == CHARACTER_TYPE_CITIZEN)
 	{
 		for (int i = 0; i < OutActors.Num(); i++)
 		{
 			AEMBuildingBase* AsBuilding = Cast<AEMBuildingBase>(OutActors[i]);
-			if (AsBuilding->GetBuildingType() == 0)
+			if (AsBuilding->GetBuildingType() == BUILDING_TYPE_MAIN)
 			{
 				WorkLocation = AsBuilding->GetActorLocation() - FVector(WorkLocationDelta, 0, 0);
 				return;

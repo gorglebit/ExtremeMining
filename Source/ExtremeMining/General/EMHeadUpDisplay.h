@@ -9,6 +9,7 @@
 #include "EMHeadUpDisplay.generated.h"
 
 class AEMCharacterBase;
+class AEMShipBase;
 class UEMUserWidgetBase;
 
 UCLASS()
@@ -17,7 +18,8 @@ class EXTREMEMINING_API AEMHeadUpDisplay : public AHUD, public IEMBasicInterface
 	GENERATED_BODY()
 
 private:
-	TArray<AEMCharacterBase*> ActorsInRectArray;
+	TArray<AEMCharacterBase*> CitizenInRectArray;
+	TArray<AEMShipBase*> ShipsInRectArray;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -37,6 +39,7 @@ protected:
 	
 public:
 	TArray<AEMCharacterBase*> SelectedCharactersArray;
+	TArray<AEMShipBase*> SelectedShipsArray;
 	
 //------------------
 private:
@@ -52,6 +55,7 @@ public:
 	virtual void MarqueeHeld() override; 
 	virtual void MarqueeReleased() override;
 	virtual TArray<AEMCharacterBase*> GrabSelectedUnits() override;
+	virtual TArray<AEMShipBase*> GetSelectedShips();
 
 	void CleanSelectedUnits();
 	void AddUnit(AEMCharacterBase* InCharacter);
