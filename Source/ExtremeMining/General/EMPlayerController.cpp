@@ -8,6 +8,7 @@
 #include "../Building/EMBuildingBase.h"
 #include "../Character/EMCharacterBase.h"
 #include "../Character/EMShipBase.h"
+#include "../Core/EMCore.h"
 
 //UE_LOG(LogTemp, Warning, TEXT(""));
 
@@ -93,8 +94,9 @@ void AEMPlayerController::MoveToLocationAction()
 	FHitResult HitResult;
 	GetHitResultUnderCursorByChannel(ETraceTypeQuery::TraceTypeQuery_MAX, true, HitResult);
 	
+	//If Hit is a Building
 	AEMBuildingBase* AsBuilding = Cast<AEMBuildingBase>(HitResult.GetActor());
-
+	
 	if (AsBuilding)
 	{
 		RightMouseLocation = AsBuilding->GetBoxComponent()->GetComponentLocation();
@@ -123,7 +125,7 @@ void AEMPlayerController::MoveToLocationAction()
 	//--------------------------
 	TArray<AEMShipBase*> SelectedShipsArray = HUD->GetSelectedShips();
 
-	// Selected units move
+	// Selected Ship move
 	for (int i = 0; i < SelectedShipsArray.Num(); i++)
 	{
 		// RightMouseLocation or other formation location
@@ -135,9 +137,28 @@ void AEMPlayerController::MoveToLocationAction()
 	}
 	//--------------------------
 
+	//If hit is Ship
+	AEMShipBase* AsShip = Cast<AEMShipBase>(HitResult.GetActor());
 
-
-	//Spawn NiagraSystem in mouse right click direction
+	if (AsShip)
+	{
+		for (int i = 0; i < SelectedCharactersArray.Num(); i++)
+		{
+			// RightMouseLocation or other formation location
+			auto AsCharacter = SelectedCharactersArray[i];
+			if (AsCharacter)
+			{
+				float Distance = EMCore::GetDistance(AsShip, AsCharacter);
+				UE_LOG(LogTemp, Warning, TEXT("Distance - %f"), Distance);
+				if (Distance < 1000 && AsCharacter->GetCharacterType() == 4)
+				{
+					AsShip->TakePassengerOnBoard(AsCharacter);
+				}
+				//SelectedCharactersArray[i]->UnitMoveCommand(RightMouseLocation);
+			}
+		}
+	}
+	//-------------
 }
 
 void AEMPlayerController::ClearSelectedBuildings()

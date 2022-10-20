@@ -101,6 +101,8 @@ public:
 
 	FORCEINLINE bool GetIsCommandActive() { return IsCommandActive; }
 
+	FORCEINLINE FTimerHandle GetCollectResourceTimer() { return CollectResourceTimer; }
+
 	FORCEINLINE int32 GetFinesIfHungry() { return FinesIfHungry; }
 
 	FORCEINLINE void SetFinesIfHungry(const int32 InNewAmount) { FinesIfHungry = InNewAmount; }
@@ -143,4 +145,6 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 		void SpawnMoveCommandFX();
+
+	void SetCollectionResource(const bool IsCollectResource);
 };

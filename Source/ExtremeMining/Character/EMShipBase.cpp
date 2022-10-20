@@ -3,7 +3,11 @@
 #include "../Character/EMShipBase.h"
 
 #include "AIController.h"
+#include "BrainComponent.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
+#include "../Character/EMCharacterBase.h"
 
 //UE_LOG(LogTemp, Warning, TEXT(""));
 
@@ -13,6 +17,23 @@ AEMShipBase::AEMShipBase()
 
 	BodyMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
 	BodyMeshComponent->SetupAttachment(RootComponent);
+	
+	FirstSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("FirstSceneComponent"));
+	FirstSceneComponent->SetupAttachment(BodyMeshComponent);
+	FirstSceneComponent->SetRelativeLocation(FVector(-250, 0, -100));
+
+	SecondSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SecondSceneComponent"));
+	SecondSceneComponent->SetupAttachment(BodyMeshComponent);
+	SecondSceneComponent->SetRelativeLocation(FVector(50, 0, -100));
+
+	ThirdSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("ThirdSceneComponent"));
+	ThirdSceneComponent->SetupAttachment(BodyMeshComponent);
+	ThirdSceneComponent->SetRelativeLocation(FVector(-80, 0, 365));
+
+	CurrentNumberOfPassangers = 0;
+	MaxNumberOfPassangers = 3;
+
+	GetCharacterMovement()->MaxWalkSpeed = 200;
 }
 
 void AEMShipBase::BeginPlay()
@@ -45,7 +66,7 @@ void AEMShipBase::DeselectObject()
 
 void AEMShipBase::UnitMoveCommand(const FVector Location)
 {
-	//GetCharacterMovement()->MaxWalkSpeed = 600;
+	//
 
 	AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(this);
 	if (!AIController) return;
@@ -54,5 +75,69 @@ void AEMShipBase::UnitMoveCommand(const FVector Location)
 
 	AIController->StopMovement();
 	AIController->MoveToLocation(Location, -1, true, true, false, true, nullptr, false);
+}
+
+void AEMShipBase::TakePassengerOnBoard(AEMCharacterBase* InPassenger)
+{
+	if (PassengersOnBoardArray.Num() < MaxNumberOfPassangers)
+	{
+		PassengersOnBoardArray.AddUnique(InPassenger);
+
+		SeatPassenger(InPassenger);
+
+		CurrentNumberOfPassangers++;
+
+	}
+
+	if (CurrentNumberOfPassangers == MaxNumberOfPassangers)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 1000;
+		SetSail();
+	}
+}
+
+void AEMShipBase::SeatPassenger(AEMCharacterBase* InPassenger)
+{
+	switch (CurrentNumberOfPassangers)
+	{
+	case 0:
+	{
+		SeatPassengerOnPlace(InPassenger, FirstSceneComponent);
+
+		break;
+	}
+	case 1:
+	{
+		SeatPassengerOnPlace(InPassenger, SecondSceneComponent);
+
+		break;
+	}
+	case 2:
+	{
+		SeatPassengerOnPlace(InPassenger, ThirdSceneComponent);
+
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+void AEMShipBase::SeatPassengerOnPlace(AEMCharacterBase* InPassenger, USceneComponent* InScene)
+{
+	InPassenger->SetActorLocation(InScene->GetComponentLocation());
+	InPassenger->AttachToComponent(InScene, FAttachmentTransformRules::KeepWorldTransform);
+
+	InPassenger->SetCollectionResource(false);
+	InPassenger->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+	
+	AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(InPassenger);
+	if (!AIController) return;
+	AIController->GetBrainComponent()->StopLogic(FString());
+}
+
+void AEMShipBase::SetSail_Implementation()
+{
+
 }
 

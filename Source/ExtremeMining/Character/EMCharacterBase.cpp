@@ -138,7 +138,8 @@ void AEMCharacterBase::CollectResouse()
 		}
 	}
 
-	SetCollectWidget(ResourseType);
+	if (CharacterType != CHARACTER_TYPE_SEA)
+		SetCollectWidget(ResourseType);
 }
 
 int32 AEMCharacterBase::GetBuildingLevel(const int32 BuildingType)
@@ -161,6 +162,18 @@ int32 AEMCharacterBase::GetBuildingLevel(const int32 BuildingType)
 void AEMCharacterBase::SetMaxMoveSpeed(const int SpeedAmount)
 {
 	GetCharacterMovement()->MaxWalkSpeed = SpeedAmount;
+}
+
+void AEMCharacterBase::SetCollectionResource(const bool IsCollectResource)
+{
+	if (IsCollectResource)
+	{
+		GetWorldTimerManager().UnPauseTimer(CollectResourceTimer);
+	}
+	else
+	{
+		GetWorldTimerManager().PauseTimer(CollectResourceTimer);
+	}
 }
 
 void AEMCharacterBase::SpawnMoveCommandFX_Implementation()
@@ -231,7 +244,7 @@ void AEMCharacterBase::UnitMoveCommand(const FVector Location)
 
 	IsCommandActive = true;
 	GetCharacterMovement()->MaxWalkSpeed = 600;
-	GetWorldTimerManager().PauseTimer(CollectResourceTimer);// CollectResourceTimer->
+	SetCollectionResource(false);// GetWorldTimerManager().PauseTimer(CollectResourceTimer);// CollectResourceTimer->
 
 	AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(this);
 	if (!AIController) return;
@@ -286,7 +299,7 @@ void AEMCharacterBase::CheckMoveStatus()
 		IsCommandActive = false;
 		GetWorldTimerManager().ClearTimer(CheckMoveStatusTimer);
 		GetCharacterMovement()->MaxWalkSpeed = 400;
-		GetWorldTimerManager().UnPauseTimer(CollectResourceTimer);
+		SetCollectionResource(true);// GetWorldTimerManager().UnPauseTimer(CollectResourceTimer);
 		//UE_LOG(LogTemp, Warning, TEXT("Timer end!!!"));
 	}
 }

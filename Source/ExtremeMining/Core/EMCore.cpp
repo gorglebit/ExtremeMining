@@ -10,3 +10,8 @@ EMCore::EMCore()
 EMCore::~EMCore()
 {
 }
+
+float EMCore::GetDistance(AActor* InActorFrom, AActor* InActorTo)
+{
+	return (InActorFrom->GetActorLocation() - InActorTo->GetActorLocation()).Size();
+}

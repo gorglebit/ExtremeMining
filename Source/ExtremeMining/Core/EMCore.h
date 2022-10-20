@@ -20,4 +20,6 @@ class EXTREMEMINING_API EMCore
 public:
 	EMCore();
 	~EMCore();
+
+	static float GetDistance(AActor* InActorFrom, AActor* InActorTo);
 };

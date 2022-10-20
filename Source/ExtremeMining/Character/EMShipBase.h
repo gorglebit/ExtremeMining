@@ -15,6 +15,20 @@ private:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
 		UStaticMeshComponent* BodyMeshComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh)
+		USceneComponent* FirstSceneComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh)
+		USceneComponent* SecondSceneComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh)
+		USceneComponent* ThirdSceneComponent;
+
+	int32 CurrentNumberOfPassangers;
+	int32 MaxNumberOfPassangers;
+
+	TArray<AEMCharacterBase*> PassengersOnBoardArray;
 public:
 
 //-----------------------
@@ -34,4 +48,14 @@ public:
 	virtual void DeselectObject() override;
 
 	virtual void UnitMoveCommand(const FVector Location) override;
+
+	FORCEINLINE int32 GetCurrentNumberOfPassangers() { return CurrentNumberOfPassangers; }
+	FORCEINLINE int32 GetMaxNumberOfPassangers() { return MaxNumberOfPassangers; }
+
+	void TakePassengerOnBoard(AEMCharacterBase* InPassenger);
+	void SeatPassenger(AEMCharacterBase* InPassenger);
+	void SeatPassengerOnPlace(AEMCharacterBase* InPassenger, USceneComponent* InScene);
+
+	UFUNCTION(BlueprintNativeEvent)
+		void SetSail();
 };
