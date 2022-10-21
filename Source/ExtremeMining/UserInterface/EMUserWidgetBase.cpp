@@ -189,6 +189,10 @@ void UEMUserWidgetBase::OnSelectCitizenType(const int32 InCitizenType)
 	}
 }
 
+void UEMUserWidgetBase::CalculateIncomeResourcesTimer()
+{
+}
+
 void UEMUserWidgetBase::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -232,5 +236,8 @@ void UEMUserWidgetBase::NativeConstruct()
 	CitizenFoodButton->OnClicked.AddDynamic(this, &UEMUserWidgetBase::OnSelectAllFoodCitizenClicked);	
 	CitizenWoodButton->OnClicked.AddDynamic(this, &UEMUserWidgetBase::OnSelectAllWoodCitizenClicked);	
 	CitizenMoneyButton->OnClicked.AddDynamic(this, &UEMUserWidgetBase::OnSelectAllMoneyCitizenClicked);	
+
+
+	GetWorld()->GetTimerManager().SetTimer(CalculateIncomeTimerHandle, this, &UEMUserWidgetBase::CalculateIncomeResourcesTimer, 2.f, true);
 }
 

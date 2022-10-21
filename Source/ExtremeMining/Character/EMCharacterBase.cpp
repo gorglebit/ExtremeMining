@@ -43,7 +43,7 @@ AEMCharacterBase::AEMCharacterBase()
 	CollectionRateWorkerDelta = 2;
 	FinesIfHungry = 0;
 
-	FoodIntakeCount = 1;
+	FoodIntakeCount = 2;
 
 	GetCharacterMovement()->MaxWalkSpeed = 400;
 }
@@ -79,7 +79,7 @@ void AEMCharacterBase::SetWorkLocation(const int32 InCharacterType)
 	}
 }
 
-void AEMCharacterBase::CollectResouse()
+void AEMCharacterBase::CollectResouseTimer()
 {
 	if (!StorageBuilding) return;
 	//UE_LOG(LogTemp, Warning, TEXT("StorageBuilding = true"));
@@ -194,10 +194,8 @@ void AEMCharacterBase::BeginPlay()
 
 	SetStorageLocation();
 
-	GetWorldTimerManager().SetTimer(FoodIntakeTimer, this, &AEMCharacterBase::IntakeFood, 2.5f, true);
-	GetWorldTimerManager().SetTimer(CollectResourceTimer, this, &AEMCharacterBase::CollectResouse, 4.f, true);
-
-
+	GetWorldTimerManager().SetTimer(FoodIntakeTimer, this, &AEMCharacterBase::IntakeFoodTimer, 5.f, true);
+	GetWorldTimerManager().SetTimer(CollectResourceTimer, this, &AEMCharacterBase::CollectResouseTimer, 5.f, true);
 }
 
 void AEMCharacterBase::SetStorageLocation()
@@ -304,7 +302,7 @@ void AEMCharacterBase::CheckMoveStatus()
 	}
 }
 
-void AEMCharacterBase::IntakeFood()
+void AEMCharacterBase::IntakeFoodTimer()
 {
 	StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() - FoodIntakeCount);
 }

@@ -87,4 +87,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 		void SpawnUpgradeFX();
+
+	UFUNCTION(BlueprintNativeEvent)
+		void SetShowBuyItemWidget(const bool IsShowing);
 };

@@ -92,7 +92,8 @@ void AEMShipBase::TakePassengerOnBoard(AEMCharacterBase* InPassenger)
 	if (CurrentNumberOfPassangers == MaxNumberOfPassangers)
 	{
 		GetCharacterMovement()->MaxWalkSpeed = 1000;
-		SetSail();
+
+		SetSailVisual();
 	}
 }
 
@@ -125,6 +126,9 @@ void AEMShipBase::SeatPassenger(AEMCharacterBase* InPassenger)
 
 void AEMShipBase::SeatPassengerOnPlace(AEMCharacterBase* InPassenger, USceneComponent* InScene)
 {
+	if (!InPassenger) return;
+	if (!InScene) return;
+
 	InPassenger->SetActorLocation(InScene->GetComponentLocation());
 	InPassenger->AttachToComponent(InScene, FAttachmentTransformRules::KeepWorldTransform);
 
@@ -136,8 +140,6 @@ void AEMShipBase::SeatPassengerOnPlace(AEMCharacterBase* InPassenger, USceneComp
 	AIController->GetBrainComponent()->StopLogic(FString());
 }
 
-void AEMShipBase::SetSail_Implementation()
+void AEMShipBase::SetSailVisual_Implementation()
 {
-
 }
-

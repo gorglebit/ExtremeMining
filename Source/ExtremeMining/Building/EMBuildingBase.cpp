@@ -6,6 +6,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "Components/Button.h"
 
+#include "../Core/EMCore.h"
 #include "../Character/EMCharacterBase.h"
 #include "../General/EMPlayerState.h"
 #include "../Building/EMBuildingStorage.h"
@@ -82,6 +83,11 @@ void AEMBuildingBase::SelectObject()
 	auto AsWidget = Cast<UEMBuildingWidget>(BuildingWidget->GetWidget());
 	if (!AsWidget) return;
 	AsWidget->GetUpgradeButton()->OnClicked.AddDynamic(AsWidget, &UEMBuildingWidget::OnUpgradeBuilding);
+
+	if (BuildingType == BUILDING_TYPE_SEA)
+	{
+		SetShowBuyItemWidget(true);
+	}
 }
 
 void AEMBuildingBase::DeselectObject()
@@ -92,6 +98,11 @@ void AEMBuildingBase::DeselectObject()
 	auto AsWidget = Cast<UEMBuildingWidget>(BuildingWidget->GetWidget());
 	if (!AsWidget) return;
 	AsWidget->GetUpgradeButton()->OnClicked.RemoveDynamic(AsWidget, &UEMBuildingWidget::OnUpgradeBuilding);
+
+	if (BuildingType == BUILDING_TYPE_SEA)
+	{
+		SetShowBuyItemWidget(false);
+	}
 }
 
 void AEMBuildingBase::UpgradeBuilding()
@@ -104,12 +115,12 @@ void AEMBuildingBase::UpgradeBuilding()
 
 	switch (BuildingType)
 	{
-	case 0:
+	case BUILDING_TYPE_MAIN:
 	{
 		SetCitizenMaxCount(BuildingLevel);
 		break;
 	}
-	case 5:
+	case BUILDING_TYPE_STORAGE:
 	{
 		TArray<AActor*> OutActors;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
@@ -160,6 +171,10 @@ void AEMBuildingBase::SpandMoneyOnUpgrade()
 
 	AsStorage->SpendMoneyOnUpgrade(UpgrageCost);
 
+}
+
+void AEMBuildingBase::SetShowBuyItemWidget_Implementation(const bool IsShowing)
+{
 }
 
 void AEMBuildingBase::SpawnUpgradeFX_Implementation()

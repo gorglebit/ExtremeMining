@@ -16,6 +16,8 @@ class EXTREMEMINING_API UEMUserWidgetBase : public UUserWidget
 {
 	GENERATED_BODY()
 private:
+	FTimerHandle CalculateIncomeTimerHandle;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UButton* CitizenNoneButton;
@@ -70,6 +72,14 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UTextBlock* CitizenNoneTextBlock;
+	//--------------------------------------
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* IncomeFoodSignTextBlock;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* IncomeFoodCountTextBlock;
+
 public:
 //-------------------------------
 private:
@@ -131,7 +141,8 @@ protected:
 	UFUNCTION()
 		void OnSelectCitizenType(const int32 InCitizenType);
 
-	
+	UFUNCTION()
+		void CalculateIncomeResourcesTimer();
 public:
 
 	UFUNCTION(BLueprintCallable)

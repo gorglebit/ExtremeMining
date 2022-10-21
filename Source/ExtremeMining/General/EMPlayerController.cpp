@@ -149,7 +149,7 @@ void AEMPlayerController::MoveToLocationAction()
 			if (AsCharacter)
 			{
 				float Distance = EMCore::GetDistance(AsShip, AsCharacter);
-				UE_LOG(LogTemp, Warning, TEXT("Distance - %f"), Distance);
+				//UE_LOG(LogTemp, Warning, TEXT("Distance - %f"), Distance);
 				if (Distance < 1000 && AsCharacter->GetCharacterType() == 4)
 				{
 					AsShip->TakePassengerOnBoard(AsCharacter);

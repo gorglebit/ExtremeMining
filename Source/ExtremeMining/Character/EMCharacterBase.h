@@ -80,7 +80,7 @@ public:
 
 private:
 	void CheckMoveStatus();
-	void IntakeFood();
+	void IntakeFoodTimer();
 	int32 GetBuildingLevel(const int32 BuildingType);
 
 protected:
@@ -133,7 +133,7 @@ public:
 		void SetStorageLocation();
 
 	UFUNCTION(BlueprintCallable)
-		void CollectResouse();
+		void CollectResouseTimer();
 
 	void SetMaxMoveSpeed(const int SpeedAmount);
 

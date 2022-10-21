@@ -57,5 +57,5 @@ public:
 	void SeatPassengerOnPlace(AEMCharacterBase* InPassenger, USceneComponent* InScene);
 
 	UFUNCTION(BlueprintNativeEvent)
-		void SetSail();
+		void SetSailVisual();
 };
