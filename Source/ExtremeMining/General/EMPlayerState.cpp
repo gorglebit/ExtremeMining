@@ -13,9 +13,12 @@ void AEMPlayerState::BeginPlay()
 
 AEMPlayerState::AEMPlayerState()
 {
+	//Resources
 	StartResourceCount = 100;
 	MaxResourceCount = 250;
+	//-----------------
 
+	//Citizen
 	CurrentCitizenCount = 0;
 	StartCitizenCount = 4;
 	MaxCitizenCount = 15;
@@ -24,6 +27,20 @@ AEMPlayerState::AEMPlayerState()
 	CitizenFoodCount = 0;
 	CitizenWoodCount = 0;
 	CitizenMoneyCount = 0;
+	//--------------------
+
+	//Collection
+	CollectionRateNotWorker = 1;
+	CollectionRateWorkerStart = 5;
+
+	CollectionRateWorkerFood = CollectionRateWorkerStart;
+	CollectionRateWorkerWood = CollectionRateWorkerStart;
+	CollectionRateWorkerMoney = CollectionRateWorkerStart;
+
+	CollectionRateWorkerDelta = 2;
+	ResourceCollectionPenalty = 0;
+
+	FoodConsumptionCount = 2;
 	
 }
 

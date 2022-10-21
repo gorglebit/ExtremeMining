@@ -24,13 +24,13 @@ class EXTREMEMINING_API AEMPlayerState : public APlayerState
 	GENERATED_BODY()
 private:
 protected:
-	UPROPERTY(BlueprintReadOnly, Category = "Citizen")
+	UPROPERTY(BlueprintReadOnly, Category = "CitizenCount")
 		int32 StartCitizenCount;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Citizen")
+	UPROPERTY(BlueprintReadOnly, Category = "CitizenCount")
 		int32 CurrentCitizenCount;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Citizen")
+	UPROPERTY(BlueprintReadOnly, Category = "CitizenCount")
 		int32 MaxCitizenCount;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Storage")
@@ -42,14 +42,43 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "CitizenCount")
 		int32 CitizenFoodCount;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Storage")
+	UPROPERTY(BlueprintReadOnly, Category = "CitizenCount")
 		int32 CitizenWoodCount;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Storage")
+	UPROPERTY(BlueprintReadOnly, Category = "CitizenCount")
 		int32 CitizenMoneyCount;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Storage")
+	UPROPERTY(BlueprintReadOnly, Category = "CitizenCount")
 		int32 CitizenNoneCount;
+
+	//------------------------------------
+	UPROPERTY(BlueprintReadOnly, Category = "Collection")
+		int32 CollectionRateNotWorker;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Collection")
+		int32 CollectionRateWorker;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Collection")
+		int32 CollectionRateWorkerFood;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Collection")
+		int32 CollectionRateWorkerWood;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Collection")
+		int32 CollectionRateWorkerMoney;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Collection")
+		int32 CollectionRateWorkerStart;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Collection")
+		int32 CollectionRateWorkerDelta;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Consumption")
+		int32 FoodConsumptionCount;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Consumption")
+		int32 ResourceCollectionPenalty;
+
 public:
 	//FORCEINLINE int32 GetCitizenNoneCount() {return CitizenNoneCount}
 
@@ -114,5 +143,23 @@ public:
 
 	void IncrementCitizentCount(const int32 InCitizenType);
 	void DecrementCitizentCount(const int32 InCitizenType);
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE int32 GetCollectionReateFoodWorker() { return CollectionRateWorkerStart; } //+ (GetBuildingLevel(BUILDING_TYPE_FOOD) * CollectionRateWorkerDelta) - ResourceCollectionPenalty;
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE int32 GetCollectionReateWoodWorker() { return CollectionRateWorkerWood; }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE int32 GetCollectionReateMoneyWorker() { return CollectionRateWorkerMoney; }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE int32 GetCollectionReateNotWorker() { return CollectionRateNotWorker; }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE int32 GetFoodConsumptionCount() { return FoodConsumptionCount; }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE void SetResourceCollectionPenalty(const int32 InNewPenalty) { FoodConsumptionCount = InNewPenalty; }
 };
  

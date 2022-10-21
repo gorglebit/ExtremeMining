@@ -45,29 +45,29 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 		int32 CharacterType;
 
-	UPROPERTY(BlueprintReadWrite)
-		int32 CollectionRateNotWorker;
+	//UPROPERTY(BlueprintReadWrite)
+	//	int32 CollectionRateNotWorker;
 
-	UPROPERTY(BlueprintReadWrite)
-		int32 CollectionRateWorkerFood;
+	//UPROPERTY(BlueprintReadWrite)
+	//	int32 CollectionRateWorkerFood;
 
-	UPROPERTY(BlueprintReadWrite)
-		int32 CollectionRateWorkerWood;
+	//UPROPERTY(BlueprintReadWrite)
+	//	int32 CollectionRateWorkerWood;
 
-	UPROPERTY(BlueprintReadWrite)
-		int32 CollectionRateWorkerMoney;
+	//UPROPERTY(BlueprintReadWrite)
+	//	int32 CollectionRateWorkerMoney;
 
-	UPROPERTY(BlueprintReadWrite)
-		int32 CollectionRateWorkerDelta;
+	//UPROPERTY(BlueprintReadWrite)
+	//	int32 CollectionRateWorkerDelta;
 
-	UPROPERTY(BlueprintReadWrite)
-		int32 CollectionRateWorkerStart;
+	//UPROPERTY(BlueprintReadWrite)
+	//	int32 CollectionRateWorkerStart;
 
-	UPROPERTY(BlueprintReadWrite)
-		int32 FinesIfHungry;
+	//UPROPERTY(BlueprintReadWrite)
+	//	int32 FinesIfHungry;
 
-	UPROPERTY(BlueprintReadWrite)
-		int32 FoodIntakeCount;
+	//UPROPERTY(BlueprintReadWrite)
+	//	int32 FoodIntakeCount;
 
 	UPROPERTY(BlueprintReadWrite)
 		bool IsCommandActive;
@@ -81,7 +81,7 @@ public:
 private:
 	void CheckMoveStatus();
 	void IntakeFoodTimer();
-	int32 GetBuildingLevel(const int32 BuildingType);
+	
 
 protected:
 	virtual void BeginPlay() override;
@@ -103,28 +103,11 @@ public:
 
 	FORCEINLINE FTimerHandle GetCollectResourceTimer() { return CollectResourceTimer; }
 
-	FORCEINLINE int32 GetFinesIfHungry() { return FinesIfHungry; }
-
-	FORCEINLINE void SetFinesIfHungry(const int32 InNewAmount) { FinesIfHungry = InNewAmount; }
-
 	void SetIsHungry(const bool InCondition);
 
 	FORCEINLINE int32 GetCharacterType() { return CharacterType; }
 
 	void SetCharacterType(const int32 InCharType);
-
-	UFUNCTION(BlueprintCallable)
-		FORCEINLINE int32 GetCollectionReateWorkerFood() { return CollectionRateWorkerFood; }
-
-	UFUNCTION(BlueprintCallable)
-		FORCEINLINE int32 GetCollectionReateWorkerWood() { return CollectionRateWorkerWood; }
-
-	UFUNCTION(BlueprintCallable)
-		FORCEINLINE int32 GetCollectionReateWorkerMoney() { return CollectionRateWorkerMoney; }
-
-	FORCEINLINE void SetCollectionReateWorkerFood(const int32 InAmount) { CollectionRateWorkerFood = InAmount; }
-	FORCEINLINE void SetCollectionReateWorkerWood(const int32 InAmount) { CollectionRateWorkerWood = InAmount; }
-	FORCEINLINE void SetCollectionReateWorkerMoney(const int32 InAmount) { CollectionRateWorkerMoney = InAmount; }
 
 	UFUNCTION(BlueprintCallable)
 		void SetWorkLocation(const int32 InCharacterType);

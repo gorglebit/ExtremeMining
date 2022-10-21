@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "EMCharacterBase.h"
+
 #include "AIController.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Kismet/GameplayStatics.h"
@@ -9,7 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
 
-#include "../Core/EMCore.h"
+#include "../Core/EMCoreActor.h"
 #include "../General/EMPlayerState.h"
 #include "../Building/EMBuildingBase.h"
 #include "../Building/EMBuildingStorage.h"
@@ -31,19 +32,6 @@ AEMCharacterBase::AEMCharacterBase()
 	CharacterType = 0;
 	WorkLocationRadius = 1400;
 	WorkLocationDelta = 1400;
-
-	CollectionRateNotWorker = 1;
-
-	CollectionRateWorkerStart = 5;
-
-	CollectionRateWorkerFood = CollectionRateWorkerStart;
-	CollectionRateWorkerWood = CollectionRateWorkerStart;
-	CollectionRateWorkerMoney = CollectionRateWorkerStart;
-
-	CollectionRateWorkerDelta = 2;
-	FinesIfHungry = 0;
-
-	FoodIntakeCount = 2;
 
 	GetCharacterMovement()->MaxWalkSpeed = 400;
 }
@@ -82,6 +70,9 @@ void AEMCharacterBase::SetWorkLocation(const int32 InCharacterType)
 void AEMCharacterBase::CollectResouseTimer()
 {
 	if (!StorageBuilding) return;
+
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
 	//UE_LOG(LogTemp, Warning, TEXT("StorageBuilding = true"));
 
 	int ResourseType = 0;
@@ -94,17 +85,17 @@ void AEMCharacterBase::CollectResouseTimer()
 		{
 		case 1:
 		{
-			StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() + CollectionRateNotWorker);
+			StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() + AsState->GetCollectionReateNotWorker());
 			break;
 		}
 		case 2:
 		{
-			StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() + CollectionRateNotWorker);
+			StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() + AsState->GetCollectionReateNotWorker());
 			break;
 		}
 		case 3:
 		{
-			StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() + CollectionRateNotWorker);
+			StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() + AsState->GetCollectionReateNotWorker());
 			break;
 		}
 		default:
@@ -117,20 +108,20 @@ void AEMCharacterBase::CollectResouseTimer()
 		{
 		case 1:
 		{
-			CollectionRateWorkerFood = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_FOOD) * CollectionRateWorkerDelta) - FinesIfHungry;
-			StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() + CollectionRateWorkerFood);
+			//CollectionRateWorkerFood = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_FOOD) * CollectionRateWorkerDelta) - FinesIfHungry;
+			StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() + AsState->GetCollectionReateFoodWorker());
 			break;
 		}
 		case 2:
 		{
-			CollectionRateWorkerWood = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_WOOD) * CollectionRateWorkerDelta) - FinesIfHungry;
-			StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() + CollectionRateWorkerWood);
+			//CollectionRateWorkerWood = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_WOOD) * CollectionRateWorkerDelta) - FinesIfHungry;
+			StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() + AsState->GetCollectionReateWoodWorker());
 			break;
 		}
 		case 3:
 		{
-			CollectionRateWorkerMoney = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_MONEY) * CollectionRateWorkerDelta) - FinesIfHungry;
-			StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() + CollectionRateWorkerMoney);
+			//CollectionRateWorkerMoney = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_MONEY) * CollectionRateWorkerDelta) - FinesIfHungry;
+			StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() + AsState->GetCollectionReateMoneyWorker());
 			break;
 		}
 		default:
@@ -140,23 +131,6 @@ void AEMCharacterBase::CollectResouseTimer()
 
 	if (CharacterType != CHARACTER_TYPE_SEA)
 		SetCollectWidget(ResourseType);
-}
-
-int32 AEMCharacterBase::GetBuildingLevel(const int32 BuildingType)
-{
-	TArray<AActor*> OutActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingBase::StaticClass(), OutActors);
-
-	int32 BuildLevel = 0;
-	for (int i = 0; i < OutActors.Num(); i++)
-	{
-		auto AsBuilding = Cast<AEMBuildingBase>(OutActors[i]);
-		if (AsBuilding->GetBuildingType() == BuildingType)
-		{
-			BuildLevel = AsBuilding->GetBuildingLevel();
-		}
-	}
-	return BuildLevel;
 }
 
 void AEMCharacterBase::SetMaxMoveSpeed(const int SpeedAmount)
@@ -255,12 +229,15 @@ void AEMCharacterBase::UnitMoveCommand(const FVector Location)
 
 void AEMCharacterBase::SetIsHungry(const bool InCondition)
 {
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
+
 	IsHungry = InCondition;
 
 	if (InCondition)
-		FinesIfHungry = 2;
+		AsState->SetResourceCollectionPenalty(2);
 	else
-		FinesIfHungry = 0;
+		AsState->SetResourceCollectionPenalty(0);
 }
 
 void AEMCharacterBase::SetCharacterType(const int32 InCharType)
@@ -304,5 +281,8 @@ void AEMCharacterBase::CheckMoveStatus()
 
 void AEMCharacterBase::IntakeFoodTimer()
 {
-	StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() - FoodIntakeCount);
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
+
+	StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() - AsState->GetFoodConsumptionCount());
 }

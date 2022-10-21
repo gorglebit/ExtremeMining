@@ -6,7 +6,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "Components/Button.h"
 
-#include "../Core/EMCore.h"
+#include "../Core/EMCoreActor.h"
 #include "../Character/EMCharacterBase.h"
 #include "../General/EMPlayerState.h"
 #include "../Building/EMBuildingStorage.h"

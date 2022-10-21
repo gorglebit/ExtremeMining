@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "EMCoreActor.generated.h"
 
 #define BUILDING_TYPE_MAIN		0
 #define BUILDING_TYPE_FOOD		1
@@ -17,11 +19,21 @@
 #define CHARACTER_TYPE_MONEY	3
 #define CHARACTER_TYPE_SEA		4	
 
-class EXTREMEMINING_API EMCore
+UCLASS()
+class EXTREMEMINING_API AEMCoreActor : public AActor
 {
-public:
-	EMCore();
-	~EMCore();
+	GENERATED_BODY()
+	
+public:	
+	AEMCoreActor();
+
+protected:
+	virtual void BeginPlay() override;
+
+public:	
+	virtual void Tick(float DeltaTime) override;
 
 	static float GetDistance(AActor* InActorFrom, AActor* InActorTo);
+	int32 GetBuildingLevelFromType(const int32 BuildingType);
+
 };
