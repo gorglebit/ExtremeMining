@@ -66,8 +66,6 @@ void AEMShipBase::DeselectObject()
 
 void AEMShipBase::UnitMoveCommand(const FVector Location)
 {
-	//
-
 	AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(this);
 	if (!AIController) return;
 
