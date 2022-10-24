@@ -92,10 +92,7 @@ void AEMShipBase::TakePassengerOnBoard(AEMCharacterBase* InPassenger)
 	case 2:
 	{
 		SeatPassengerOnPlace(InPassenger, ThirdSceneComponent);
-		break;
-	}
-	case 3:
-	{
+
 		GetCharacterMovement()->MaxWalkSpeed = 1000;
 		SetSailVisual();
 		break;
