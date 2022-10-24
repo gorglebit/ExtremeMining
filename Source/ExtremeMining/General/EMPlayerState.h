@@ -18,11 +18,19 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCitizenWoodCountChangedSignature,
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCitizenMoneyCountChangedSignature, int32, NewAmount);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCitizenNoneCountChangedSignature, int32, NewAmount);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFoodIncomeChangedSignature, int32, NewAmount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWoodIncomeChangedSignature, int32, NewAmount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoneyIncomeChangedSignature, int32, NewAmount);
+
 UCLASS()
 class EXTREMEMINING_API AEMPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 private:
+	FTimerHandle FoodIncomeCalculationTimer;
+	FTimerHandle WoodIncomeCalculationTimer;
+	FTimerHandle MoneyIncomeCalculationTimer;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "CitizenCount")
 		int32 StartCitizenCount;
@@ -79,6 +87,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Consumption")
 		int32 ResourceCollectionPenalty;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Consumption")
+		int32 IncomeTimePeriod;
+
 public:
 	//FORCEINLINE int32 GetCitizenNoneCount() {return CitizenNoneCount}
 
@@ -106,9 +117,19 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FOnCitizenMoneyCountChangedSignature OnCitizenMoneyCountChangedDelegate;
 	
+	UPROPERTY(BlueprintAssignable)
+		FOnFoodIncomeChangedSignature OnFoodIncomeChangedDelegate;
 
+	UPROPERTY(BlueprintAssignable)
+		FOnWoodIncomeChangedSignature OnWoodIncomeChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+		FOnMoneyIncomeChangedSignature OnMoneyIncomeChangedDelegate;
 	//---------------------
 private:
+	void FoodResourceIncomeCalculationTimer();
+	void WoodResourceIncomeCalculationTimer();
+	void MoneyResourceIncomeCalculationTimer();
 protected:
 	virtual void BeginPlay() override;
 public:
@@ -145,21 +166,12 @@ public:
 	void DecrementCitizentCount(const int32 InCitizenType);
 
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE int32 GetCollectionReateFoodWorker() { return CollectionRateWorkerStart; } //+ (GetBuildingLevel(BUILDING_TYPE_FOOD) * CollectionRateWorkerDelta) - ResourceCollectionPenalty;
-
-	UFUNCTION(BlueprintCallable)
-		FORCEINLINE int32 GetCollectionReateWoodWorker() { return CollectionRateWorkerWood; }
-
-	UFUNCTION(BlueprintCallable)
-		FORCEINLINE int32 GetCollectionReateMoneyWorker() { return CollectionRateWorkerMoney; }
-
-	UFUNCTION(BlueprintCallable)
-		FORCEINLINE int32 GetCollectionReateNotWorker() { return CollectionRateNotWorker; }
+		int32 GetCollectionRateWorker(const int32 InBuildingType);
 
 	UFUNCTION(BlueprintCallable)
 		FORCEINLINE int32 GetFoodConsumptionCount() { return FoodConsumptionCount; }
 
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE void SetResourceCollectionPenalty(const int32 InNewPenalty) { FoodConsumptionCount = InNewPenalty; }
+		FORCEINLINE void SetResourceCollectionPenalty(const int32 InNewPenalty) { ResourceCollectionPenalty = InNewPenalty; }
 };
  

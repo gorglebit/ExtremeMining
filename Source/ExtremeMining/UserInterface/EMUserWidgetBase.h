@@ -80,6 +80,19 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UTextBlock* IncomeFoodCountTextBlock;
 
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* IncomeWoodSignTextBlock;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* IncomeWoodCountTextBlock;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* IncomeMoneySignTextBlock;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* IncomeMoneyCountTextBlock;
+	//--------------------------------------------------
+
 public:
 //-------------------------------
 private:
@@ -125,6 +138,15 @@ protected:
 
 	UFUNCTION()
 		void OnCitizenNoneCountChanged(int32 NewAmount);
+
+	UFUNCTION()
+		void OnFoodIncomeChanged(int32 NewAmount);
+
+	UFUNCTION()
+		void OnWoodIncomeChanged(int32 NewAmount);
+
+	UFUNCTION()
+		void OnMoneyIncomeChanged(int32 NewAmount);
 
 	UFUNCTION()
 		void OnSelectAllNoneCitizenClicked();

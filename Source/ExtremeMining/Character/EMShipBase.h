@@ -53,7 +53,6 @@ public:
 	FORCEINLINE int32 GetMaxNumberOfPassangers() { return MaxNumberOfPassangers; }
 
 	void TakePassengerOnBoard(AEMCharacterBase* InPassenger);
-	void SeatPassenger(AEMCharacterBase* InPassenger);
 	void SeatPassengerOnPlace(AEMCharacterBase* InPassenger, USceneComponent* InScene);
 
 	UFUNCTION(BlueprintNativeEvent)

@@ -141,6 +141,51 @@ void UEMUserWidgetBase::OnCitizenNoneCountChanged(int32 NewAmount)
 	CitizenNoneTextBlock->SetText(FText::AsNumber(NewAmount));
 }
 
+void UEMUserWidgetBase::OnFoodIncomeChanged(int32 NewAmount)
+{
+	if(NewAmount > 0)
+		IncomeFoodSignTextBlock->SetText(FText::FromString(TEXT("+")));
+	
+	if (NewAmount < 0)
+		IncomeFoodSignTextBlock->SetText(FText::FromString(TEXT("-")));
+
+	if (NewAmount == 0)
+		IncomeFoodSignTextBlock->SetText(FText::FromString(TEXT("+-")));
+		
+	NewAmount = FMath::Abs(NewAmount);
+	IncomeFoodCountTextBlock->SetText(FText::AsNumber(NewAmount));
+}
+
+void UEMUserWidgetBase::OnWoodIncomeChanged(int32 NewAmount)
+{
+	if (NewAmount > 0)
+		IncomeWoodSignTextBlock->SetText(FText::FromString(TEXT("+")));
+
+	if (NewAmount < 0)
+		IncomeWoodSignTextBlock->SetText(FText::FromString(TEXT("-")));
+
+	if (NewAmount == 0)
+		IncomeWoodSignTextBlock->SetText(FText::FromString(TEXT("+-")));
+
+	NewAmount = FMath::Abs(NewAmount);
+	IncomeWoodCountTextBlock->SetText(FText::AsNumber(NewAmount));
+}
+
+void UEMUserWidgetBase::OnMoneyIncomeChanged(int32 NewAmount)
+{
+	if (NewAmount > 0)
+		IncomeMoneySignTextBlock->SetText(FText::FromString(TEXT("+")));
+
+	if (NewAmount < 0)
+		IncomeMoneySignTextBlock->SetText(FText::FromString(TEXT("-")));
+
+	if (NewAmount == 0)
+		IncomeMoneySignTextBlock->SetText(FText::FromString(TEXT("+-")));
+
+	NewAmount = FMath::Abs(NewAmount);
+	IncomeMoneyCountTextBlock->SetText(FText::AsNumber(NewAmount));
+}
+
 void UEMUserWidgetBase::OnSelectAllNoneCitizenClicked()
 {
 	OnSelectCitizenType(0);
@@ -202,33 +247,39 @@ void UEMUserWidgetBase::NativeConstruct()
 	StorageBuilding = Cast<AEMBuildingStorage>(OutActors[0]);
 	
 	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (AsState)
+	{
+		CurrentCitizenTextBlock->SetText(FText::AsNumber(AsState->GetStartCitizenCount()));
+		MaxCitizenTextBlock->SetText(FText::AsNumber(AsState->GetMaxCitizenCount()));
+		CitizenNoneTextBlock->SetText(FText::AsNumber(AsState->GetStartCitizenCount()));
 
-	CurrentCitizenTextBlock->SetText(FText::AsNumber(AsState->GetStartCitizenCount()));
-	MaxCitizenTextBlock->SetText(FText::AsNumber(AsState->GetMaxCitizenCount()));
-	CitizenNoneTextBlock->SetText(FText::AsNumber(AsState->GetStartCitizenCount()));
+		FoodTextBlock->SetText(FText::AsNumber(AsState->GetStartResourceCount()));
+		WoodTextBlock->SetText(FText::AsNumber(AsState->GetStartResourceCount()));
+		MoneyTextBlock->SetText(FText::AsNumber(AsState->GetStartResourceCount()));
 
-	FoodTextBlock->SetText(FText::AsNumber(AsState->GetStartResourceCount()));
-	WoodTextBlock->SetText(FText::AsNumber(AsState->GetStartResourceCount()));
-	MoneyTextBlock->SetText(FText::AsNumber(AsState->GetStartResourceCount()));
+		MaxFoodTextBlock->SetText(FText::AsNumber(AsState->GetMaxResourceCount()));
+		MaxWoodTextBlock->SetText(FText::AsNumber(AsState->GetMaxResourceCount()));
+		MaxMoneyTextBlock->SetText(FText::AsNumber(AsState->GetMaxResourceCount()));
 
-	MaxFoodTextBlock->SetText(FText::AsNumber(AsState->GetMaxResourceCount()));
-	MaxWoodTextBlock->SetText(FText::AsNumber(AsState->GetMaxResourceCount()));
-	MaxMoneyTextBlock->SetText(FText::AsNumber(AsState->GetMaxResourceCount()));
+		AsState->OnMaxResourceCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnMaxRecourceCountChanged);
+		AsState->OnCurrentCitizenCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCurrentCitizenCountChanged);
+		AsState->OnMaxCitizenCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnMaxCitizenCountChanged);
+
+		AsState->OnCitizenFoodCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCitizenFoodCountChanged);
+		AsState->OnCitizenWoodCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCitizenWoodCountChanged);
+		AsState->OnCitizenMoneyCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCitizenMoneyCountChanged);
+		AsState->OnCitizenNoneCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCitizenNoneCountChanged);
+		
+		AsState->OnFoodIncomeChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnFoodIncomeChanged);
+		AsState->OnWoodIncomeChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnWoodIncomeChanged);
+		AsState->OnMoneyIncomeChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnMoneyIncomeChanged);
+	}
 
 	if (StorageBuilding)
 	{
 		StorageBuilding->OnFoodAmountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnFoodAmountChanged);
 		StorageBuilding->OnWoodAmountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnWoodAmountChanged);
 		StorageBuilding->OnMoneyAmountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnMoneyAmountChanged);
-		
-		AsState->OnMaxResourceCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnMaxRecourceCountChanged);
-		AsState->OnCurrentCitizenCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCurrentCitizenCountChanged);
-		AsState->OnMaxCitizenCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnMaxCitizenCountChanged);
-		
-		AsState->OnCitizenFoodCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCitizenFoodCountChanged);
-		AsState->OnCitizenWoodCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCitizenWoodCountChanged);
-		AsState->OnCitizenMoneyCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCitizenMoneyCountChanged);
-		AsState->OnCitizenNoneCountChangedDelegate.AddUniqueDynamic(this, &UEMUserWidgetBase::OnCitizenNoneCountChanged);
 		//UE_LOG(LogTemp, Warning, TEXT("OnFoodAmountChangedDelegate"));
 	}
 

@@ -85,17 +85,17 @@ void AEMCharacterBase::CollectResouseTimer()
 		{
 		case 1:
 		{
-			StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() + AsState->GetCollectionReateNotWorker());
+			StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() + AsState->GetCollectionRateWorker(BUILDING_TYPE_MAIN));
 			break;
 		}
 		case 2:
 		{
-			StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() + AsState->GetCollectionReateNotWorker());
+			StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() + AsState->GetCollectionRateWorker(BUILDING_TYPE_MAIN));
 			break;
 		}
 		case 3:
 		{
-			StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() + AsState->GetCollectionReateNotWorker());
+			StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() + AsState->GetCollectionRateWorker(BUILDING_TYPE_MAIN));
 			break;
 		}
 		default:
@@ -108,20 +108,17 @@ void AEMCharacterBase::CollectResouseTimer()
 		{
 		case 1:
 		{
-			//CollectionRateWorkerFood = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_FOOD) * CollectionRateWorkerDelta) - FinesIfHungry;
-			StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() + AsState->GetCollectionReateFoodWorker());
+			StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() + AsState->GetCollectionRateWorker(BUILDING_TYPE_FOOD));
 			break;
 		}
 		case 2:
 		{
-			//CollectionRateWorkerWood = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_WOOD) * CollectionRateWorkerDelta) - FinesIfHungry;
-			StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() + AsState->GetCollectionReateWoodWorker());
+			StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() + AsState->GetCollectionRateWorker(BUILDING_TYPE_WOOD));
 			break;
 		}
 		case 3:
 		{
-			//CollectionRateWorkerMoney = CollectionRateWorkerStart + (GetBuildingLevel(BUILDING_TYPE_MONEY) * CollectionRateWorkerDelta) - FinesIfHungry;
-			StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() + AsState->GetCollectionReateMoneyWorker());
+			StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() + AsState->GetCollectionRateWorker(BUILDING_TYPE_MONEY));
 			break;
 		}
 		default:

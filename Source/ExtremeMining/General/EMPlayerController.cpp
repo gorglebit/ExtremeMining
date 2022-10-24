@@ -153,6 +153,7 @@ void AEMPlayerController::MoveToLocationAction()
 				if (Distance < 1000 && AsCharacter->GetCharacterType() == 4)
 				{
 					AsShip->TakePassengerOnBoard(AsCharacter);
+					//UE_LOG(LogTemp, Warning, TEXT("SelectedCharactersArray - %d"), SelectedCharactersArray.Num());
 				}
 				//SelectedCharactersArray[i]->UnitMoveCommand(RightMouseLocation);
 			}

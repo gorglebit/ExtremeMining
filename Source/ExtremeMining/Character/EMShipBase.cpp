@@ -79,44 +79,27 @@ void AEMShipBase::UnitMoveCommand(const FVector Location)
 
 void AEMShipBase::TakePassengerOnBoard(AEMCharacterBase* InPassenger)
 {
-	if (PassengersOnBoardArray.Num() < MaxNumberOfPassangers)
-	{
-		PassengersOnBoardArray.AddUnique(InPassenger);
-
-		SeatPassenger(InPassenger);
-
-		CurrentNumberOfPassangers++;
-
-	}
-
-	if (CurrentNumberOfPassangers == MaxNumberOfPassangers)
-	{
-		GetCharacterMovement()->MaxWalkSpeed = 1000;
-
-		SetSailVisual();
-	}
-}
-
-void AEMShipBase::SeatPassenger(AEMCharacterBase* InPassenger)
-{
 	switch (CurrentNumberOfPassangers)
 	{
 	case 0:
 	{
 		SeatPassengerOnPlace(InPassenger, FirstSceneComponent);
-
 		break;
 	}
 	case 1:
 	{
 		SeatPassengerOnPlace(InPassenger, SecondSceneComponent);
-
 		break;
 	}
 	case 2:
 	{
 		SeatPassengerOnPlace(InPassenger, ThirdSceneComponent);
-
+		break;
+	}
+	case 3:
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 1000;
+		SetSailVisual();
 		break;
 	}
 	default:
@@ -127,7 +110,9 @@ void AEMShipBase::SeatPassenger(AEMCharacterBase* InPassenger)
 void AEMShipBase::SeatPassengerOnPlace(AEMCharacterBase* InPassenger, USceneComponent* InScene)
 {
 	if (!InPassenger) return;
+	
 	if (!InScene) return;
+	UE_LOG(LogTemp, Warning, TEXT("InScene"));
 
 	InPassenger->SetActorLocation(InScene->GetComponentLocation());
 	InPassenger->AttachToComponent(InScene, FAttachmentTransformRules::KeepWorldTransform);
@@ -138,6 +123,10 @@ void AEMShipBase::SeatPassengerOnPlace(AEMCharacterBase* InPassenger, USceneComp
 	AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(InPassenger);
 	if (!AIController) return;
 	AIController->GetBrainComponent()->StopLogic(FString());
+
+	PassengersOnBoardArray.AddUnique(InPassenger);
+	CurrentNumberOfPassangers++;
+	UE_LOG(LogTemp, Warning, TEXT("CurrentNumberOfPassangers++"));
 }
 
 void AEMShipBase::SetSailVisual_Implementation()

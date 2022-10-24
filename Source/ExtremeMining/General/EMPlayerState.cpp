@@ -2,13 +2,47 @@
 
 #include "EMPlayerState.h"
 
+#include "Kismet/GameplayStatics.h"
+
+#include "../Core/EMCoreActor.h"
 #include "../General/EMPlayerState.h"
 
 //UE_LOG(LogTemp, Warning, TEXT(""));
 
+void AEMPlayerState::FoodResourceIncomeCalculationTimer()
+{
+	int32 FoodIncome = CitizenFoodCount * GetCollectionRateWorker(BUILDING_TYPE_FOOD) * (IncomeTimePeriod / 5);
+	int32 FoodConsumption = CurrentCitizenCount * FoodConsumptionCount * 6;
+	int32 Result = FoodIncome - FoodConsumption;
+	
+	OnFoodIncomeChangedDelegate.Broadcast(Result);
+}
+
+void AEMPlayerState::WoodResourceIncomeCalculationTimer()
+{
+	int32 WoodIncome = CitizenWoodCount * GetCollectionRateWorker(BUILDING_TYPE_WOOD) * (IncomeTimePeriod / 5);
+	int32 WoodConsumption = 0;
+	int32 Result = WoodIncome - WoodConsumption;
+
+	OnWoodIncomeChangedDelegate.Broadcast(Result);
+}
+
+void AEMPlayerState::MoneyResourceIncomeCalculationTimer()
+{
+	int32 MoneyIncome = CitizenMoneyCount * GetCollectionRateWorker(BUILDING_TYPE_MONEY) * (IncomeTimePeriod / 5);
+	int32 MoneyConsumption = 0;
+	int32 Result = MoneyIncome - MoneyConsumption;
+
+	OnMoneyIncomeChangedDelegate.Broadcast(Result);
+}
+
 void AEMPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetWorldTimerManager().SetTimer(FoodIncomeCalculationTimer, this, &AEMPlayerState::FoodResourceIncomeCalculationTimer, 1.f, true);
+	GetWorldTimerManager().SetTimer(WoodIncomeCalculationTimer, this, &AEMPlayerState::WoodResourceIncomeCalculationTimer, 1.f, true);
+	GetWorldTimerManager().SetTimer(MoneyIncomeCalculationTimer, this, &AEMPlayerState::MoneyResourceIncomeCalculationTimer, 1.f, true);
 }
 
 AEMPlayerState::AEMPlayerState()
@@ -41,6 +75,8 @@ AEMPlayerState::AEMPlayerState()
 	ResourceCollectionPenalty = 0;
 
 	FoodConsumptionCount = 2;
+
+	IncomeTimePeriod = 30;
 	
 }
 
@@ -136,4 +172,18 @@ void AEMPlayerState::DecrementCitizentCount(const int32 InCitizenType)
 	default:
 		break;
 	}
+}
+
+int32 AEMPlayerState::GetCollectionRateWorker(const int32 InBuildingType)
+{
+	if (InBuildingType == 0) return CollectionRateNotWorker;
+
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMCoreActor::StaticClass(), OutActors);
+	if (OutActors.Num() == 0) return 0;
+
+	auto AsCore = Cast<AEMCoreActor>(OutActors[0]);
+	if (!AsCore) return 0;
+
+	return CollectionRateWorkerStart + AsCore->GetBuildingLevelFromType(InBuildingType) * CollectionRateWorkerDelta - ResourceCollectionPenalty;
 }
