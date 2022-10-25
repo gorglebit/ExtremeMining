@@ -65,29 +65,10 @@ void AEMShipBase::OnDropOffPassangers()
 		}
 	, 1.f, false);
 
-	FirstSceneComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-	SecondSceneComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-	ThirdSceneComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-
-	for (int i = 0; i < PassengersOnBoardArray.Num(); i++)
+	for (int i = CurrentNumberOfPassangers; i > 0; i--)
 	{
-		auto Passenger = PassengersOnBoardArray[i];
-		if (!Passenger) return;
-
-		Passenger->SetCollectionResource(true);
-		Passenger->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
-		
-		bool b = Passenger->SetActorLocation(SpawnPassengersLocation, false);
-		UE_LOG(LogTemp, Warning, TEXT("SetActorLocation - %d"), b);
-
-		AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(Passenger);
-		if (!AIController) return;
-		AIController->GetBrainComponent()->StartLogic();
-
-		PassengersOnBoardArray.Remove(Passenger);
-		CurrentNumberOfPassangers--;
-
-		SpawnPassengersLocation.Z += 100;
+		auto Passenger = PassengersOnBoardArray[i - 1];
+		GetOffPassengerFromBoard(Passenger);
 	}
 }
 
@@ -185,7 +166,34 @@ void AEMShipBase::TakePassengerOnBoard(AEMCharacterBase* InPassenger)
 		SeatPassengerOnPlace(InPassenger, ThirdSceneComponent);
 
 		GetCharacterMovement()->MaxWalkSpeed = 1000;
-		SetSailVisual();
+		SetSailVisual(true);
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+void AEMShipBase::GetOffPassengerFromBoard(AEMCharacterBase* InPassenger)
+{
+	switch (CurrentNumberOfPassangers)
+	{
+	case 1:
+	{
+		GetOffPassengerFromPlace(InPassenger, FirstSceneComponent);
+
+		GetCharacterMovement()->MaxWalkSpeed = 200;
+		SetSailVisual(false);
+		break;
+	}
+	case 2:
+	{
+		GetOffPassengerFromPlace(InPassenger, SecondSceneComponent);
+		break;
+	}
+	case 3:
+	{
+		GetOffPassengerFromPlace(InPassenger, ThirdSceneComponent);
 		break;
 	}
 	default:
@@ -196,7 +204,6 @@ void AEMShipBase::TakePassengerOnBoard(AEMCharacterBase* InPassenger)
 void AEMShipBase::SeatPassengerOnPlace(AEMCharacterBase* InPassenger, USceneComponent* InScene)
 {
 	if (!InPassenger) return;
-
 	if (!InScene) return;
 
 	InPassenger->SetActorLocation(InScene->GetComponentLocation());
@@ -214,10 +221,34 @@ void AEMShipBase::SeatPassengerOnPlace(AEMCharacterBase* InPassenger, USceneComp
 	//UE_LOG(LogTemp, Warning, TEXT("CurrentNumberOfPassangers++"));
 }
 
-void AEMShipBase::SetLandButtonVisibitity_Implementation()
+void AEMShipBase::GetOffPassengerFromPlace(AEMCharacterBase* InPassenger, USceneComponent* InScene)
+{
+	if (!InPassenger) return;
+	if (!InScene) return;
+
+	AAIController* AIController = UAIBlueprintHelperLibrary::GetAIController(InPassenger);
+	if (!AIController) return;
+
+	AIController->GetBrainComponent()->StartLogic();
+	
+	InPassenger->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	InPassenger->SetCollectionResource(true);
+
+	InPassenger->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+	bool b = InPassenger->SetActorLocation(SpawnPassengersLocation, false, 0, ETeleportType::None);
+	UE_LOG(LogTemp, Warning, TEXT("SetActorLocation - %d"), b);
+
+	PassengersOnBoardArray.Remove(InPassenger);
+	CurrentNumberOfPassangers--;
+
+	SpawnPassengersLocation.Z += 400;
+}
+
+void AEMShipBase::SetSailVisual_Implementation(const bool IsVisible)
 {
 }
 
-void AEMShipBase::SetSailVisual_Implementation()
+void AEMShipBase::SetLandButtonVisibitity_Implementation()
 {
 }

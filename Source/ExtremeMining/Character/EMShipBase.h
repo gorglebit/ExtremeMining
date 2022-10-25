@@ -75,10 +75,14 @@ public:
 	FORCEINLINE int32 GetMaxNumberOfPassangers() { return MaxNumberOfPassangers; }
 
 	void TakePassengerOnBoard(AEMCharacterBase* InPassenger);
+	void GetOffPassengerFromBoard(AEMCharacterBase* InPassenger);
+
 	void SeatPassengerOnPlace(AEMCharacterBase* InPassenger, USceneComponent* InScene);
 
+	void GetOffPassengerFromPlace(AEMCharacterBase* InPassenger, USceneComponent* InScene);
+
 	UFUNCTION(BlueprintNativeEvent)
-		void SetSailVisual();
+		void SetSailVisual(const bool IsVisible);
 
 	UFUNCTION(BlueprintNativeEvent)
 		void SetLandButtonVisibitity();
