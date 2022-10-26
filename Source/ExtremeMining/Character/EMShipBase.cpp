@@ -8,11 +8,30 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Components/Button.h"
+#include "Kismet/GameplayStatics.h"
 
+#include "../Building/EMBuildingStorage.h"
+#include "../General/EMPlayerState.h"
 #include "../UserInterface/EMShipWidget.h"
 #include "../Character/EMCharacterBase.h"
 
 //UE_LOG(LogTemp, Warning, TEXT(""));
+
+void AEMShipBase::WoodConsumptionTimer()
+{
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
+
+	StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() - AsState->GetWoodConsumptionCount());
+}
+
+void AEMShipBase::MoneyConsumptionTimer()
+{
+	auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (!AsState) return;
+
+	StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() - AsState->GetMoneyConsumptionCount());
+}
 
 AEMShipBase::AEMShipBase()
 {
@@ -76,7 +95,18 @@ void AEMShipBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(CheckLandTimer, this, &AEMShipBase::SetGetOffButtonTimer, 0.5f, true);
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
+	StorageBuilding = Cast<AEMBuildingStorage>(OutActors[0]);
+
+	GetWorldTimerManager().SetTimer(CheckLandTimerHandle, this, &AEMShipBase::SetGetOffButtonTimer, 0.5f, true);
+	GetWorldTimerManager().SetTimer(SetMaxSpeedTimerHandle, this, &AEMShipBase::SetMaxSpeedTimer, 1.f, true);
+	
+	GetWorldTimerManager().SetTimer(WoodConsumptionTimerHandle, this, &AEMShipBase::WoodConsumptionTimer, 5.f, true);
+	GetWorldTimerManager().SetTimer(MoneyConsumptionTimerHandle, this, &AEMShipBase::MoneyConsumptionTimer, 5.f, true);
+
+	GetWorldTimerManager().PauseTimer(WoodConsumptionTimerHandle);
+	GetWorldTimerManager().PauseTimer(MoneyConsumptionTimerHandle);
 
 	auto AsUserWidget = Cast<UEMShipWidget>(ShipWidget->GetWidget());
 	if (!AsUserWidget) return;
@@ -111,6 +141,21 @@ void AEMShipBase::SetGetOffButtonTimer()
 		ShipWidget->SetVisibility(false);
 		AsUserWidget->GetGetOffButton()->SetIsEnabled(false);
 		//AsUserWidget->GetGetOffButton()->OnClicked.RemoveDynamic(this, &AEMShipBase::OnDropOffPassangers);
+	}
+}
+
+void AEMShipBase::SetMaxSpeedTimer()
+{
+	if (!StorageBuilding) return;
+	bool IsEnoughMoney = StorageBuilding->GetMoneyAmount() > 50 && StorageBuilding->GetWoodAmount() > 50;
+
+	if (CurrentNumberOfPassangers == MaxNumberOfPassangers && IsEnoughMoney)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 1000;
+	}
+	else
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 200;
 	}
 }
 
@@ -165,8 +210,17 @@ void AEMShipBase::TakePassengerOnBoard(AEMCharacterBase* InPassenger)
 	{
 		SeatPassengerOnPlace(InPassenger, ThirdSceneComponent);
 
-		GetCharacterMovement()->MaxWalkSpeed = 1000;
+		//GetCharacterMovement()->MaxWalkSpeed = 1000;
 		SetSailVisual(true);
+
+		GetWorldTimerManager().UnPauseTimer(WoodConsumptionTimerHandle);
+		GetWorldTimerManager().UnPauseTimer(MoneyConsumptionTimerHandle);
+
+		auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+		if (!AsState) return;
+
+		AsState->IncrementWorkShipCount();
+
 		break;
 	}
 	default:
@@ -181,9 +235,6 @@ void AEMShipBase::GetOffPassengerFromBoard(AEMCharacterBase* InPassenger)
 	case 1:
 	{
 		GetOffPassengerFromPlace(InPassenger, FirstSceneComponent);
-
-		GetCharacterMovement()->MaxWalkSpeed = 200;
-		SetSailVisual(false);
 		break;
 	}
 	case 2:
@@ -194,6 +245,18 @@ void AEMShipBase::GetOffPassengerFromBoard(AEMCharacterBase* InPassenger)
 	case 3:
 	{
 		GetOffPassengerFromPlace(InPassenger, ThirdSceneComponent);
+
+		//GetCharacterMovement()->MaxWalkSpeed = 200;
+		SetSailVisual(false);
+
+		GetWorldTimerManager().PauseTimer(WoodConsumptionTimerHandle);
+		GetWorldTimerManager().PauseTimer(MoneyConsumptionTimerHandle);
+
+		auto AsState = Cast<AEMPlayerState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+		if (!AsState) return;
+
+		AsState->DecrementWorkShipCount();
+
 		break;
 	}
 	default:

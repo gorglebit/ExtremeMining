@@ -45,30 +45,6 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 		int32 CharacterType;
 
-	//UPROPERTY(BlueprintReadWrite)
-	//	int32 CollectionRateNotWorker;
-
-	//UPROPERTY(BlueprintReadWrite)
-	//	int32 CollectionRateWorkerFood;
-
-	//UPROPERTY(BlueprintReadWrite)
-	//	int32 CollectionRateWorkerWood;
-
-	//UPROPERTY(BlueprintReadWrite)
-	//	int32 CollectionRateWorkerMoney;
-
-	//UPROPERTY(BlueprintReadWrite)
-	//	int32 CollectionRateWorkerDelta;
-
-	//UPROPERTY(BlueprintReadWrite)
-	//	int32 CollectionRateWorkerStart;
-
-	//UPROPERTY(BlueprintReadWrite)
-	//	int32 FinesIfHungry;
-
-	//UPROPERTY(BlueprintReadWrite)
-	//	int32 FoodIntakeCount;
-
 	UPROPERTY(BlueprintReadWrite)
 		bool IsCommandActive;
 

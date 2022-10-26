@@ -8,15 +8,22 @@
 #include "EMShipBase.generated.h"
 
 class UWidgetComponent;
+class AEMBuildingStorage;
 
 UCLASS()
 class EXTREMEMINING_API AEMShipBase : public ACharacter, public IEMBasicInterface
 {
 	GENERATED_BODY()
 private:
-	FTimerHandle CheckLandTimer;
+	FTimerHandle CheckLandTimerHandle;
+	FTimerHandle WoodConsumptionTimerHandle;
+	FTimerHandle MoneyConsumptionTimerHandle;
+	FTimerHandle SetMaxSpeedTimerHandle;
 
 protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Storage)
+		AEMBuildingStorage* StorageBuilding;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UWidgetComponent* ShipWidget;
 
@@ -57,7 +64,17 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
 	void SetGetOffButtonTimer();
+
+	UFUNCTION()
+		void SetMaxSpeedTimer();
+
+	UFUNCTION()
+	void WoodConsumptionTimer();
+
+	UFUNCTION()
+	void MoneyConsumptionTimer();
 public:
 	AEMShipBase();
 

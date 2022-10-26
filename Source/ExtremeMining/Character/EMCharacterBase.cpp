@@ -159,6 +159,10 @@ void AEMCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
+	StorageBuilding = Cast<AEMBuildingStorage>(OutActors[0]);
+
 	SetCharacterType(0);
 	SetCharacterRole(CharacterType);
 	SetWorkLocation(CharacterType);
@@ -171,9 +175,6 @@ void AEMCharacterBase::BeginPlay()
 
 void AEMCharacterBase::SetStorageLocation()
 {
-	TArray<AActor*> OutActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEMBuildingStorage::StaticClass(), OutActors);
-	StorageBuilding = Cast<AEMBuildingStorage>(OutActors[0]);
 	if (!StorageBuilding) return;
 	StorageLocation = StorageBuilding->GetBoxComponent()->GetComponentLocation();
 

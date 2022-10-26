@@ -32,6 +32,17 @@ private:
 	FTimerHandle MoneyIncomeCalculationTimer;
 
 protected:
+	UPROPERTY(BlueprintReadOnly, Category = "Ship")
+		int32 CurrnetShipsCount;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ship")
+		int32 WorkShipsCount;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ship")
+		int32 NotWorkShipsCount;
+
+	//-------------------------------
+
 	UPROPERTY(BlueprintReadOnly, Category = "CitizenCount")
 		int32 StartCitizenCount;
 
@@ -40,12 +51,6 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "CitizenCount")
 		int32 MaxCitizenCount;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Storage")
-		int32 StartResourceCount;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Storage")
-		int32 MaxResourceCount;
 
 	UPROPERTY(BlueprintReadOnly, Category = "CitizenCount")
 		int32 CitizenFoodCount;
@@ -58,6 +63,14 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "CitizenCount")
 		int32 CitizenNoneCount;
+
+	//---------------------------------------------
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Storage")
+		int32 StartResourceCount;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Storage")
+		int32 MaxResourceCount;
 
 	//------------------------------------
 	UPROPERTY(BlueprintReadOnly, Category = "Collection")
@@ -81,14 +94,22 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Collection")
 		int32 CollectionRateWorkerDelta;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Consumption")
-		int32 FoodConsumptionCount;
+	
 
 	UPROPERTY(BlueprintReadOnly, Category = "Consumption")
 		int32 ResourceCollectionPenalty;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Consumption")
 		int32 IncomeTimePeriod;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Consumption")
+		int32 FoodConsumptionCount;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Consumption")
+		int32 WoodConsumptionCount;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Consumption")
+		int32 MoneyConsumptionCount;
 
 public:
 	//FORCEINLINE int32 GetCitizenNoneCount() {return CitizenNoneCount}
@@ -172,6 +193,18 @@ public:
 		FORCEINLINE int32 GetFoodConsumptionCount() { return FoodConsumptionCount; }
 
 	UFUNCTION(BlueprintCallable)
+		FORCEINLINE int32 GetWoodConsumptionCount() { return WoodConsumptionCount; }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE int32 GetMoneyConsumptionCount() { return MoneyConsumptionCount; }
+
+	UFUNCTION(BlueprintCallable)
 		FORCEINLINE void SetResourceCollectionPenalty(const int32 InNewPenalty) { ResourceCollectionPenalty = InNewPenalty; }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE void IncrementWorkShipCount() { WorkShipsCount++; }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE void DecrementWorkShipCount() { WorkShipsCount--; }
 };
  

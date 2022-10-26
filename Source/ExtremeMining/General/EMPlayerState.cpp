@@ -21,7 +21,7 @@ void AEMPlayerState::FoodResourceIncomeCalculationTimer()
 void AEMPlayerState::WoodResourceIncomeCalculationTimer()
 {
 	int32 WoodIncome = CitizenWoodCount * GetCollectionRateWorker(BUILDING_TYPE_WOOD) * (IncomeTimePeriod / 5);
-	int32 WoodConsumption = 0;
+	int32 WoodConsumption = WorkShipsCount * WoodConsumptionCount * (IncomeTimePeriod / 5);
 	int32 Result = WoodIncome - WoodConsumption;
 
 	OnWoodIncomeChangedDelegate.Broadcast(Result);
@@ -30,7 +30,7 @@ void AEMPlayerState::WoodResourceIncomeCalculationTimer()
 void AEMPlayerState::MoneyResourceIncomeCalculationTimer()
 {
 	int32 MoneyIncome = CitizenMoneyCount * GetCollectionRateWorker(BUILDING_TYPE_MONEY) * (IncomeTimePeriod / 5);
-	int32 MoneyConsumption = 0;
+	int32 MoneyConsumption = WorkShipsCount * MoneyConsumptionCount * (IncomeTimePeriod / 5);
 	int32 Result = MoneyIncome - MoneyConsumption;
 
 	OnMoneyIncomeChangedDelegate.Broadcast(Result);
@@ -63,6 +63,12 @@ AEMPlayerState::AEMPlayerState()
 	CitizenMoneyCount = 0;
 	//--------------------
 
+	//Ships
+	CurrnetShipsCount = 0;
+	WorkShipsCount = 0;
+	NotWorkShipsCount = 0;
+	//-----------------------
+	
 	//Collection
 	CollectionRateNotWorker = 1;
 	CollectionRateWorkerStart = 5;
@@ -74,10 +80,14 @@ AEMPlayerState::AEMPlayerState()
 	CollectionRateWorkerDelta = 2;
 	ResourceCollectionPenalty = 0;
 
-	FoodConsumptionCount = 2;
-
 	IncomeTimePeriod = 30;
+	//--------------------------
 	
+	//Consumption
+	FoodConsumptionCount = 2;
+	WoodConsumptionCount = 1;
+	MoneyConsumptionCount = 1;
+	//---------------------
 }
 
 void AEMPlayerState::SetCurrentCitizenCount(const int32 InNewCount)
