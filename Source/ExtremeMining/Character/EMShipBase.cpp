@@ -9,7 +9,9 @@
 #include "Components/WidgetComponent.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/CapsuleComponent.h"
 
+#include "../PickUp/EMPickUpActorBase.h"
 #include "../Building/EMBuildingStorage.h"
 #include "../General/EMPlayerState.h"
 #include "../UserInterface/EMShipWidget.h"
@@ -33,6 +35,21 @@ void AEMShipBase::MoneyConsumptionTimer()
 	StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() - AsState->GetMoneyConsumptionCount());
 }
 
+void AEMShipBase::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	auto AsResource = Cast<AEMPickUpActorBase>(OtherActor);
+	if (!AsResource) return;
+
+	if (!IsShipHoldEmpty) return;
+
+	TransportedResourceCount = AsResource->GetResourceCount();
+	TransportedResourceType = AsResource->GetResourceType();
+	AsResource->DestroyActorAfterGrab();
+
+	SetResourceOnBoardVisibility(TransportedResourceType, TransportedResourceCount);
+	IsShipHoldEmpty = false;
+}
+
 AEMShipBase::AEMShipBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -40,6 +57,9 @@ AEMShipBase::AEMShipBase()
 	BodyMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
 	BodyMeshComponent->SetupAttachment(RootComponent);
 	BodyMeshComponent->SetRelativeLocation(FVector(0, 0, 500));
+
+	GrabResourceComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("GrabResourceComponent"));
+	GrabResourceComponent->SetupAttachment(BodyMeshComponent);
 
 	FirstSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("FirstSceneComponent"));
 	FirstSceneComponent->SetupAttachment(BodyMeshComponent);
@@ -63,6 +83,9 @@ AEMShipBase::AEMShipBase()
 	MaxNumberOfPassangers = 3;
 	IsButtonVisible = false;
 	IsCanDropped = true;
+	IsShipHoldEmpty = true;
+	TransportedResourceCount = 0;
+	TransportedResourceType = 0;
 
 	ShipWidget->SetVisibility(IsButtonVisible);
 
@@ -101,7 +124,7 @@ void AEMShipBase::BeginPlay()
 
 	GetWorldTimerManager().SetTimer(CheckLandTimerHandle, this, &AEMShipBase::SetGetOffButtonTimer, 0.5f, true);
 	GetWorldTimerManager().SetTimer(SetMaxSpeedTimerHandle, this, &AEMShipBase::SetMaxSpeedTimer, 1.f, true);
-	
+
 	GetWorldTimerManager().SetTimer(WoodConsumptionTimerHandle, this, &AEMShipBase::WoodConsumptionTimer, 5.f, true);
 	GetWorldTimerManager().SetTimer(MoneyConsumptionTimerHandle, this, &AEMShipBase::MoneyConsumptionTimer, 5.f, true);
 
@@ -111,6 +134,8 @@ void AEMShipBase::BeginPlay()
 	auto AsUserWidget = Cast<UEMShipWidget>(ShipWidget->GetWidget());
 	if (!AsUserWidget) return;
 	AsUserWidget->GetGetOffButton()->OnClicked.AddDynamic(this, &AEMShipBase::OnDropOffPassangers);
+
+	GrabResourceComponent->OnComponentBeginOverlap.AddDynamic(this, &AEMShipBase::OverlapBegin);
 }
 
 void AEMShipBase::SetGetOffButtonTimer()
@@ -293,7 +318,7 @@ void AEMShipBase::GetOffPassengerFromPlace(AEMCharacterBase* InPassenger, UScene
 	if (!AIController) return;
 
 	AIController->GetBrainComponent()->StartLogic();
-	
+
 	InPassenger->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	InPassenger->SetCollectionResource(true);
 
@@ -306,6 +331,44 @@ void AEMShipBase::GetOffPassengerFromPlace(AEMCharacterBase* InPassenger, UScene
 	CurrentNumberOfPassangers--;
 
 	SpawnPassengersLocation.Z += 400;
+}
+
+void AEMShipBase::UnloadShip()
+{
+	if (IsShipHoldEmpty) return;
+	if (TransportedResourceType == 0) return;
+	if (!StorageBuilding) return;
+
+	switch (TransportedResourceType)
+	{
+	case 1:
+	{
+		StorageBuilding->SetFoodAmount(StorageBuilding->GetFoodAmount() + TransportedResourceCount);
+		break;
+	}
+	case 2:
+	{
+		StorageBuilding->SetWoodAmount(StorageBuilding->GetWoodAmount() + TransportedResourceCount);
+		break;
+	}
+	case 3:
+	{
+		StorageBuilding->SetMoneyAmount(StorageBuilding->GetMoneyAmount() + TransportedResourceCount);
+		break;
+	}
+	default:
+		break;
+	}
+
+	TransportedResourceCount = 0;
+	TransportedResourceType = 0;
+	IsShipHoldEmpty = true;
+
+	SetResourceOnBoardVisibility(TransportedResourceType, TransportedResourceCount);
+}
+
+void AEMShipBase::SetResourceOnBoardVisibility_Implementation(const int32 InResourceType, const int32 InResourceCount)
+{
 }
 
 void AEMShipBase::SetSailVisual_Implementation(const bool IsVisible)

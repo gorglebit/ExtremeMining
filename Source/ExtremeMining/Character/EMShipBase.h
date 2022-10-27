@@ -9,6 +9,7 @@
 
 class UWidgetComponent;
 class AEMBuildingStorage;
+class UCapsuleComponent;
 
 UCLASS()
 class EXTREMEMINING_API AEMShipBase : public ACharacter, public IEMBasicInterface
@@ -31,6 +32,9 @@ protected:
 		UStaticMeshComponent* BodyMeshComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh)
+		UCapsuleComponent* GrabResourceComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh)
 		USceneComponent* FirstSceneComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh)
@@ -46,10 +50,19 @@ protected:
 		bool IsCanDropped;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool IsShipHoldEmpty;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FVector SpawnPassengersLocation;
 
 	int32 CurrentNumberOfPassangers;
 	int32 MaxNumberOfPassangers;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 TransportedResourceType;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 TransportedResourceCount;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TArray<AEMCharacterBase*> PassengersOnBoardArray;
@@ -75,6 +88,9 @@ protected:
 
 	UFUNCTION()
 	void MoneyConsumptionTimer();
+
+	UFUNCTION()
+		void OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 public:
 	AEMShipBase();
 
@@ -98,9 +114,15 @@ public:
 
 	void GetOffPassengerFromPlace(AEMCharacterBase* InPassenger, USceneComponent* InScene);
 
+	UFUNCTION(BlueprintCallable)
+	void UnloadShip();
+
 	UFUNCTION(BlueprintNativeEvent)
 		void SetSailVisual(const bool IsVisible);
 
 	UFUNCTION(BlueprintNativeEvent)
 		void SetLandButtonVisibitity();
+
+	UFUNCTION(BlueprintNativeEvent)
+		void SetResourceOnBoardVisibility(const int32 InResourceType, const int32 InResourceCount);
 };
