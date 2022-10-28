@@ -173,21 +173,24 @@ void AEMPlayerController::MoveToLocationAction()
 
 void AEMPlayerController::ConnonVolleyRightAction()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ConnonVolleyRightAction"));
+	//UE_LOG(LogTemp, Warning, TEXT("ConnonVolleyRightAction"));
 
 	AEMHeadUpDisplay* HUD = Cast<AEMHeadUpDisplay>(GetHUD());
 	if (!HUD) return;
 	if (HUD->GetSelectedShips().Num() != 1) return;
-	
-	UE_LOG(LogTemp, Warning, TEXT("HUD"));
-
 	if (!SelectedShip) return;
-	UE_LOG(LogTemp, Warning, TEXT("SelectedShip"));
+
 	SelectedShip->CannonsVolleyAttack(true);
 }
 
 void AEMPlayerController::ConnonVolleyLeftAction()
 {
+	AEMHeadUpDisplay* HUD = Cast<AEMHeadUpDisplay>(GetHUD());
+	if (!HUD) return;
+	if (HUD->GetSelectedShips().Num() != 1) return;
+	if (!SelectedShip) return;
+	UE_LOG(LogTemp, Warning, TEXT("LEFT"));
+	SelectedShip->CannonsVolleyAttack(false);
 }
 
 void AEMPlayerController::ClearSelectedBuildings()
@@ -208,7 +211,7 @@ void AEMPlayerController::SetupInputComponent()
 	InputComponent->BindAction("MoveToLocation", IE_Released, this, &AEMPlayerController::MoveToLocationAction);
 	
 	InputComponent->BindAction("CannonsVolleyRight", IE_Released, this, &AEMPlayerController::ConnonVolleyRightAction);
-	InputComponent->BindAction("ConnonsVolleyLeft", IE_Released, this, &AEMPlayerController::ConnonVolleyLeftAction);
+	InputComponent->BindAction("CannonsVolleyLeft", IE_Released, this, &AEMPlayerController::ConnonVolleyLeftAction);
 
 }
 
