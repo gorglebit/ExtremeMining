@@ -161,9 +161,15 @@ void AEMHeadUpDisplay::CleanSelectedUnits()
 	//UE_LOG(LogTemp, Warning, TEXT("CleanSelectedUnits After - %d"), SelectedCharactersArray.Num());
 }
 
-void AEMHeadUpDisplay::AddUnit(AEMCharacterBase* InCharacter)
+void AEMHeadUpDisplay::AddCitizen(AEMCharacterBase* InCharacter)
 {
 	InCharacter->SelectObject();
 	SelectedCharactersArray.AddUnique(InCharacter);
+}
+
+void AEMHeadUpDisplay::AddShip(AEMShipBase* InShip)
+{
+	InShip->SelectObject();
+	SelectedShipsArray.AddUnique(InShip);
 }
 

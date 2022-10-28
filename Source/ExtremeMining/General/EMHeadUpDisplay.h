@@ -58,7 +58,8 @@ public:
 	virtual TArray<AEMShipBase*> GetSelectedShips();
 
 	void CleanSelectedUnits();
-	void AddUnit(AEMCharacterBase* InCharacter);
+	void AddCitizen(AEMCharacterBase* InCharacter);
+	void AddShip(AEMShipBase* InShip);
 
 	FORCEINLINE UEMUserWidgetBase* GetStorage() { return UserWidget; }
 };

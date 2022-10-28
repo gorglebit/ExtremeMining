@@ -125,4 +125,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 		void SetResourceOnBoardVisibility(const int32 InResourceType, const int32 InResourceCount);
+
+	UFUNCTION(BlueprintNativeEvent)
+		void CannonsVolleyAttack(const bool InIsRight);
 };

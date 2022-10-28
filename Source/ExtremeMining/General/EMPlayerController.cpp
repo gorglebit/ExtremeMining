@@ -69,8 +69,17 @@ void AEMPlayerController::SelectObjectStartAction()
 	AEMCharacterBase* AsCharacter = Cast<AEMCharacterBase>(Hit.GetActor());
 	if (AsCharacter)
 	{
-		//AsCharacter->SelectObject();
-		HUD->AddUnit(AsCharacter);
+		AsCharacter->SelectObject();
+		HUD->AddCitizen(AsCharacter);
+		return;
+	}
+
+	AEMShipBase* AsShip = Cast<AEMShipBase>(Hit.GetActor());
+	if (AsShip)
+	{
+		AsShip->SelectObject();
+		SelectedShip = AsShip;
+		HUD->AddShip(AsShip);
 		return;
 	}
 
@@ -162,6 +171,25 @@ void AEMPlayerController::MoveToLocationAction()
 	//-------------
 }
 
+void AEMPlayerController::ConnonVolleyRightAction()
+{
+	UE_LOG(LogTemp, Warning, TEXT("ConnonVolleyRightAction"));
+
+	AEMHeadUpDisplay* HUD = Cast<AEMHeadUpDisplay>(GetHUD());
+	if (!HUD) return;
+	if (HUD->GetSelectedShips().Num() != 1) return;
+	
+	UE_LOG(LogTemp, Warning, TEXT("HUD"));
+
+	if (!SelectedShip) return;
+	UE_LOG(LogTemp, Warning, TEXT("SelectedShip"));
+	SelectedShip->CannonsVolleyAttack(true);
+}
+
+void AEMPlayerController::ConnonVolleyLeftAction()
+{
+}
+
 void AEMPlayerController::ClearSelectedBuildings()
 {
 	if (SelectedBuilding)
@@ -178,6 +206,10 @@ void AEMPlayerController::SetupInputComponent()
 	InputComponent->BindAction("SelectObject", IE_Pressed, this, &AEMPlayerController::SelectObjectStartAction);
 	InputComponent->BindAction("SelectObject", IE_Released, this, &AEMPlayerController::SelectObjectStopAction);
 	InputComponent->BindAction("MoveToLocation", IE_Released, this, &AEMPlayerController::MoveToLocationAction);
+	
+	InputComponent->BindAction("CannonsVolleyRight", IE_Released, this, &AEMPlayerController::ConnonVolleyRightAction);
+	InputComponent->BindAction("ConnonsVolleyLeft", IE_Released, this, &AEMPlayerController::ConnonVolleyLeftAction);
+
 }
 
 

@@ -9,6 +9,7 @@
 #include "EMPlayerController.generated.h"
 
 class AEMBuildingBase;
+class AEMShipBase;
 
 UCLASS()
 class EXTREMEMINING_API AEMPlayerController : public APlayerController, public IEMBasicInterface
@@ -19,6 +20,8 @@ private:
 	bool IsLeftMousePressed;
 	FVector RightMouseLocation;
 	AEMBuildingBase* SelectedBuilding;
+	AEMShipBase* SelectedShip;
+
 protected:
 public:
 //------------------
@@ -27,6 +30,9 @@ private:
 	void SelectObjectStartAction();
 	void SelectObjectStopAction();
 	void MoveToLocationAction();
+
+	void ConnonVolleyRightAction();
+	void ConnonVolleyLeftAction();
 
 protected:
 	virtual void BeginPlay() override;

@@ -367,6 +367,10 @@ void AEMShipBase::UnloadShip()
 	SetResourceOnBoardVisibility(TransportedResourceType, TransportedResourceCount);
 }
 
+void AEMShipBase::CannonsVolleyAttack_Implementation(const bool InIsRight)
+{
+}
+
 void AEMShipBase::SetResourceOnBoardVisibility_Implementation(const int32 InResourceType, const int32 InResourceCount)
 {
 }
